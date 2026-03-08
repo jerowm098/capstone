@@ -73,6 +73,26 @@ body {
 
 
 /* Brand Link overall styling */
+nav .navbar-brand {
+    display: flex !important;
+    flex-direction: row !important; /* Forces side-by-side */
+    align-items: center !important;
+    text-decoration: none;
+    font-size: 1.4rem; /* Slightly smaller to fit better horizontally */
+    letter-spacing: -1px;
+    position: relative;
+    left: -70px;
+    
+
+}
+
+/* This targets the navigation list specifically within the top navbar */
+nav .navbar-nav {
+    margin-left: -4rem !important; /* Adds space between the logo and the first link */
+}
+
+
+
 .navbar-brand {
     display: flex !important;
     flex-direction: row !important; /* Forces side-by-side */
@@ -80,12 +100,10 @@ body {
     text-decoration: none;
     font-size: 1.4rem; /* Slightly smaller to fit better horizontally */
     letter-spacing: -1px;
+    position: relative;
+    left: -50px;
     
-
 }
-
-
-
 
 
 .nav-link {
@@ -198,26 +216,81 @@ html {
 }
 
 /* Home Section Styling */
+/* --- FIXED HOME CAROUSEL --- */
 #home {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('bg2.png');
+    min-height: 90vh;
+    overflow: hidden;
+}
+
+.carousel-item {
+    height: 90vh;
     background-size: cover;
     background-position: center;
-    min-height: 90vh;
-    display: flex;
-    align-items: center; /* Vertically centers the hero-box */
+    background-repeat: no-repeat;
 }
 
 .hero-box {
-    /* background: rgba(0, 0, 0, 0); */ /* Semi-transparent black background */
-    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
-    padding: 20px;
+    background: transparent;
+    padding: 30px;
     border-radius: 20px;
-    backdrop-filter: blur(10px);    /* Modern frosted glass effect */
-    border: 2px solid rgba(212, 160, 23, 0.3); /* Subtle Gold border */
-    position: relative; 
-    top: 5px;   /* Itaas (negative value) o Ibaba (positive value) */
-    left: -300px;   /* Pakaliwa o Pakanan */
-    max-width: 630px;
+    border: 2px solid rgba(212, 160, 23, 0.3); /* Gold border from your theme */
+    backdrop-filter: blur(10px);
+    max-width: 650px;
+    /* TANGGALIN ang left: -300px; Gamitin ang margin para sa alignment */
+    margin-left: 0; 
+    text-align: left;
+}
+
+/* Para sa responsive font sizes */
+.hero-box h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem) !important; /* Dynamic size */
+    color: #ffffff !important;
+}
+
+.hero-box p.lead {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: #ffffff !important;
+}
+
+/* Controls visibility */
+.carousel-control-prev, .carousel-control-next {
+    width: 5%;
+    opacity: 0.7;
+}
+
+/* 2. Patakbuhin lang ang animation kapag TAPOS na o habang nag-a-active ang slide */
+.carousel-item.active .hero-box {
+    animation: fadeInSlide 0.7s ease-out 0.1s forwards; /* May delay na 0.4s para hintayin ang background fade */
+}
+/* 1. Itago muna ang lahat ng hero-box sa loob ng carousel items */
+.carousel-item .hero-box {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: none; /* Siguradong walang transition kapag hindi active */
+}
+
+
+
+
+@keyframes fadeInSlide {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Mobile Fix */
+@media (max-width: 991px) {
+    .hero-box {
+        margin: 0 auto;
+        text-align: center;
+        max-width: 95%;
+        padding: 20px;
+    }
+    .hero-box h1 {
+        -webkit-text-stroke: 1px #800000;
+    }
+    .hero-box .d-sm-flex {
+        justify-content: center;
+    }
 }
 
 /* The "White text with Maroon Outline" effect */
@@ -226,15 +299,11 @@ html {
     font-weight: 900;
     text-transform: uppercase;
     /* Adds the Maroon border/outline to the text */
-    -webkit-text-stroke: 1.5px #800000; 
-    text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
     letter-spacing: 0.5px;
 }
 .hero-box p.lead {
     color: #ffffff !important;
     font-weight: 700;
-    -webkit-text-stroke: 0.6px #800000; 
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     letter-spacing: 1px;
     padding-left: 15px;
 }
@@ -326,6 +395,160 @@ h1 {
 }
 
 
+/* I-center ang buong hero-box sa Second Section */
+.second-section .hero-box {
+    background: transparent !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    max-width: 90%;      /* Nilakihan ng konti para sa center look */
+    width: 100%;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important; /* Lahat ng text sa loob ay mag-center */
+    margin-top: -200px !important; /* Lakihan mo pa ang number (ex: -150px) kung gusto mong mas mataas pa */
+}
+
+/* Siguraduhin na ang buttons ay mag-center din */
+.second-section .hero-box .d-sm-flex {
+    justify-content: center !important;
+}
+
+/* Optional: Text shadow para sa H1 at Paragraph para mas lutang */
+.second-section .hero-box h1 {
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8) !important;
+    margin-bottom: 20px;
+}
+
+.second-section .hero-box p.lead {
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.9) !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+
+/* General Header Style */
+.second-section-header {
+    font-family: 'Poppins', sans-serif !important;
+    text-transform: none !important; /* Siguraduhing hindi puro uppercase kung mixed case sa image */
+    letter-spacing: -1px; /* Para mas dikit ang mga letra tulad ng sa logo */
+    transform: scale(1.5); /* Papalakhin nito ang text ng 20% */
+    transform-origin: center; /* Siguraduhin na sa gitna ang paglaki */
+}
+/* PUPBC - Maroon */
+.second-section-header .text-pup {
+    background: linear-gradient(to right, #800000, #d32f2f);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* color: #800000 !important; */ /* PUP Maroon */
+    font-weight: 800;
+    
+}
+/* Care - Professional Medical Blue Gradient */
+.second-section-header .text-care {
+    background: linear-gradient(to right, #007bff 0%, #4facfe 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800; /* Mas makapal para mas kita ang gradient */
+}
+/* Link - Deep Maroon to Crimson (Lightish Maroon) */
+.second-section-header .text-link {
+    background: linear-gradient(to left, #800000, #d32f2f);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* -webkit-text-fill-color: transparent; */
+    font-weight: 800;
+}
+/* Siguraduhin na hindi sila maghihiwalay */
+.second-section-header span {
+    display: inline-block;
+    white-space: nowrap;
+}
+/* Tanggalin ang red outline sa Care at Link */
+.second-section-header .text-care, 
+.second-section-header .text-link,
+.second-section-header .text-pup {
+    -webkit-text-stroke: 0px transparent !important; /* Ito ang tatanggal sa red outline */
+    text-shadow: none !important; /* Optional: Tanggalin din kung nag-ko-cause ng dumi sa gradient */
+}
+
+
+/* Container para sa paragraph sa second section */
+.hero-box p.lead.second-section-p {
+    font-family: 'Poppins', sans-serif !important; /* Ito ang font sa image */
+    -webkit-text-stroke: 0px transparent !important;
+    text-shadow: none !important;
+    padding-left: 0 !important;
+    border-left: none !important;
+    line-height: 1; /* Nagbibigay ng tamang space sa pagitan ng lines */
+}
+
+/* Container para sa paragraph sa second section */
+.second-section-p {
+    /* Alisin ang default outline at shadow para maging solid ang kulay */
+    -webkit-text-stroke: 0px transparent !important;
+    text-shadow: none !important;
+    padding-left: 0 !important; /* Siguraduhin na pantay sa center */
+    border-left: none !important;
+}
+/* Taas na linya - Solid Black */
+.second-section-p .p-top {
+    color: #000000 !important;
+    font-weight: 900; /* Medyo makapal para madaling basahin */
+    display: inline-block;
+    padding: 2px 10px;
+    margin-bottom: 5px;
+}
+/* Babang linya - Solid White */
+.second-section-p .p-bottom {
+    color: #ffffff !important;
+    font-weight: 900; /* Mas makapal para lumitaw ang pagka-puti */
+    display: inline-block;
+    padding: 2px 10px;
+    margin-bottom: 5px;
+}
+
+.carousel-item.second-section {
+/* Ang gradient ay 'to bottom', ibig sabihin mula sa itaas pababa ang itim/puti */
+    background: radial-gradient(
+        ellipse at 50% -10%,
+        rgba(255, 255, 255, 0.9) 0%,   /* Solid na puti sa pinakataas */
+        rgba(255, 255, 255, 0.4) 30%,  /* Medyo blurry/transparent sa gitna */
+        rgba(255, 255, 255, 0) 60%     /* Tuluyang invisible na sa bandang baba */
+    ), 
+    url('bgcampus1.png'); /* Ang iyong original na image */
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 90vh; /* O depende sa height ng banner mo */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+
+/* Palitan ang kulay ng Prev at Next Icons */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(75%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    /* O mas simpleng approach: */
+    /* filter: grayscale(100%) brightness(1.2); */
+    width: 3rem; /* Optional: Lakihan natin nang konti para mas kita */
+    height: 3rem;
+}
+
+/* Optional: Baguhin ang kulay kapag nira-ratan (Hover) */
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+    filter: invert(100%); /* Magiging mas matingkad na silver/white sa hover */
+}
 
 
 

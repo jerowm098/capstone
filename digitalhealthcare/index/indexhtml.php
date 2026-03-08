@@ -31,7 +31,8 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav mx-auto text-center">
+      <!-- <ul class="navbar-nav mx-auto text-center"> -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="#home">Home</a>
         </li>
@@ -63,23 +64,76 @@
   </div>
 </nav>
 
-<section id="home" class="d-flex align-items-center">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-8 text-center hero-box">
-        <h1 class="display-3 fw-bold mb-4">Our Expertise <br>at your Service</h1>
-        <p class="lead mb-5 text-muted">
-          <!-- Providing world-class digital healthcare solutions tailored to your needs. <br>
-          From virtual consultations to secure medical records, we bring the hospital to your fingertips. -->
-          Your Online Link to PUP BC Health Services
-          <br> PUP Biñan Campus Clinic
-        </p>
-        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-          <a href="#services" class="btn btn-dark btn-lg px-5 py-3">Services</a>
-          <a href="#about" class="btn btn-outline-dark btn-lg px-5 py-3">Learn More</a>
+<section id="home" class="p-0">
+  <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="6000" data-bs-pause="hover">
+    
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+    </div>
+
+    <div class="carousel-inner">
+      
+      <div class="carousel-item active second-section">
+        <div class="container h-100 d-flex align-items-center">
+          <div class="hero-box">
+            <h1 class="display-3 fw-bold mb-4 second-section-header">
+              <span class="text-pup">PUPBC</span> 
+              <span class="text-care">Care</span><span class="text-link">Link</span>
+            </h1>
+            <p class="lead mb-5 text-muted second-section-p">
+              <span class="p-top">Official Clinic Support Website | Connected to the</span> <br>
+              <span class="p-bottom">Polytechnic University of the Philippines Biñan Campus.</span>
+            </p>
+         <!--    <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
+              <a href="#about" class="btn btn-outline-dark btn-lg px-5 py-3">View Privacy</a>
+            </div> -->
+          </div>
         </div>
       </div>
+
+      <div class="carousel-item" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('bg2.png');">
+        <div class="container h-100 d-flex align-items-center">
+          <div class="hero-box">
+            <h1 class="display-3 fw-bold mb-4">Our Expertise <br>at your Service</h1>
+            <p class="lead mb-5 text-muted">
+              Your Online Link to PUP BC Health Services<br>
+              PUP Biñan Campus Clinic
+            </p>
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
+              <a href="#services" class="btn btn-dark btn-lg px-5 py-3">Services</a>
+              <!-- <a href="#about" class="btn btn-outline-dark btn-lg px-5 py-3">Learn More</a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80');">
+        <div class="container h-100 d-flex align-items-center">
+          <div class="hero-box">
+            <h1 class="display-3 fw-bold mb-4">Seamless <br>Appointments</h1>
+            <p class="lead mb-5 text-muted">
+              Skip the long lines. Book your medical consultation <br>
+              online anytime, anywhere within the campus.
+            </p>
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
+              <a href="appointment_form.php" class="btn btn-dark btn-lg px-5 py-3">Book Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
     </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
   </div>
 </section>
 
@@ -458,55 +512,74 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const statNumbers = document.querySelectorAll('.stat-number');
-    
-    const animateCounter = (num) => {
-        const rawValue = num.getAttribute('data-target') || num.innerText;
-        
-        // I-save ang original value sa data attribute kung wala pa
+    const statsContainer = document.querySelector('.stats-container');
+
+    // Store original values immediately before any animation logic starts
+    statNumbers.forEach(num => {
         if (!num.getAttribute('data-target')) {
-            num.setAttribute('data-target', rawValue);
+            num.setAttribute('data-target', num.innerText);
+            // Initialize with 0 so it doesn't "jump" on first load
+            const suffix = num.innerText.replace(/[\d.]/g, '');
+            num.innerText = "0" + suffix;
         }
+    });
 
+    const animateCounter = (el) => {
+        // Prevent double-animation if already animating
+        if (el.dataset.animating === "true") return;
+        el.dataset.animating = "true";
+
+        const rawValue = el.getAttribute('data-target');
         const target = parseFloat(rawValue.replace(/[^\d.]/g, ''));
-        const suffix = rawValue.replace(/[\d.]/g, ''); 
+        const suffix = rawValue.replace(/[\d.]/g, '');
         
-        let count = 0;
-        const duration = 2000; 
-        const increment = target / (duration / 30);
+        const duration = 2000; // 2 seconds
+        let startTime = null;
 
-        const updateCount = () => {
-            count += increment;
-            if (count < target) {
-                if (target === 4.9) {
-                    num.innerText = count.toFixed(1) + suffix;
-                } else {
-                    num.innerText = Math.floor(count) + suffix;
-                }
-                setTimeout(updateCount, 30);
+        const step = (currentTime) => {
+            if (!startTime) startTime = currentTime;
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            
+            const currentCount = progress * target;
+
+            // Formatting logic
+            if (target % 1 !== 0) { // If it's a decimal like 4.9
+                el.innerText = currentCount.toFixed(1) + suffix;
             } else {
-                num.innerText = rawValue;
+                el.innerText = Math.floor(currentCount) + suffix;
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                el.innerText = rawValue;
+                el.dataset.animating = "false"; // Animation finished
             }
         };
-        updateCount();
+
+        requestAnimationFrame(step);
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Kapag nakita na ang section, simulan ang animation
+                // Animate each number individually
                 statNumbers.forEach(num => animateCounter(num));
             } else {
-                // Kapag nawala sa screen, i-reset sa 0 para tumakbo ulit mamaya
+                // Reset to 0 when scrolled away so it can re-animate later
                 statNumbers.forEach(num => {
-                    const rawValue = num.getAttribute('data-target') || num.innerText;
+                    const rawValue = num.getAttribute('data-target');
                     const suffix = rawValue.replace(/[\d.]/g, '');
                     num.innerText = "0" + suffix;
+                    num.dataset.animating = "false";
                 });
             }
         });
-    }, { threshold: 0.2 }); // Trigger kahit 20% pa lang ng section ang nakikita
+    }, { threshold: 0.2 });
 
-    observer.observe(document.querySelector('.stats-container'));
+    if (statsContainer) {
+        observer.observe(statsContainer);
+    }
 });
 </script>
   
