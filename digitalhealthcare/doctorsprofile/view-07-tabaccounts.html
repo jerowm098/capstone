@@ -1,0 +1,83 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Accounts & Billing</h2>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-dark btn-sm shadow-sm">
+                <i class="bi bi-download me-1"></i> Financial Report
+            </button>
+            <button class="btn btn-dark btn-sm shadow-sm">
+                + Create Invoice
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card account-stat-card border-0 shadow-sm p-4 border-primary">
+                <p class="stat-subtitle">Pending Payments</p>
+                <h3 class="stat-value text-primary">$12,450.00</h3>
+                <small class="text-muted">From 24 patients</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card account-stat-card border-0 shadow-sm p-4 border-success">
+                <p class="stat-subtitle">Collected (Monthly)</p>
+                <h3 class="stat-value text-success">$45,200.00</h3>
+                <small class="text-muted">8% increase from last month</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card account-stat-card border-0 shadow-sm p-4 border-danger">
+                <p class="stat-subtitle">Overdue Invoices</p>
+                <h3 class="stat-value text-danger">$3,120.00</h3>
+                <small class="text-muted">Action required for 5 accounts</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 border-0">
+                    <h6 class="fw-bold mb-0">Recent Transactions</h6>
+                </div>
+                <div class="table-responsive p-3 pt-0">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Patient</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="invoice-id">#INV-9021</td>
+                                <td>Sarah Jenkins</td>
+                                <td class="date-text">Oct 24, 2026</td>
+                                <td class="fw-bold">$240.00</td>
+                                <td><span class="badge bg-success-light text-success">Paid</span></td>
+                                <td><button class="btn btn-action"><i class="bi bi-printer"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td class="invoice-id">#INV-9022</td>
+                                <td>Robert Smith</td>
+                                <td class="date-text">Oct 23, 2026</td>
+                                <td class="fw-bold">$1,150.00</td>
+                                <td><span class="badge bg-warning-light text-warning">Pending</span></td>
+                                <td><button class="btn btn-dark btn-sm px-3">Remind</button></td>
+                            </tr>
+                            <tr>
+                                <td class="invoice-id">#INV-8955</td>
+                                <td>Maria Garcia</td>
+                                <td class="date-text">Oct 15, 2026</td>
+                                <td class="fw-bold">$45.00</td>
+                                <td><span class="badge bg-danger-light text-danger">Overdue</span></td>
+                                <td><button class="btn btn-action text-danger"><i class="bi bi-exclamation-circle"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>

@@ -1,0 +1,10 @@
+PATIENT
+register/ add 
+view
+manage/ edit delete view
+
+
+EMPLOYEE
+register/ add 
+view
+manage/ edit delete view

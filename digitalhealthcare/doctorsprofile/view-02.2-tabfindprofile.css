@@ -1,0 +1,108 @@
+/* Specific styling for Find Profile Search Box */
+
+#searchForm .form-control:focus {
+    box-shadow: none !important;
+    border-color: #dee2e6 !important;
+}
+
+/* Autofill fix */
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+
+/* view-02.2-findprofiletab.css */
+
+/* Table alignment fixes */
+.user-directory-table {
+    table-layout: fixed; /* Pinipilit ang columns na sumunod sa width */
+    width: 100%;
+}
+
+/* Specific Column Widths */
+.col-name { width: 25%; }
+.col-email { width: 20%; }
+.col-contact { width: 15%; }
+.col-expertise { width: 15%; }
+.col-joined { width: 12%; }
+.col-action { width: 13%; }
+
+/* Text Overflow Handling - para hindi masira ang table pag mahaba ang text */
+.user-directory-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+/* Avatar styling */
+.avatar-circle {
+    width: 38px;
+    height: 38px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: transform 0.2s;
+}
+
+.table-hover tbody tr:hover .avatar-circle {
+    transform: scale(1.1);
+}
+
+/* Badge fix */
+.expertise-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.5em 0.8em;
+    border-radius: 6px;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Pagination highlight */
+.pagination .page-link {
+    border: none;
+    margin: 0 2px;
+    border-radius: 5px;
+}
+
+/* Search bar styling */
+#searchForm .input-group {
+    border-radius: 8px;
+    /* overflow: hidden; */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+
+/* FIX: Para hindi gumalaw ang page content pag nag-open ang modal */
+body {
+    overflow-y: scroll !important; /* Laging ipakita ang scrollbar vertical */
+    padding-right: 0 !important;   /* Pigilan ang Bootstrap sa pag-add ng padding-right */
+}
+
+.modal-open {
+    overflow-y: scroll !important;
+    padding-right: 0 !important;
+}
+
+
+
+
+/* Hanapin o dagdagan ang class na ito sa CSS file mo */
+.table-responsive {
+    min-height: 360px; /* Adjust mo ang height na ito depende sa gusto mong haba */
+    display: flex;
+    flex-direction: column;
+}
+
+.user-directory-table {
+    table-layout: fixed;
+    width: 100%;
+    margin-bottom: 0; /* Iwasan ang extra margin sa ilalim ng table */
+}
+
+/* Siguraduhin na ang card container ay laging sakop ang space */
+.card.d-flex.flex-column {
+    min-height: 520px; /* Total height kasama ang header at footer */
+}

@@ -1,0 +1,106 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="fw-bold main-tab-title mb-0">Consultation Session</h2>
+        <small class="text-muted">Patient: <strong>Juan Dela Cruz</strong> | ID: 2021-00123-MN-0</small>
+    </div>
+    <span class="badge bg-primary px-3 py-2">Session ID: #CON-2024-001</span>
+</div>
+
+<ul class="nav nav-tabs mb-4 border-bottom-0" id="consultationTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active fw-bold text-uppercase small" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab">
+            <i class="bi bi-journal-text me-2"></i>Patient Consultation
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold text-uppercase small" id="lab-tab" data-bs-toggle="tab" data-bs-target="#lab" type="button" role="tab">
+            <i class="bi bi-flask me-2"></i>Laboratory
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold text-uppercase small" id="prescription-tab" data-bs-toggle="tab" data-bs-target="#prescription" type="button" role="tab">
+            <i class="bi bi-capsule me-2"></i>Prescription
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="consultationTabsContent">
+    
+    <div class="tab-pane fade show active" id="notes" role="tabpanel">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm border-start border-warning border-4 mb-3">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-warning mb-3"><i class="bi bi-clipboard2-pulse me-2"></i>Triage Data</h6>
+                        <div class="row g-2 text-center mb-3">
+                            <div class="col-4"><div class="p-2 bg-light rounded small">Temp<br><strong>37.2°C</strong></div></div>
+                            <div class="col-4"><div class="p-2 bg-light rounded small">BP<br><strong>120/80</strong></div></div>
+                            <div class="col-4"><div class="p-2 bg-light rounded small">Pulse<br><strong>82</strong></div></div>
+                        </div>
+                        <p class="small mb-0"><strong>Chief Complaint:</strong> "Persistent cough and headache."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <label class="form-label fw-bold text-muted small">CLINICAL FINDINGS & DIAGNOSIS</label>
+                        <textarea class="form-control mb-3" rows="4" placeholder="Enter objective findings and assessment..."></textarea>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-success px-4">Save Consultation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="lab" role="tabpanel">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 text-center py-5">
+                <i class="bi bi-send-check text-muted fs-1 mb-3"></i>
+                <h5 class="fw-bold">Request Laboratory Test</h5>
+                <p class="text-muted small mb-4">Select required laboratory examinations for this patient.</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-start">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="lab1">
+                            <label class="form-check-input-label" for="lab1">Complete Blood Count (CBC)</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="lab2">
+                            <label class="form-check-input-label" for="lab2">Urinalysis</label>
+                        </div>
+                        <button class="btn btn-primary w-100 mt-3">Generate Lab Request</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="prescription" role="tabpanel">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h6 class="fw-bold mb-3">E-Prescription Management</h6>
+                <div class="border rounded p-3 bg-light mb-3">
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <select class="form-select"><option>Search Medicine...</option></select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" placeholder="Qty">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary w-100">Add to Prescription</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-sm small">
+                    <thead><tr><th>Medicine</th><th>Qty</th><th>Instructions</th><th>Action</th></tr></thead>
+                    <tbody><tr><td colspan="4" class="text-center text-muted py-3">No medication added yet.</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

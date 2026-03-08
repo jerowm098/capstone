@@ -1,0 +1,80 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Laboratory & Diagnostics</h2>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-dark btn-sm"><i class="bi bi-filter me-1"></i> Filter</button>
+            <button class="btn btn-dark btn-sm">+ Order New Test</button>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="p-3 bg-white border rounded shadow-sm">
+                <p class="small text-muted mb-1">New Results</p>
+                <h4 class="fw-bold mb-0">12</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-3 bg-white border rounded shadow-sm border-start border-warning border-4">
+                <p class="small text-muted mb-1">Pending Lab</p>
+                <h4 class="fw-bold mb-0">08</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-3 bg-white border rounded shadow-sm border-start border-danger border-4">
+                <p class="small text-muted mb-1">Critical Flags</p>
+                <h4 class="fw-bold mb-0 text-danger">02</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-3 bg-white border rounded shadow-sm">
+                <p class="small text-muted mb-1">Imaging Ready</p>
+                <h4 class="fw-bold mb-0">05</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3 border-0">
+            <h6 class="fw-bold mb-0">Recent Test Results</h6>
+        </div>
+        <div class="table-responsive p-3 pt-0">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Test Type</th>
+                        <th>Ordered By</th>
+                        <th>Status</th>
+                        <th>Result Preview</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="small fw-bold">#PT-8821</td>
+                        <td>Complete Blood Count (CBC)</td>
+                        <td class="small">Dr. Wilson</td>
+                        <td><span class="badge bg-success-light text-success px-2">Completed</span></td>
+                        <td><span class="text-muted small">WBC: Normal</span></td>
+                        <td><button class="btn btn-sm btn-light border"><i class="bi bi-eye"></i></button></td>
+                    </tr>
+                    <tr>
+                        <td class="small fw-bold">#PT-7704</td>
+                        <td>Lipid Panel</td>
+                        <td class="small">Dr. Wilson</td>
+                        <td><span class="badge bg-danger-light text-danger px-2">Critical</span></td>
+                        <td><span class="text-danger small fw-bold">High LDL (190)</span></td>
+                        <td><button class="btn btn-sm btn-dark"><i class="bi bi-file-earmark-pdf"></i></button></td>
+                    </tr>
+                    <tr>
+                        <td class="small fw-bold">#PT-9122</td>
+                        <td>Chest X-Ray</td>
+                        <td class="small">Dr. Adams</td>
+                        <td><span class="badge bg-warning-light text-warning px-2">In Progress</span></td>
+                        <td><div class="spinner-grow spinner-grow-sm text-warning" role="status"></div></td>
+                        <td><button class="btn btn-sm btn-light border" disabled><i class="bi bi-eye"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>

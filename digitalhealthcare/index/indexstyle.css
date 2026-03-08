@@ -1,0 +1,836 @@
+
+
+
+/* General Theme */
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar Customization */
+.navbar {
+    /* border-bottom: 1px solid #f0f0f0; */
+    background-color: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    border-bottom: 2px solid #d4a017;
+    padding: 0 !important; /* Siguraduhing zero na lahat */
+    min-height: auto !important; /* Tinatanggal ang default height ng Bootstrap */
+    transition: all 0.3s ease;
+}
+
+
+
+/* Logo Styling - Adjusted for side-by-side */
+.brand-logo {
+    height: 70px; /* logo size */
+    width: auto;
+    display: block;
+    margin-right: -35px !important; /* Palitan ito depende sa lapit na gusto mo */
+    margin-top: -5px !important;    /* Hahatak sa logo pataas */
+    margin-bottom: -5px !important; /* Hahatak sa logo pababa */
+}
+
+/* Container for the text lines */
+.brand-text-wrapper {
+    line-height: 0.9; /* Adjust this to bring PUPBC and CareLink closer */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* font-family: 'Cinzel', serif; */ /* O anumang serif font para magmukhang academic/PUP */
+    font-family: 'Poppins', sans-serif;
+    
+}
+
+
+/* Customization para sa PUPBC (Maroon) */
+.brand-text-wrapper span:first-child {
+    color: #800000 !important; /* Official PUP Maroon */
+    font-weight: 800;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+}
+
+/* Customization para sa CareLink (Gold/Yellow) */
+.brand-text-wrapper span:last-child {
+    color: #d4a017 !important; /* Deep Gold para mabasa sa white background */
+    font-weight: 600;
+    font-size: 1.1rem;
+    /* text-transform: uppercase; */
+    letter-spacing: 2px;
+}
+
+.navbar-brand:hover .brand-text-wrapper span:first-child {
+    color: #a00000 !important; /* Mas maliwanag na maroon */
+}
+
+.navbar-brand:hover .brand-text-wrapper span:last-child {
+    color: #b8860b !important; /* Darker gold */
+}
+
+
+
+/* Brand Link overall styling */
+.navbar-brand {
+    display: flex !important;
+    flex-direction: row !important; /* Forces side-by-side */
+    align-items: center !important;
+    text-decoration: none;
+    font-size: 1.4rem; /* Slightly smaller to fit better horizontally */
+    letter-spacing: -1px;
+    
+
+}
+
+
+
+
+
+.nav-link {
+    color: #4a4a4a !important; /* Dark grey for a professional look */
+    font-weight: 600;
+    margin: 0 15px;
+    font-size: 0.95rem;
+    text-transform: uppercase; /* Academic feel */
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Hover state: Changes to PUP Maroon */
+.nav-link:hover {
+    color: #800000 !important; 
+}
+
+/* Optional: Add a Gold underline effect on hover */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #800000; /* PUP Gold */
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.navbar-nav .nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-item:not(:last-child)::after {
+    content: "";
+    height: 15px; /* Taas ng linya */
+    width: 1px;   /* Kapal ng linya */
+    background-color: #d1d1d1; /* Kulay ng linya (light gray) */
+    margin: 0 0px; /* Spacing sa kaliwa at kanan */
+    display: inline-block;
+}
+
+
+
+
+/* Login Button Customization */
+/* Login Button - Base Style */
+.btn-login {
+    background-color: #800000;
+    color: #ffffff !important;
+    border-radius: 50px;
+    padding: 8px 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border: 2px solid #800000 !important; /* Siguradong Maroon ang border */
+    transition: all 0.3s ease;
+}
+
+/* Hover, Active, at Focus States */
+.btn-login:hover, 
+.btn-login:active,
+.btn-login:focus,
+.btn-login:focus-visible {
+    background-color: transparent !important;
+    color: #800000 !important;
+    border-color: #800000 !important; /* Ito ang papatay sa itim na border */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2) !important;
+    outline: #800000 !important; /* Tinatanggal ang default browser outline */
+}
+
+/* Siguraduhin na kahit sa focus (pagkaclick), walang ibang kulay na lilitaw */
+.btn-check:focus + .btn-login, .btn-login:focus {
+    outline: #800000 !important;
+    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2) !important;
+    border-color: #800000 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* HOME SECTION */
+/* Smooth scrolling makes the navigation jump look like a glide */
+html {
+    scroll-behavior: smooth;
+}
+
+#home {
+    scroll-margin-top: 80px; /* Kadalasan 0 ito para sa pinakataas */
+}
+
+/* Home Section Styling */
+#home {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('bg2.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 90vh;
+    display: flex;
+    align-items: center; /* Vertically centers the hero-box */
+}
+
+.hero-box {
+    /* background: rgba(0, 0, 0, 0); */ /* Semi-transparent black background */
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+    padding: 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);    /* Modern frosted glass effect */
+    border: 2px solid rgba(212, 160, 23, 0.3); /* Subtle Gold border */
+    position: relative; 
+    top: 5px;   /* Itaas (negative value) o Ibaba (positive value) */
+    left: -300px;   /* Pakaliwa o Pakanan */
+    max-width: 630px;
+}
+
+/* The "White text with Maroon Outline" effect */
+.hero-box h1 {
+    color: #ffffff !important;
+    font-weight: 900;
+    text-transform: uppercase;
+    /* Adds the Maroon border/outline to the text */
+    -webkit-text-stroke: 1.5px #800000; 
+    text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
+}
+.hero-box p.lead {
+    color: #ffffff !important;
+    font-weight: 700;
+    -webkit-text-stroke: 0.6px #800000; 
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    letter-spacing: 1px;
+    padding-left: 15px;
+}
+
+/* --- BUTTON CUSTOMIZATION --- */
+
+/* Primary Button (Services) - PUP Maroon */
+.hero-box .btn-dark {
+    background-color: #800000 !important;
+    border: 2px solid #800000 !important;
+    color: #fff !important;
+    transition: all 0.3s ease;
+}
+.hero-box .btn-dark:hover {
+    background-color: transparent !important;
+    color: #800000 !important;
+    border-color: #800000 !important;
+}
+
+/* Outline Button (Learn More) - PUP Gold */
+.hero-box .btn-outline-dark {
+    border: 2px solid #d4a017 !important;
+    color: #d4a017 !important;
+    background-color: transparent !important;
+    transition: all 0.3s ease;
+}
+
+.hero-box .btn-outline-dark:hover {
+    background-color: #d4a017 !important;
+    color: #fff !important;
+}
+
+
+/* --- RESPONSIVE DESIGN --- */
+
+/* For Tablets and Mobile Phones (Screens smaller than 992px) */
+@media (max-width: 991px) {
+    .hero-box {
+        left: 0 !important;      /* Removes the 270px offset */
+        margin: 20px auto;       /* Centers the box */
+        max-width: 90%;          /* Uses more width on small screens */
+        padding: 25px;
+        text-align: center;      /* Keeps everything neat and centered */
+    }
+
+    .hero-box h1 {
+        font-size: 2.5rem !important; /* Makes the title smaller so it fits */
+        -webkit-text-stroke: 1px #800000; /* Thinner stroke for smaller text */
+    }
+
+    .hero-box p.lead {
+        font-size: 1.1rem;
+        padding-left: 0;
+        border-left: none; /* Removes the side border on mobile for better centering */
+        border-top: 3px solid #d4a017; /* Moves the Gold accent to the top instead */
+        padding-top: 10px;
+    }
+
+    /* Stack the buttons vertically on very small phones */
+    .d-sm-flex {
+        flex-direction: column;
+    }
+}
+
+
+
+/* Siguraduhin na ang mga text sa loob ay puti rin */
+#home h1, 
+#home p.text-muted {
+    color: #ffffff !important;
+}
+
+#home p.text-muted {
+    opacity: 0.9; /* Konting transparency para sa sub-text */
+}
+
+h1 {
+    letter-spacing: -2px;
+    line-height: 1.1;
+}
+
+/* Custom Large Buttons */
+.btn-lg {
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px; /* Keeping it clean and slightly boxed */
+}
+
+
+
+
+
+/* ABOUT */
+/* Smooth scrolling for navigation */
+html {
+    scroll-behavior: smooth;
+}
+
+
+
+/* Tracking for the small label */
+.tracking-widest {
+    letter-spacing: 0.2rem;
+}
+
+#about {
+    scroll-margin-top: 20px; /* scroll landing / minus to go down */ 
+}
+
+/* Hover effect for the About Image */
+.about-image-wrapper img {
+    transition: transform 0.4s ease;
+}
+
+.about-image-wrapper img:hover {
+    transform: scale(1.02);
+}
+
+/* Custom Large Button */
+.btn-dark {
+    background-color: #000000;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.about-sub-label {
+    color: #800000; /* Subtle brand color accent */
+}
+/* Image Wrapper with Floating Badge */
+.about-image-wrapper {
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+.main-about-img {
+    transition: all 0.5s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+.about-image-wrapper:hover .main-about-img {
+    transform: translateY(-5px);
+}
+.experience-badge {
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+    background: #800000; /* Solid Maroon Background */
+    color: #ffffff;
+    padding: 10px 30px;
+    border-radius: 12px;
+    text-align: center;
+    border: 4px solid #ffffff;
+    z-index: 2;
+}
+/* Button Refinement */
+.btn-about-primary {
+    background-color: #000000;
+    color: #ffffff !important;
+    border-radius: 8px;
+    padding: 14px 40px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid #000000;
+    transition: all 0.3s ease;
+}
+.btn-about-primary:hover {
+    background-color: transparent;
+    color: #000000 !important;
+    transform: translateY(-3px);
+}
+/* Stats Typography */
+#about h4 {
+    color: #800000;
+    border-left: 3px solid #d4a017; /* Gold accent line */
+    padding-left: 10px;
+}
+
+
+
+
+
+/* SERVICES */
+/* Services Section Styles */
+#services {
+    scroll-margin-top: 20px; /* scroll landing / minus to go down */ 
+    background-color: #ffffff;
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+}
+
+.card img {
+    filter: grayscale(100%); /* Keeps your black/white aesthetic */
+    transition: filter 0.3s ease;
+}
+
+.card:hover img {
+    filter: grayscale(0%); /* Adds a pop of color on hover */
+}
+
+/* Custom Read More Button */
+.btn-outline-dark {
+    border-width: 2px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #ffffff !important; /* Ginagawang puti ang text */
+}
+
+
+.text-maroon {
+    color: #800000;
+}
+/* Service Card Styling */
+.service-card {
+    border: 1px solid #C0C0C0 !important;
+    background: #ffffff;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s ease;
+    /* border: 1px solid rgb(0, 0, 0) !important; */
+
+    /* WIDTH & HEIGHT CONTROL */
+    min-height: 350px; /* Pinipilit ang pantay na height */
+    max-width: 410px;  /* Nililimitahan ang lapad ng bawat box */
+    margin: 0 auto;    /* Sinisiguro na sentro ang box sa column */
+
+    /* PADDING (Internal Space) */
+    padding: 2.5rem !important; /* Dito mo ma-aadjust kung gaano kaluwag ang loob */
+}
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(128, 0, 0, 0.1);
+    border-color: #800000 !important; /* Maroon border on hover */
+    border-width: 5px; /* Pwedeng kapalan nang kaunti sa hover */
+}
+/* Icon Box */
+.service-icon-box {
+    width: 70px;
+    height: 70px;
+    background-color: #f8f9fa;
+    color: #800000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+.service-card:hover .service-icon-box {
+    background-color: #800000;
+    color: #ffffff;
+    transform: rotate(-5deg);
+}
+
+/* Text & Link Styling */
+.service-card h4 {
+    transition: color 0.3s ease;
+}
+.service-card:hover h4 {
+    color: #800000;
+}
+.service-link {
+    color: #800000;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s ease;
+}
+.service-link:hover {
+    color: #d4a017;
+    gap: 15px; /* Arrow moves outward on hover */
+}
+
+
+
+
+/* Doctor Section Styles */
+
+#doctors {
+    scroll-margin-top: 20px; /* scroll landing / minus to go down */ 
+}
+
+.doctor-profile-img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border: 6px solid #f8f9fa;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.text-maroon {
+    color: #800000;
+}
+
+.doctor-card {
+    border: 1px solid #C0C0C0 !important;
+    background-color: #ffffff;
+    border-radius: 20px !important;
+    transition: all 0.4s ease;
+    /* border: 1px solid rgba(0,0,0,0.05) !important; */
+}
+
+.doctor-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(128, 0, 0, 0.1) !important;
+    border-color: #800000 !important;
+}
+
+.doctor-card:hover .doctor-profile-img {
+    border-color: #d4a017; /* Nagiging Gold ang border on hover */
+    transform: scale(1.05) rotate(3deg);
+}
+
+.doctor-card .bi {
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.doctor-card .bi:hover {
+    color: #6c757d !important;
+}
+
+/* Social Icons Styling */
+.social-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #f8f9fa;
+    color: #800000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+.social-icon:hover {
+    background-color: #800000;
+    color: #ffffff;
+    transform: translateY(-3px);
+}
+
+
+
+
+
+
+/* REVIEW SECTION */
+/* Review Section Styling */
+/* REVIEW SECTION IMPROVEMENTS */
+
+
+.text-maroon { color: #800000 !important; }
+.text-gold { color: #d4a017 !important; }
+
+#review {
+    scroll-margin-top: 0px;
+}
+
+/* Card Design */
+.review-card {
+    border-top: 4px solid #800000; /* Maroon accent sa taas */
+    border-left: none !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease;
+    /* border: 1px solid rgba(0,0,0,0.05) !important; */
+    border: 1px solid #C0C0C0 !important;
+
+    /* WIDTH & HEIGHT CONTROL */
+    min-height: 290px; /* Pinipilit ang pantay na height */
+    max-width: 400px;  /* Nililimitahan ang lapad ng bawat box */
+    margin: 0 auto;    /* Sinisiguro na sentro ang box sa column */
+
+    margin-top: -40px !important; /* Hahatak sa boxes pataas */
+
+}
+
+.review-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(128, 0, 0, 0.1) !important;
+    border-color: #800000 !important;
+}
+
+/* Horizontal Stats Bar */
+.stats-horizontal-bar {
+    background-color: #fcfcfc;
+    border-radius: 50px; /* Pill shape design */
+    border: 1px solid rgba(128, 0, 0, 0.1);
+}
+
+.stat-item {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+}
+
+/* Tanggalin ang border sa dulo o kapag mobile na siksikan */
+@media (max-width: 768px) {
+    .stats-horizontal-bar {
+        border-radius: 20px;
+    }
+    .stat-item {
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+}
+
+.stats-container {
+    max-width: 1000px;
+    /* margin: 0 auto; */
+    margin: -40px auto 0 auto;
+    /* padding: 20px 0; */
+    padding: 0px 0 20px 0;
+}
+.stat-group {
+    flex: 1;
+    min-width: 150px;
+    /* padding: 10px; */
+    padding: 0px 10px;
+}
+.stat-number {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #800000 !important; /* PUP Maroon */
+    margin-bottom: 5px;
+}
+.stat-label {
+    font-size: 0.95rem;
+    color: #666;
+    font-weight: 500;
+}
+/* Responsive adjustment para sa mobile */
+@media (max-width: 768px) {
+    .stat-group {
+        flex: 0 0 50%; /* Dalawa bawat row sa mobile */
+        margin-bottom: 20px;
+    }
+}
+
+/* AVATAR INITIALS STYLING */
+.avatar-circle {
+    width: 45px;
+    height: 45px;
+    background-color: #800000; /* Official PUP Maroon */
+    color: #ffffff; /* Puting letters */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* Ginagawang bilog */
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 2px solid #d4a017; /* PUP Gold border para lalong gumanda */
+    flex-shrink: 0; /* Para hindi mapitpit ang bilog */
+    transition: all 0.3s ease;
+}
+/* Hover effect para sa bilog */
+.review-card:hover .avatar-circle {
+    background-color: #d4a017; /* Nagpapalit sa Gold on hover */
+    color: #800000; /* Maroon letters */
+    border-color: #800000;
+}
+/* Inaayos ang line height ng pangalan para pantay sa bilog */
+.lh-1 {
+    line-height: 1.2;
+    margin-bottom: 2px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* FOOTER */
+/* Footer Styles */
+/* FOOTER IMPROVEMENTS */
+footer {
+    background-color: #fff4f4 !important; /* Binago sa White para lumitaw ang Maroon logo */
+    color: #000000;
+    padding: 80px 0 30px 0;
+    border-top: 2px solid #d4a017 !important; /* Gold top border gaya ng sa navbar */
+}
+
+/* FOOTER LOGO NAME - DEFAULT STATE (Maroon & Gold) */
+.footer-brand-text span:first-child {
+    color: #800000 !important; /* PUP Maroon */
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 0.9;
+    transition: color 0.3s ease;
+}
+
+.footer-brand-text span:last-child {
+    color: #d4a017 !important; /* Gold */
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    transition: color 0.3s ease;
+}
+
+/* FOOTER LOGO NAME - HOVER STATE (Darkish Maroon) */
+.footer-brand-link:hover .footer-brand-text span:first-child {
+    color: #5a0000 !important; /* Mas madilim na maroon sa hover */
+}
+
+.footer-brand-link:hover .footer-brand-text span:last-child {
+    color: #b8860b !important; /* Darker gold sa hover */
+}
+
+/* Inaayos ang logo image sa footer */
+footer .brand-logo {
+    height: 65px;
+    width: auto;
+    margin-right: -32px !important; /* Match sa navbar feel */
+}
+
+/* Iba pang footer text adjustments para sa light background */
+.footer-description {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.footer-heading {
+    color: #800000; /* Maroon headings para sa academic look */
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 2px solid #d4a017;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.footer-links a {
+    color: #555 !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #800000 !important; /* Mag-ma-maroon sa hover */
+    padding-left: 5px;
+}
+
+.footer-bottom-border {
+    border-top: 1px solid #eeeeee !important;
+}
+
+.copyright-text {
+    color: #999;
+    font-size: 0.85rem;
+}
+
+
+
+
+/* Tanggalin ang asul na glow kapag kiniclick o naka-focus */
+.btn-login:focus, 
+.btn-login:active,
+.btn-login:focus-visible {
+    box-shadow: none !important; /* Ito ang nagtatanggal ng blue glow */
+    outline: none !important;
+    border-color: #000000 !important;
+}
+
+/* Para siguradong walang asul kahit sa mobile */
+.btn:focus {
+    box-shadow: none !important;
+}
+
+
+
+
+
+

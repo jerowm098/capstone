@@ -1,0 +1,88 @@
+/* --- CLEANED DASHBOARD LAYOUT SECTION --- */
+
+/* 1. Stat Cards */
+.stat-card {
+    padding: 3rem !important;
+    /* height: 118% !important; */
+    height: 130% !important;
+    /* height: auto !important; */
+    min-height: 100px;
+    border-radius: 15px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 5px solid #eee;
+    transition: transform 0.3s ease;
+}
+
+/* I-target ang 4th, 5th, at 6th column containers */
+.col-lg-9 .col-md-4:nth-child(n+4) {
+    /* margin-top: 2.5rem; */ /* Dagdagan ang value na ito para mas bumaba pa sila */
+    margin-top: 3rem;
+}   
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+/* 2. Stat Numbers & Labels */
+.stat-number {
+    font-size: 1.8rem !important;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #000000;
+}
+
+.stat-label {
+    font-size: 0.8rem !important;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0;
+}
+
+/* 3. Icon Circles */
+.stat-icon-circle {
+    width: 50px;
+    height: 50px;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: #000000;
+    border: 1px solid #eeeeee;
+}
+
+.stat-icon-circle i {
+    line-height: 0;
+}
+
+/* Red Alert/Danger Card Circle */
+.bg-light-danger {
+    background-color: #fee2e2 !important;
+    border: 1px solid #fecaca !important;
+}
+
+/* 4. Table Styling for Dashboard */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: white;
+}
+
+.table thead {
+    background-color: #f8f9fa;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+
