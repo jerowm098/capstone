@@ -515,7 +515,9 @@ h1 {
 .carousel-item.second-section {
 /* Ang gradient ay 'to bottom', ibig sabihin mula sa itaas pababa ang itim/puti */
     background: radial-gradient(
-        ellipse at 50% -10%,
+        /* 150% width at 100% height para maging 'Wide U' */
+        /* ellipse at 50% -10%, */
+        150% 100% ellipse at 50% -5%,
         rgba(255, 255, 255, 0.9) 0%,   /* Solid na puti sa pinakataas */
         rgba(255, 255, 255, 0.4) 30%,  /* Medyo blurry/transparent sa gitna */
         rgba(255, 255, 255, 0) 60%     /* Tuluyang invisible na sa bandang baba */
