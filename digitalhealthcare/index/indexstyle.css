@@ -8,6 +8,9 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+
+
+
 /* Navbar Customization */
 .navbar {
     /* border-bottom: 1px solid #f0f0f0; */
@@ -20,6 +23,45 @@ body {
     min-height: auto !important; /* Tinatanggal ang default height ng Bootstrap */
     transition: all 0.3s ease;
 }
+
+/* STYLES FOR NAVBAR DROPDOWN */
+/* Enable Hover for Desktop */
+@media (min-width: 992px) {
+    .navbar .nav-item.dropdown:hover .dropdown-menu {
+        /* display: inline-block; */
+        margin-top: 0; /* Prevents gap so mouse doesn't lose focus */
+    }
+}
+
+/* Style the Dropdown Menu */
+.dropdown-menu {
+    border-top: 3px solid #d4a017; /* Matches your navbar bottom border */
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 10px 0;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #d4a017; /* Text turns gold on hover */
+    padding-left: 25px; /* Subtle slide effect */
+}
+
+/* Arrow Animation */
+.nav-link.dropdown-toggle i {
+    transition: transform 0.3s ease;
+}
+
+.nav-item.dropdown:hover .nav-link.dropdown-toggle i {
+    transform: rotate(180deg); /* Arrow flips up on hover */
+}
+
 
 
 

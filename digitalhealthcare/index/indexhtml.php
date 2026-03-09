@@ -39,9 +39,28 @@
         <li class="nav-item">
           <a class="nav-link" href="#about">About</a>
         </li>
-        <li class="nav-item">
+<!--         <li class="nav-item">
           <a class="nav-link" href="#services">Services</a>
+        </li> -->
+
+
+
+        <!-- STYLE FOR DROPDOWN NAVBAR -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#services" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Services <i class="bi bi-chevron-down ms-1" style="font-size: 0.8rem;"></i>
+            </a>
+            <ul class="dropdown-menu animate__animated animate__fadeInUp" aria-labelledby="servicesDropdown">
+                <li><a class="dropdown-item" href="appointment_form.php"><i class="bi bi-calendar-check me-2"></i>Book Appointment</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-capsule me-2"></i>Digital Pharmacy</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-shield-check me-2"></i>Health Tracking</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#services">View All Services</a></li>
+            </ul>
         </li>
+
+
+
         <li class="nav-item">
             <a class="nav-link" href="#doctors">Doctors</a>
         </li>
@@ -52,6 +71,17 @@
             <a class="nav-link" href="#contact">Contact Us</a>
         </li>
 
+
+        <!-- STYLE FOR DROPDOWN NAVBAR -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="portalDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Portals <i class="bi bi-chevron-down ms-1" style="font-size: 0.8rem;"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="portalDropdown">
+                <li><a class="dropdown-item" href="../login/studentloginhtml.php">Student Portal</a></li>
+                <li><a class="dropdown-item" href="../login/loginhtml.php">Doctor Portal</a></li>
+            </ul>
+        </li>
 
       </ul>
 
