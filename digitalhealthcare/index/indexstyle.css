@@ -358,7 +358,7 @@ html {
         font-size: 1.1rem;
         padding-left: 0;
         border-left: none; /* Removes the side border on mobile for better centering */
-        border-top: 3px solid #d4a017; /* Moves the Gold accent to the top instead */
+        /* border-top: 3px solid #d4a017;  *//* Moves the Gold accent to the top instead */
         padding-top: 10px;
     }
 
