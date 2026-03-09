@@ -1,3 +1,9 @@
+<?php
+$rememberedID = isset($_COOKIE['remembered_student_id']) ? $_COOKIE['remembered_student_id'] : '';
+$rememberedPass = isset($_COOKIE['remembered_password']) ? $_COOKIE['remembered_password'] : '';
+$is_checked = isset($_COOKIE['remembered_student_id']) ? 'checked' : '';
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -36,21 +42,43 @@
     </div>
 
     <form action="process_login.php" method="POST">
-        <div class="mb-2">
+<!--         <div class="mb-2">
             <label for="username" class="form-label">Patient ID</label>
             <input type="text" class="form-control" id="username" name="username" placeholder="e.g. STU-0000" required>
+        </div> -->
+
+        <div class="mb-2">
+            <label for="username" class="form-label">Patient ID</label>
+            <input type="text" class="form-control" id="username" name="username" 
+                value="<?php echo htmlspecialchars($rememberedID); ?>" 
+                placeholder="e.g. STU-0000" required>
         </div>
+
+<!--         <div class="mb-2">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+        </div> -->
 
         <div class="mb-2">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+            <input type="password" class="form-control" id="password" name="password" 
+                value="<?php echo htmlspecialchars($rememberedPass); ?>" 
+                placeholder="••••••••" required>
         </div>
 
+
+
         <div class="login-options">
-            <div class="form-check">
+<!--             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="rememberMe">
                 <label class="form-check-label text-muted" for="rememberMe" style="font-size: 0.75rem;">Remember me</label>
+            </div> -->
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe" <?php echo $is_checked; ?>>
+                <label class="form-check-label text-muted" for="rememberMe" style="font-size: 0.75rem;">Remember me</label>
             </div>
+
             <a href="#" class="forgot-link small">Forgot password?</a>
         </div>
 
