@@ -24,45 +24,6 @@ body {
     transition: all 0.3s ease;
 }
 
-/* STYLES FOR NAVBAR DROPDOWN */
-/* Enable Hover for Desktop */
-@media (min-width: 992px) {
-    .navbar .nav-item.dropdown:hover .dropdown-menu {
-        /* display: inline-block; */
-        margin-top: 0; /* Prevents gap so mouse doesn't lose focus */
-    }
-}
-
-/* Style the Dropdown Menu */
-.dropdown-menu {
-    border-top: 3px solid #d4a017; /* Matches your navbar bottom border */
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    padding: 10px 0;
-}
-
-.dropdown-item {
-    padding: 10px 20px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.dropdown-item:hover {
-    background-color: #f8f9fa;
-    color: #d4a017; /* Text turns gold on hover */
-    padding-left: 25px; /* Subtle slide effect */
-}
-
-/* Arrow Animation */
-.nav-link.dropdown-toggle i {
-    transition: transform 0.3s ease;
-}
-
-.nav-item.dropdown:hover .nav-link.dropdown-toggle i {
-    transform: rotate(180deg); /* Arrow flips up on hover */
-}
-
-
 
 
 
@@ -279,23 +240,14 @@ html {
     padding: 30px;
     border-radius: 20px;
     border: 2px solid rgba(212, 160, 23, 0.3); /* Gold border from your theme */
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
     max-width: 650px;
     /* TANGGALIN ang left: -300px; Gamitin ang margin para sa alignment */
     margin-left: 0; 
     text-align: left;
 }
 
-/* Para sa responsive font sizes */
-.hero-box h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem) !important; /* Dynamic size */
-    color: #ffffff !important;
-}
 
-.hero-box p.lead {
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: #ffffff !important;
-}
 
 /* Controls visibility */
 .carousel-control-prev, .carousel-control-next {
@@ -322,36 +274,8 @@ html {
     to { opacity: 1; transform: translateX(0); }
 }
 
-/* Mobile Fix */
-@media (max-width: 991px) {
-    .hero-box {
-        margin: 0 auto;
-        text-align: center;
-        max-width: 95%;
-        padding: 20px;
-    }
-    .hero-box h1 {
-        -webkit-text-stroke: 1px #800000;
-    }
-    .hero-box .d-sm-flex {
-        justify-content: center;
-    }
-}
 
-/* The "White text with Maroon Outline" effect */
-.hero-box h1 {
-    color: #ffffff !important;
-    font-weight: 900;
-    text-transform: uppercase;
-    /* Adds the Maroon border/outline to the text */
-    letter-spacing: 0.5px;
-}
-.hero-box p.lead {
-    color: #ffffff !important;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding-left: 15px;
-}
+
 
 /* --- BUTTON CUSTOMIZATION --- */
 
@@ -382,53 +306,23 @@ html {
 }
 
 
-/* --- RESPONSIVE DESIGN --- */
-
-/* For Tablets and Mobile Phones (Screens smaller than 992px) */
-@media (max-width: 991px) {
-    .hero-box {
-        left: 0 !important;      /* Removes the 270px offset */
-        margin: 20px auto;       /* Centers the box */
-        max-width: 90%;          /* Uses more width on small screens */
-        padding: 25px;
-        text-align: center;      /* Keeps everything neat and centered */
-    }
-
-    .hero-box h1 {
-        font-size: 2.5rem !important; /* Makes the title smaller so it fits */
-        -webkit-text-stroke: 1px #800000; /* Thinner stroke for smaller text */
-    }
-
-    .hero-box p.lead {
-        font-size: 1.1rem;
-        padding-left: 0;
-        border-left: none; /* Removes the side border on mobile for better centering */
-        /* border-top: 3px solid #d4a017;  *//* Moves the Gold accent to the top instead */
-        padding-top: 10px;
-    }
-
-    /* Stack the buttons vertically on very small phones */
-    .d-sm-flex {
-        flex-direction: column;
-    }
-}
 
 
 
 /* Siguraduhin na ang mga text sa loob ay puti rin */
-#home h1, 
+/* #home h1, 
 #home p.text-muted {
     color: #ffffff !important;
-}
-
-#home p.text-muted {
-    opacity: 0.9; /* Konting transparency para sa sub-text */
+} */
+/* Konting transparency para sa sub-text */
+/* #home p.text-muted {
+    opacity: 0.9; 
 }
 
 h1 {
     letter-spacing: -2px;
     line-height: 1.1;
-}
+} */
 
 /* Custom Large Buttons */
 .btn-lg {
@@ -462,6 +356,7 @@ h1 {
 .second-section .hero-box h1 {
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8) !important;
     margin-bottom: 20px;
+    
 }
 
 .second-section .hero-box p.lead {
@@ -596,6 +491,109 @@ h1 {
 .carousel-control-next:hover .carousel-control-next-icon {
     filter: invert(100%); /* Magiging mas matingkad na silver/white sa hover */
 }
+
+
+
+
+/* CAROUSEL FIRST-SECTION IS WHICH THE CUSTOM-SECTION */
+
+/* Targets only the specific section to remove the box background and borders */
+.custom-section .hero-box {
+    background: transparent !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    /* max-width: 100px; */
+    max-width: 100% !important;
+    width: 90%;
+    margin: 0 auto !important; /* Centers the box horizontally */
+    text-align: center !important; /* Centers the text inside */
+    
+    /* Moves it to the upper part of the screen */
+    align-self: flex-start !important; 
+    margin-top: 5vh !important; /* Adjust this value to move it higher or lower */
+    /* letter-spacing: 200px !important; */
+}
+
+.custom-section .hero-box h1 {
+    /* clamp(MIN, PREFERRED, MAX) */
+    /* font-size: clamp(3rem, 3.5vw, 3rem) !important;  */
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 700 !important; /* Optional: adjust thickness */
+    font-size: 60px !important;
+    color: #410000 !important;
+    /* line-height: 3; */
+    margin-bottom: 18px !important;
+    white-space: nowrap; /* Keep it in one line as requested earlier */
+    letter-spacing: -2px;
+    /* max-width: 600px; */
+    margin-top: 20px !important;
+    -webkit-text-stroke: 0px transparent !important;
+    text-shadow: none !important;
+    
+}
+
+.custom-section .hero-box p.lead {
+    /* font-size: clamp(1rem, 1.2vw, 1.5rem) !important; */
+    font-size: 19px !important;
+    font-weight: 300 !important;
+    max-width: 761px; /* Limits paragraph width so it doesn't stretch too far */
+    margin: 0 auto 30px auto !important; /* Centers the paragraph and adds bottom space */
+    font-family: 'Poppins', sans-serif !important;
+    color: #000000 !important;
+    letter-spacing: 0px;
+}
+
+
+
+/* Centers the buttons for this specific section */
+.custom-section .hero-box .d-sm-flex {
+    justify-content: center !important;
+    margin-top: 270px !important;
+}
+
+/* Adjust animation to start from center */
+.carousel-item.active.custom-section .hero-box {
+    animation: fadeInDown 0.7s ease-out forwards;
+}
+
+.carousel-item.custom-section {
+/* Ang gradient ay 'to bottom', ibig sabihin mula sa itaas pababa ang itim/puti */
+    background: radial-gradient(
+        /* 150% width at 100% height para maging 'Wide U' */
+        /* ellipse at 50% -10%, */
+        150% 100% ellipse at 50% 0%,
+        rgba(255, 255, 255, 0.9) 0%,   /* Solid na puti sa pinakataas */
+        rgba(255, 255, 255, 0.4) 20%,  /* Medyo blurry/transparent sa gitna */
+        rgba(255, 255, 255, 0) 60%     /* Tuluyang invisible na sa bandang baba */
+    ), 
+    url('bg8.png'); /* Ang iyong original na image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 90vh; /* O depende sa height ng banner mo */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -998,7 +996,61 @@ html {
 
 
 
+/* --- PRE-FOOTER CTA SECTION (BLUE THEME) --- */
+.pre-footer-cta {
+    /* Medical Blue Gradient matching your "Care" logo text */
+    /* Adjusted to flow from Top to Bottom */
+    background: linear-gradient(179deg, #007bff 0%, #007bff 50%, #4facfe 100%);
+    padding: 25px 0;
+    border-top: 5px solid #d4a017; /* Keeps the PUP Gold accent */
+    position: relative;
+    overflow: hidden;
+    text-align: center; /* Ensures all children are centered */
+}
 
+/* Updated Blue Button */
+.btn-cta-blue {
+    background-color: #ffffff; /* White button pops better on Blue */
+    color: #0056b3 !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid #ffffff;
+    border-radius: 50px; /* Rounded pill shape for a modern look */
+    transition: all 0.3s ease;
+}
+
+.btn-cta-blue:hover {
+    background-color: transparent;
+    color: #ffffff !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Subtle background overlay to make text more readable */
+.pre-footer-cta::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://www.transparenttextures.com/patterns/cubes.png'); /* Optional subtle pattern */
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+/* Header Text shadow for better readability on gradient */
+.pre-footer-cta h2 {
+    text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-size: 2.5rem;
+}
+
+@media (max-width: 768px) {
+    .pre-footer-cta {
+        padding: 60px 0;
+    }
+    .pre-footer-cta h2 {
+        font-size: 1.8rem;
+    }
+}
 
 
 
@@ -1011,7 +1063,7 @@ footer {
     background-color: #270000 !important; /* Binago sa White para lumitaw ang Maroon logo */
     color: #666;
     padding: 80px 0 30px 0;
-    border-top: 2px solid #d4a017 !important; /* Gold top border gaya ng sa navbar */
+    /* border-top: 2px solid #d4a017 !important; */ /* Gold top border gaya ng sa navbar */
 }
 
 /* FOOTER LOGO NAME - DEFAULT STATE (Maroon & Gold) */

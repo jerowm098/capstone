@@ -39,27 +39,9 @@
         <li class="nav-item">
           <a class="nav-link" href="#about">About</a>
         </li>
-<!--         <li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link" href="#services">Services</a>
-        </li> -->
-
-
-
-        <!-- STYLE FOR DROPDOWN NAVBAR -->
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#services" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Services <i class="bi bi-chevron-down ms-1" style="font-size: 0.8rem;"></i>
-            </a>
-            <ul class="dropdown-menu animate__animated animate__fadeInUp" aria-labelledby="servicesDropdown">
-                <li><a class="dropdown-item" href="appointment_form.php"><i class="bi bi-calendar-check me-2"></i>Book Appointment</a></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-capsule me-2"></i>Digital Pharmacy</a></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-shield-check me-2"></i>Health Tracking</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#services">View All Services</a></li>
-            </ul>
         </li>
-
-
 
         <li class="nav-item">
             <a class="nav-link" href="#doctors">Doctors</a>
@@ -69,18 +51,6 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#contact">Contact Us</a>
-        </li>
-
-
-        <!-- STYLE FOR DROPDOWN NAVBAR -->
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="portalDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Portals <i class="bi bi-chevron-down ms-1" style="font-size: 0.8rem;"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="portalDropdown">
-                <li><a class="dropdown-item" href="../login/studentloginhtml.php">Student Portal</a></li>
-                <li><a class="dropdown-item" href="../login/loginhtml.php">Doctor Portal</a></li>
-            </ul>
         </li>
 
       </ul>
@@ -95,7 +65,7 @@
 </nav>
 
 <section id="home" class="p-0">
-  <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="6000" data-bs-pause="hover">
+  <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="6000" data-bs-pause="false"> <!-- hover/false -->
     
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
@@ -123,14 +93,21 @@
         </div>
       </div>
 
-      <div class="carousel-item" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('bg2.png');">
+      <div class="carousel-item custom-section">
         <div class="container h-100 d-flex align-items-center">
           <div class="hero-box">
-            <h1 class="display-3 fw-bold mb-4">Our Expertise <br>at your Service</h1>
+<!--             <h1 class="display-3 fw-bold mb-4">Our Expertise <br>at your Service</h1>
             <p class="lead mb-5 text-muted">
-              Your Online Link to PUP BC Health Services<br>
-              PUP Biñan Campus Clinic
+              Your Online Link to PUPBC Health <br>
+              Services PUP Biñan Campus Clinic
+            </p> -->
+
+            <h1 class="display-3 fw-bold mb-4">Your Health and Safety, Our Top Priority</h1>
+            <p class="lead mb-5 text-muted">
+              Get medical help here at PUP Biñan. Our campus medical team is ready to
+              help students and faculty with proper care to keep everyone safe and healthy.
             </p>
+
             <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
               <a href="#services" class="btn btn-dark btn-lg px-5 py-3">Services</a>
               <!-- <a href="#about" class="btn btn-outline-dark btn-lg px-5 py-3">Learn More</a> -->
@@ -139,10 +116,10 @@
         </div>
       </div>
 
-      <div class="carousel-item" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80');">
+      <div class="carousel-item" style="background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('bg6.png');">
         <div class="container h-100 d-flex align-items-center">
           <div class="hero-box">
-            <h1 class="display-3 fw-bold mb-4">Seamless <br>Appointments</h1>
+            <h1 class="display-3 fw-bold mb-4">Book Online <br>Appointments</h1>
             <p class="lead mb-5 text-muted">
               Skip the long lines. Book your medical consultation <br>
               online anytime, anywhere within the campus.
@@ -458,6 +435,27 @@
 
   </div>
 </section>
+
+
+
+
+<section class="pre-footer-cta">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h2 class="fw-bold text-white mb-3">Take Control of Your Health Journey</h2>
+        <p class="text-white mb-4 opacity-75">Connect with the PUP Biñan Campus medical team and access your clinical records securely anytime, anywhere.</p>
+        
+        <div class="mt-2">
+          <a href="#home" class="btn btn-cta-blue px-5 py-3 shadow">
+            Get Started Now <i class="bi bi-arrow-right ms-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 
 
