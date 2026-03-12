@@ -1,15 +1,9 @@
-
-
-
 /* General Theme */
 body {
     background-color: #ffffff;
     color: #000000;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
-
-
 
 /* Navbar Customization */
 .navbar {
@@ -38,7 +32,6 @@ body {
     margin-top: -5px !important;    /* Hahatak sa logo pataas */
     margin-bottom: -5px !important; /* Hahatak sa logo pababa */
 }
-
 /* Container for the text lines */
 .brand-text-wrapper {
     line-height: 0.9; /* Adjust this to bring PUPBC and CareLink closer */
@@ -49,14 +42,15 @@ body {
     font-family: 'Poppins', sans-serif;
     
 }
-
-
 /* Customization para sa PUPBC (Maroon) */
 .brand-text-wrapper span:first-child {
     color: #800000 !important; /* Official PUP Maroon */
     font-weight: 800;
     font-size: 1.6rem;
     letter-spacing: 1px;
+}
+.navbar-brand:hover .brand-text-wrapper span:first-child {
+    color: #a00000 !important; /* Mas maliwanag na maroon */
 }
 
 /* Customization para sa CareLink (Gold/Yellow) */
@@ -67,14 +61,11 @@ body {
     /* text-transform: uppercase; */
     letter-spacing: 2px;
 }
-
-.navbar-brand:hover .brand-text-wrapper span:first-child {
-    color: #a00000 !important; /* Mas maliwanag na maroon */
-}
-
 .navbar-brand:hover .brand-text-wrapper span:last-child {
     color: #b8860b !important; /* Darker gold */
 }
+
+
 
 
 
@@ -88,29 +79,12 @@ nav .navbar-brand {
     letter-spacing: -1px;
     position: relative;
     left: -70px;
-    
-
 }
 
 /* This targets the navigation list specifically within the top navbar */
 nav .navbar-nav {
     margin-left: -4rem !important; /* Adds space between the logo and the first link */
 }
-
-
-
-.navbar-brand {
-    display: flex !important;
-    flex-direction: row !important; /* Forces side-by-side */
-    align-items: center !important;
-    text-decoration: none;
-    font-size: 1.4rem; /* Slightly smaller to fit better horizontally */
-    letter-spacing: -1px;
-    position: relative;
-    left: -50px;
-    
-}
-
 
 .nav-link {
     color: #4a4a4a !important; /* Dark grey for a professional look */
@@ -161,47 +135,84 @@ nav .navbar-nav {
 
 
 
+/* ============================================================
+   GLASSMORPHISM LOGIN BUTTON
+   ============================================================ */
 
-/* Login Button Customization */
-/* Login Button - Base Style */
+/* 1. Normal State: Solid Maroon Fill, White Text */
 .btn-login {
-    background-color: #800000;
+    background-color: #800000 !important; /* Solid Maroon */
     color: #ffffff !important;
     border-radius: 50px;
-    padding: 8px 30px;
+    padding: 10px 35px;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.85rem;
-    letter-spacing: 1px;
-    border: 2px solid #800000 !important; /* Siguradong Maroon ang border */
-    transition: all 0.3s ease;
+    letter-spacing: 1.5px;
+    border: 2px solid #800000 !important; /* Solid Maroon Border */
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: inline-block;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Hover, Active, at Focus States */
-.btn-login:hover, 
-.btn-login:active,
-.btn-login:focus,
-.btn-login:focus-visible {
-    background-color: transparent !important;
-    color: #800000 !important;
-    border-color: #800000 !important; /* Ito ang papatay sa itim na border */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2) !important;
-    outline: #800000 !important; /* Tinatanggal ang default browser outline */
+/* 2. Hover State: Glassmorphism Effect */
+.btn-login:hover {
+    /* Maroon Tint na may transparency */
+    background-color: rgba(128, 0, 0, 0.2) !important; 
+    
+    /* Frosted Glass Effect */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    
+    color: #ffffff !important; /* White text remains */
+    border: 2px solid #800000 !important; /* Nanatiling Solid Maroon ang border */
+    
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(128, 0, 0, 0.2) !important;
 }
 
-/* Siguraduhin na kahit sa focus (pagkaclick), walang ibang kulay na lilitaw */
-.btn-check:focus + .btn-login, .btn-login:focus {
-    outline: #800000 !important;
-    box-shadow: 0 4px 15px rgba(128, 0, 0, 0.2) !important;
+/* 3. Click/Active State: Match Hover style but "Pressed" look */
+.btn-login:active, 
+.btn-login:focus {
+    /* Kaparehas ng hover color base sa request mo */
+    background-color: rgba(128, 0, 0, 0.3) !important; 
+    
+    /* Glass effect pa rin */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    /* Pressed effect */
+    transform: translateY(1px); 
     border-color: #800000 !important;
+    outline: none !important;
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.1) !important;
 }
 
+/* ============================================================
+   FIX PARA SA BLACK BORDER / FOCUS STATE
+   ============================================================ */
 
-
-
-
-
+/* Pinapanatili natin ang logic mo pero binabago ang kulay mula black tungo sa Maroon */
+.btn-login:focus, 
+.btn-login:active, 
+.btn-login:focus-visible {
+    /* Ang salarin ay ang #000000, palitan natin ng Maroon para malinis tingnan */
+    border-color: #800000 !important; 
+    
+    /* Imbes na 'none', gumamit tayo ng soft maroon glow para magmukhang premium */
+    box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.25) !important; 
+    
+    /* Siguradong walang default browser blue/black outline */
+    outline: none !important;
+    
+    /* Para mag-match sa hover state na gusto mo (Glassmorphism tint) */
+    background-color: rgba(128, 0, 0, 0.3) !important;
+    color: #ffffff !important;
+}
+.btn:focus {
+    box-shadow: none !important;
+} 
 
 
 
@@ -250,10 +261,121 @@ html {
 
 
 /* Controls visibility */
-.carousel-control-prev, .carousel-control-next {
+.carousel-control-prev, 
+.carousel-control-next {
     width: 5%;
     opacity: 0.7;
 }
+
+
+/* Container at Glassmorphism Effect */
+.loader-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* Glass Background - Ginawang Darker at mas opaque para sa white background images */
+.glass-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Dark translucent background */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 1;
+}
+
+.loader-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  z-index: 2;
+}
+
+/* 1. Normal State: Darker Track */
+.loader-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.1); /* Halos anino lang ng bilog */
+  stroke-width: 3.5;
+}
+
+/* 2. Loading State: Gold or Bright White */
+.loader-track {
+  fill: none;
+  stroke: #FFD700; /* Gold color para kitang-kita sa dark glass at white background */
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 126; 
+  stroke-dashoffset: 126;
+  animation: none;
+}
+
+/* Kung gusto mong white pa rin ang loading, gamitin ang #ffffff sa stroke */
+
+.carousel-loading.next-loader .loader-track {
+  animation: loading-circle 6s linear forwards;
+}
+
+@keyframes loading-circle {
+  0% { stroke-dashoffset: 126; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* 3. Custom Arrow Design with Tail */
+.custom-arrow {
+  position: relative;
+  z-index: 3;
+  width: 18px; 
+  height: 2px;
+  background-color: #ffffff; /* Gawing solid white ang arrow para laging kita */
+  transition: all 0.3s ease;
+}
+
+.custom-arrow::before {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-top: 2.5px solid #ffffff; /* Mas makapal na border */
+  border-right: 2.5px solid #ffffff;
+  top: -3.5px;
+}
+
+.right-arrow::before {
+  right: 0;
+  transform: rotate(45deg);
+}
+
+.left-arrow::before {
+  left: 0;
+  transform: rotate(-135deg);
+}
+
+/* Hover Effect: Glow */
+.loader-container:hover .glass-bg {
+  background: rgba(128, 0, 0, 0.8); /* PUP Maroon on hover */
+  box-shadow: 0 0 15px rgba(128, 0, 0, 0.5);
+}
+
+.loader-container:hover .custom-arrow {
+  transform: scale(1.1);
+}
+
+
+
+
+
+
+
 
 /* 2. Patakbuhin lang ang animation kapag TAPOS na o habang nag-a-active ang slide */
 .carousel-item.active .hero-box {
@@ -427,7 +549,7 @@ html {
     font-weight: 900; /* Mas makapal para lumitaw ang pagka-puti */
     display: inline-block;
     padding: 2px 10px;
-    margin-bottom: 5px;
+    margin-bottom: 50px;
 }
 
 
@@ -535,7 +657,7 @@ html {
     
     /* Moves it to the upper part of the screen */
     align-self: flex-start !important; 
-    margin-top: 0vh !important; /* Adjust this value to move it higher or lower */
+    margin-top: 5vh !important; /* Adjust this value to move it higher or lower */
     /* letter-spacing: 200px !important; */
 }
 
@@ -551,7 +673,7 @@ html {
     white-space: nowrap; /* Keep it in one line as requested earlier */
     letter-spacing: -2px;
     max-width: 1400px;
-    margin-top: 20px !important;
+    margin-top: 0px !important;
     -webkit-text-stroke: 0px transparent !important;
     text-shadow: none !important;
     
@@ -572,7 +694,7 @@ html {
 /* Centers the buttons for this specific section */
 .second-section .hero-box .d-sm-flex {
     justify-content: center !important;
-    margin-top: 280px !important;
+    margin-top: 120px !important;
 }
 
 
@@ -670,7 +792,7 @@ html {
 
 
 
-
+/* THIRD SECTION */
 
 
 /* Target lang ang hero-box na nasa loob ng .third-section class */
@@ -718,7 +840,7 @@ html {
         rgba(255, 255, 255, 0.3) 30%,  /* Transition/Blur sa gitna */
         rgba(255, 255, 255, 0) 40%     /* Invisible na pagdating sa kanan */
     ), 
-    url('bg6.png'); /* Ang background image mo */
+    url('bg6_blank.png'); /* Ang background image mo */
 
     background-size: cover;
     background-position: center;
@@ -769,7 +891,7 @@ html {
 }
 
 .carousel-item.active.third-section .hero-box .btn-dark {
-    animation: fadeInUpCustom 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+    animation: fadeInUpCustom 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
 }
 
 
@@ -857,65 +979,54 @@ html {
 
 
 
-/* --- THE 2-LAYER PARALLAX EFFECT --- */
 
-.carousel-item.third-section {
-    position: relative;
-    overflow: hidden; /* Mahalaga para hindi lumampas ang layers */
-    background: #f8f9fa; /* Fallback color */
-}
 
-/* Base style para sa layers */
-.layer-bg, .layer-people {
+/* Container para sa sliding image - Ginawang 100% para hindi ma-crop */
+.carousel-item.third-section .sliding-image-container {
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    will-change: transform, opacity;
+    right: 0;
+    width: 500%; /* Gamitin ang buong width para pwedeng lumagpas ang image */
+    height: 120%;
+    overflow: hidden;
+    z-index: 1; 
+    pointer-events: none; /* Para hindi ma-block ang clicks sa button */
 }
 
-/* Layer 1: Ang Background Image */
-.carousel-item.third-section .layer-bg {
-    background-image: url('bg6_blank.png'); /* PALITAN MO ITO: Image na walang tao */
-    z-index: 1;
-    transform: scale(1.1); /* Konting zoom para sa motion space */
+.carousel-item.third-section .sliding-img {
+    /* Baguhin ang height para sumakto sa screen */
+    height: 100%; 
+    width: auto; /* Maintain aspect ratio para hindi stretched */
+    object-fit: contain; /* Sinisigurado na buo ang image */
+    position: absolute;
+    bottom: 0;
+    right: -100%; /* Initial state sa labas ng screen */
+    opacity: 0;
 }
 
-/* Layer 2: Ang Tao Image (Transparent) */
-.carousel-item.third-section .layer-people {
-    background-image: url('bg6_people.png'); /* PALITAN MO ITO: Image na tao lang */
-    z-index: 2;
+/* Animation Keyframe: Right to Left */
+@keyframes slideInRightToLeft {
+    0% {
+        right: -2%; /* Mas malayo ang start para ramdam ang bilis */
+        opacity: 1;
+    }
+    100% {
+        /* I-adjust mo ito (e.g., 0% or 5% or 10%) 
+           depende kung gaano mo kagustong pumasok sa loob ang mga tao */
+        right: 0%; 
+        opacity: 1;
+    }
 }
 
-/* --- THE ANIMATIONS --- */
-
-@keyframes layerMoveBG {
-    0% { transform: scale(1.1) translateX(0); }
-    100% { transform: scale(1.1) translateX(-20px); } /* Dahan-dahang galaw pabalik */
+/* Trigger ang animation */
+.carousel-item.active.third-section .sliding-img {
+    animation: slideInRightToLeft 2s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
 }
 
-@keyframes layerMovePeople {
-    0% { transform: translateX(40px); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; } /* Mas mabilis na pasok */
-}
-
-/* Trigger ang animation kapag active ang slide */
-.carousel-item.active.third-section .layer-bg {
-    animation: layerMoveBG 10s ease-out forwards;
-}
-
-.carousel-item.active.third-section .layer-people {
-    animation: layerMovePeople 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
-}
-
-/* Siguraduhin na ang text box ay nasa pinaka-ibabaw */
+/* Siguraduhin na ang text box ay nasa ibabaw */
 .carousel-item.third-section .container {
     position: relative;
-    z-index: 3;
+    z-index: 5; 
 }
 
 
@@ -1326,7 +1437,15 @@ html {
 .pre-footer-cta {
     /* Medical Blue Gradient matching your "Care" logo text */
     /* Adjusted to flow from Top to Bottom */
-    background: linear-gradient(179deg, #007bff 0%, #007bff 50%, #4facfe 100%);
+
+
+    background: linear-gradient(rgba(0, 123, 255, 0.8), rgba(79, 172, 254, 0.8)), url('bg3.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Optional: adds a parallax effect */
+
+
+    /* background: linear-gradient(179deg, #007bff 0%, #007bff 50%, #4facfe 100%); */
     padding: 25px 0;
     border-top: 5px solid #d4a017; /* Keeps the PUP Gold accent */
     position: relative;
@@ -1358,7 +1477,7 @@ html {
     content: "";
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: url('https://www.transparenttextures.com/patterns/cubes.png'); /* Optional subtle pattern */
+    background: url('bg3.png'); /* Optional subtle pattern */
     opacity: 0.1;
     pointer-events: none;
 }
@@ -1462,21 +1581,21 @@ footer .brand-logo {
 
 
 
-
+/* Ito ang nagtatanggal ng blue glow */
 /* Tanggalin ang asul na glow kapag kiniclick o naka-focus */
-.btn-login:focus, 
+/* .btn-login:focus, 
 .btn-login:active,
 .btn-login:focus-visible {
-    box-shadow: none !important; /* Ito ang nagtatanggal ng blue glow */
+    box-shadow: none !important; 
     outline: none !important;
     border-color: #000000 !important;
-}
+} */
 
-/* Para siguradong walang asul kahit sa mobile */
-.btn:focus {
+
+/* .btn:focus {
     box-shadow: none !important;
-}
-
+} */
+/* Para siguradong walang asul kahit sa mobile */
 
 
 

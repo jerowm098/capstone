@@ -26,6 +26,18 @@
       </div>
     </a>
 
+<!--     <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+      <img src="logo1.png" alt="Logo" class="brand-logo me-2">
+      
+      <div class="brand-text-wrapper">
+        <span class="d-block">PUPBC</span>
+        <span class="d-block">
+          <span class="text-care">Care</span><span class="text-link">Link</span>
+        </span>
+      </div>
+    </a> -->
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -131,37 +143,60 @@
         </div>
       </div> -->
 
-            <div class="carousel-item third-section">
-              <div class="layer-bg"></div>
-              
-              <div class="layer-people"></div>
 
-              <div class="container h-100 d-flex align-items-center">
-                <div class="hero-box">
-                  <h1 class="display-3 fw-bold mb-4">Book Online <br>Appointments</h1>
-                  <p class="lead mb-5">
-                    Skip the long lines. Book your medical consultation <br>
-                    online anytime, anywhere within the campus.
-                  </p>
-                  <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
-                    <a href="appointment_form.php" class="btn btn-dark btn-lg px-5 py-3">Book Now</a>
-                  </div>
-                </div>
-              </div>
+
+<div class="carousel-item third-section">       
+    <div class="sliding-image-container">
+        <img src="3.png" alt="Sliding Doc" class="sliding-img">
+    </div>
+
+    <div class="container h-100 d-flex align-items-center">
+        <div class="hero-box">
+            <h1 class="display-3 fw-bold mb-4">Book Online <br>Appointments</h1>
+            <p class="lead mb-5">
+                Skip the long lines. Book your medical consultation <br>
+                online anytime, anywhere within the campus.
+            </p>
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
+                <a href="appointment_form.php" class="btn btn-dark btn-lg px-5 py-3">Book Now</a>
             </div>
-
+        </div>
+    </div>
+</div>
 
 
 
 
     </div>
+<!-- 
+      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button> -->
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon"></span>
-    </button>
+<button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+  <div class="loader-container">
+    <div class="glass-bg"></div>
+    <svg class="loader-svg" viewBox="0 0 100 100">
+      <circle class="loader-bg" cx="50" cy="50" r="40"></circle>
+    </svg>
+    <div class="custom-arrow left-arrow"></div>
+  </div>
+</button>
+
+<button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+  <div class="loader-container next-loader">
+    <div class="glass-bg"></div>
+<svg class="loader-svg" viewBox="0 0 50 50">
+  <circle class="loader-bg" cx="25" cy="25" r="20"></circle>
+  <circle class="loader-track" cx="25" cy="25" r="20"></circle>
+</svg>
+    <div class="custom-arrow right-arrow"></div>
+  </div>
+</button>
+
   </div>
 </section>
 
@@ -630,6 +665,30 @@ document.addEventListener("DOMContentLoaded", () => {
         observer.observe(statsContainer);
     }
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const heroCarousel = document.getElementById('heroCarousel');
+  const nextLoader = document.querySelector('.next-loader');
+
+  function resetAnimation() {
+    if (nextLoader) {
+      nextLoader.classList.remove('carousel-loading');
+      void nextLoader.offsetWidth; // Trigger reflow
+      nextLoader.classList.add('carousel-loading');
+    }
+  }
+
+  // Start on load
+  resetAnimation();
+
+  // Sync with carousel slide
+  heroCarousel.addEventListener('slide.bs.carousel', function () {
+    resetAnimation();
+  });
+});
+
+
 </script>
   
   
