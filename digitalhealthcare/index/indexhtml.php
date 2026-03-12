@@ -75,25 +75,25 @@
 
     <div class="carousel-inner">
       
-      <div class="carousel-item active second-section">
+      <div class="carousel-item active first-section">
         <div class="container h-100 d-flex align-items-center">
           <div class="hero-box">
-            <h1 class="display-3 fw-bold mb-4 second-section-header">
+            <h1 class="display-3 fw-bold mb-4 first-section-header">
               <span class="text-pup">PUPBC</span> 
               <span class="text-care">Care</span><span class="text-link">Link</span>
             </h1>
-            <p class="lead mb-5 text-muted second-section-p">
+            <p class="lead mb-5 text-muted first-section-p">
               <span class="p-top">Official Clinic Support Website | Connected to the</span> <br>
               <span class="p-bottom">Polytechnic University of the Philippines Biñan Campus.</span>
             </p>
-         <!--    <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
-              <a href="#about" class="btn btn-outline-dark btn-lg px-5 py-3">View Privacy</a>
-            </div> -->
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
+              <a href="loginhtml.php" class="btn btn-outline-dark btn-lg px-5 py-3">Join Our Team</a>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="carousel-item custom-section">
+      <div class="carousel-item second-section">
         <div class="container h-100 d-flex align-items-center">
           <div class="hero-box">
 <!--             <h1 class="display-3 fw-bold mb-4">Our Expertise <br>at your Service</h1>
@@ -116,11 +116,11 @@
         </div>
       </div>
 
-      <div class="carousel-item" style="background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('bg6.png');">
+<!--       <div class="carousel-item third-section">       
         <div class="container h-100 d-flex align-items-center">
           <div class="hero-box">
             <h1 class="display-3 fw-bold mb-4">Book Online <br>Appointments</h1>
-            <p class="lead mb-5 text-muted">
+            <p class="lead mb-5">
               Skip the long lines. Book your medical consultation <br>
               online anytime, anywhere within the campus.
             </p>
@@ -129,7 +129,28 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
+
+            <div class="carousel-item third-section">
+              <div class="layer-bg"></div>
+              
+              <div class="layer-people"></div>
+
+              <div class="container h-100 d-flex align-items-center">
+                <div class="hero-box">
+                  <h1 class="display-3 fw-bold mb-4">Book Online <br>Appointments</h1>
+                  <p class="lead mb-5">
+                    Skip the long lines. Book your medical consultation <br>
+                    online anytime, anywhere within the campus.
+                  </p>
+                  <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
+                    <a href="appointment_form.php" class="btn btn-dark btn-lg px-5 py-3">Book Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
 
 
 

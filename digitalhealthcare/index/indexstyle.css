@@ -280,20 +280,21 @@ html {
 /* --- BUTTON CUSTOMIZATION --- */
 
 /* Primary Button (Services) - PUP Maroon */
-.hero-box .btn-dark {
+/* .hero-box .btn-dark {
     background-color: #800000 !important;
     border: 2px solid #800000 !important;
     color: #fff !important;
     transition: all 0.3s ease;
-}
-.hero-box .btn-dark:hover {
+} */
+/* .hero-box .btn-dark:hover {
     background-color: transparent !important;
     color: #800000 !important;
     border-color: #800000 !important;
-}
+    
+} */
 
 /* Outline Button (Learn More) - PUP Gold */
-.hero-box .btn-outline-dark {
+/* .hero-box .btn-outline-dark {
     border: 2px solid #d4a017 !important;
     color: #d4a017 !important;
     background-color: transparent !important;
@@ -303,39 +304,15 @@ html {
 .hero-box .btn-outline-dark:hover {
     background-color: #d4a017 !important;
     color: #fff !important;
-}
-
-
-
-
-
-/* Siguraduhin na ang mga text sa loob ay puti rin */
-/* #home h1, 
-#home p.text-muted {
-    color: #ffffff !important;
-} */
-/* Konting transparency para sa sub-text */
-/* #home p.text-muted {
-    opacity: 0.9; 
-}
-
-h1 {
-    letter-spacing: -2px;
-    line-height: 1.1;
 } */
 
-/* Custom Large Buttons */
-.btn-lg {
-    font-weight: 600;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: 4px; /* Keeping it clean and slightly boxed */
-}
+
+/* CAROUSEL FIRST-SECTION*/
+
 
 
 /* I-center ang buong hero-box sa Second Section */
-.second-section .hero-box {
+.first-section .hero-box {
     background: transparent !important;
     border: none !important;
     backdrop-filter: none !important;
@@ -348,18 +325,19 @@ h1 {
 }
 
 /* Siguraduhin na ang buttons ay mag-center din */
-.second-section .hero-box .d-sm-flex {
+.first-section .hero-box .d-sm-flex {
     justify-content: center !important;
+    
 }
 
 /* Optional: Text shadow para sa H1 at Paragraph para mas lutang */
-.second-section .hero-box h1 {
+.first-section .hero-box h1 {
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8) !important;
     margin-bottom: 20px;
     
 }
 
-.second-section .hero-box p.lead {
+.first-section .hero-box p.lead {
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.9) !important;
     margin-left: auto;
     margin-right: auto;
@@ -369,7 +347,7 @@ h1 {
 
 
 /* General Header Style */
-.second-section-header {
+.first-section-header {
     font-family: 'Poppins', sans-serif !important;
     text-transform: none !important; /* Siguraduhing hindi puro uppercase kung mixed case sa image */
     letter-spacing: -1px; /* Para mas dikit ang mga letra tulad ng sa logo */
@@ -377,7 +355,7 @@ h1 {
     transform-origin: center; /* Siguraduhin na sa gitna ang paglaki */
 }
 /* PUPBC - Maroon */
-.second-section-header .text-pup {
+.first-section-header .text-pup {
     background: linear-gradient(to right, #800000, #d32f2f);
     background-clip: text;
     -webkit-background-clip: text;
@@ -387,7 +365,7 @@ h1 {
     
 }
 /* Care - Professional Medical Blue Gradient */
-.second-section-header .text-care {
+.first-section-header .text-care {
     background: linear-gradient(to right, #007bff 0%, #4facfe 100%);
     background-clip: text;
     -webkit-background-clip: text;
@@ -395,7 +373,7 @@ h1 {
     font-weight: 800; /* Mas makapal para mas kita ang gradient */
 }
 /* Link - Deep Maroon to Crimson (Lightish Maroon) */
-.second-section-header .text-link {
+.first-section-header .text-link {
     background: linear-gradient(to left, #800000, #d32f2f);
     background-clip: text;
     -webkit-background-clip: text;
@@ -404,21 +382,21 @@ h1 {
     font-weight: 800;
 }
 /* Siguraduhin na hindi sila maghihiwalay */
-.second-section-header span {
+.first-section-header span {
     display: inline-block;
     white-space: nowrap;
 }
 /* Tanggalin ang red outline sa Care at Link */
-.second-section-header .text-care, 
-.second-section-header .text-link,
-.second-section-header .text-pup {
+.first-section-header .text-care, 
+.first-section-header .text-link,
+.first-section-header .text-pup {
     -webkit-text-stroke: 0px transparent !important; /* Ito ang tatanggal sa red outline */
     text-shadow: none !important; /* Optional: Tanggalin din kung nag-ko-cause ng dumi sa gradient */
 }
 
 
 /* Container para sa paragraph sa second section */
-.hero-box p.lead.second-section-p {
+.hero-box p.lead.first-section-p {
     font-family: 'Poppins', sans-serif !important; /* Ito ang font sa image */
     -webkit-text-stroke: 0px transparent !important;
     text-shadow: none !important;
@@ -428,7 +406,7 @@ h1 {
 }
 
 /* Container para sa paragraph sa second section */
-.second-section-p {
+.first-section-p {
     /* Alisin ang default outline at shadow para maging solid ang kulay */
     -webkit-text-stroke: 0px transparent !important;
     text-shadow: none !important;
@@ -436,7 +414,7 @@ h1 {
     border-left: none !important;
 }
 /* Taas na linya - Solid Black */
-.second-section-p .p-top {
+.first-section-p .p-top {
     color: #000000 !important;
     font-weight: 900; /* Medyo makapal para madaling basahin */
     display: inline-block;
@@ -444,7 +422,7 @@ h1 {
     margin-bottom: 5px;
 }
 /* Babang linya - Solid White */
-.second-section-p .p-bottom {
+.first-section-p .p-bottom {
     color: #ffffff !important;
     font-weight: 900; /* Mas makapal para lumitaw ang pagka-puti */
     display: inline-block;
@@ -452,7 +430,8 @@ h1 {
     margin-bottom: 5px;
 }
 
-.carousel-item.second-section {
+
+.carousel-item.first-section {
 /* Ang gradient ay 'to bottom', ibig sabihin mula sa itaas pababa ang itim/puti */
     background: radial-gradient(
         /* 150% width at 100% height para maging 'Wide U' */
@@ -492,13 +471,59 @@ h1 {
     filter: invert(100%); /* Magiging mas matingkad na silver/white sa hover */
 }
 
+/* 1. KEYFRAMES: Lahat naka-3D para sa GPU acceleration */
+
+@keyframes fadeInLeftHeader {
+    0% { opacity: 0; transform: translate3d(-60px, 0, 0) scale3d(1.5, 1.5, 1); visibility: visible; }
+    100% { opacity: 1; transform: translate3d(0, 0, 0) scale3d(1.5, 1.5, 1); visibility: visible; }
+}
+
+@keyframes fadeInLeftParagraph {
+    0% { opacity: 0; transform: translate3d(-60px, 0, 0); visibility: visible; }
+    100% { opacity: 1; transform: translate3d(0, 0, 0); visibility: visible; }
+}
+
+@keyframes fadeInUpButtons {
+    0% { opacity: 0; transform: translate3d(0, 50px, 0); visibility: visible; }
+    100% { opacity: 1; transform: translate3d(0, 0, 0); visibility: visible; }
+}
+
+/* 2. INITIAL STATES: Itago muna ang lahat para iwas flicker */
+
+.carousel-item.first-section .hero-box h1,
+.carousel-item.first-section .hero-box p.first-section-p,
+.carousel-item.first-section .hero-box .d-sm-flex {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+}
+
+/* Specific initial transform para sa H1 (para naka-scale na siya agad) */
+.carousel-item.first-section .hero-box h1 {
+    transform: translate3d(-60px, 0, 0) scale3d(1.5, 1.5, 1);
+    transform-origin: center;
+}
+
+/* 3. ACTIVE STATES: Ang mismong pag-trigger ng animation */
+
+.carousel-item.active.first-section .hero-box h1 {
+    animation: fadeInLeftHeader 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+}
+
+.carousel-item.active.first-section .hero-box p.first-section-p {
+    animation: fadeInLeftParagraph 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+}
+
+.carousel-item.active.first-section .hero-box .d-sm-flex {
+    animation: fadeInUpButtons 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+}
 
 
 
-/* CAROUSEL FIRST-SECTION IS WHICH THE CUSTOM-SECTION */
+/* SECOND SECTION */
 
 /* Targets only the specific section to remove the box background and borders */
-.custom-section .hero-box {
+.second-section .hero-box {
     background: transparent !important;
     border: none !important;
     backdrop-filter: none !important;
@@ -510,29 +535,29 @@ h1 {
     
     /* Moves it to the upper part of the screen */
     align-self: flex-start !important; 
-    margin-top: 5vh !important; /* Adjust this value to move it higher or lower */
+    margin-top: 0vh !important; /* Adjust this value to move it higher or lower */
     /* letter-spacing: 200px !important; */
 }
 
-.custom-section .hero-box h1 {
+.second-section .hero-box h1 {
     /* clamp(MIN, PREFERRED, MAX) */
     /* font-size: clamp(3rem, 3.5vw, 3rem) !important;  */
     font-family: 'Poppins', sans-serif !important;
-    font-weight: 700 !important; /* Optional: adjust thickness */
-    font-size: 60px !important;
+    font-weight: 650 !important; /* Optional: adjust thickness */
+    font-size: 55px !important;
     color: #410000 !important;
     /* line-height: 3; */
     margin-bottom: 18px !important;
     white-space: nowrap; /* Keep it in one line as requested earlier */
     letter-spacing: -2px;
-    /* max-width: 600px; */
+    max-width: 1400px;
     margin-top: 20px !important;
     -webkit-text-stroke: 0px transparent !important;
     text-shadow: none !important;
     
 }
 
-.custom-section .hero-box p.lead {
+.second-section .hero-box p.lead {
     /* font-size: clamp(1rem, 1.2vw, 1.5rem) !important; */
     font-size: 19px !important;
     font-weight: 300 !important;
@@ -544,19 +569,15 @@ h1 {
 }
 
 
-
 /* Centers the buttons for this specific section */
-.custom-section .hero-box .d-sm-flex {
+.second-section .hero-box .d-sm-flex {
     justify-content: center !important;
     margin-top: 280px !important;
 }
 
-/* Adjust animation to start from center */
-.carousel-item.active.custom-section .hero-box {
-    animation: fadeInDown 0.7s ease-out forwards;
-}
 
-.carousel-item.custom-section {
+
+.carousel-item.second-section {
 /* Ang gradient ay 'to bottom', ibig sabihin mula sa itaas pababa ang itim/puti */
     background: radial-gradient(
         /* 150% width at 100% height para maging 'Wide U' */
@@ -577,10 +598,70 @@ h1 {
 }
 
 
+/* Header: Galing Left papuntang Right */
+@keyframes fadeInLeft {
+    0% { 
+        opacity: 0; 
+        transform: translateX(-50px);
+        visibility: visible;
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateX(0);
+        visibility: visible;
+    }
+}
 
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-30px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Paragraph: Galing Right papuntang Left */
+@keyframes fadeInRight {
+    0% { 
+        opacity: 0; 
+        transform: translateX(50px);
+        visibility: visible;
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateX(0);
+        visibility: visible;
+    }
+}
+
+/* Button: Galing Down papuntang Up */
+@keyframes fadeInUpBtn {
+    0% { 
+        opacity: 0; 
+        transform: translateY(50px);
+        visibility: visible;
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateY(0);
+        visibility: visible;
+    }
+}
+
+/* Initial State: Panatilihing nakatago para iwas flicker */
+.carousel-item.second-section .hero-box h1,
+.carousel-item.second-section .hero-box p.lead,
+.carousel-item.second-section .hero-box .d-sm-flex {
+    opacity: 0;
+    visibility: hidden;
+    overflow: visible !important;
+}
+
+/* Headline (H1) - Galing Left */
+.carousel-item.active.second-section .hero-box h1 {
+    animation: fadeInLeft 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+}
+
+/* Paragraph (P) - Galing Right */
+.carousel-item.active.second-section .hero-box p.lead {
+    animation: fadeInRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+}
+
+/* Buttons Container - Galing Down */
+.carousel-item.active.second-section .hero-box .d-sm-flex {
+    animation: fadeInUpBtn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
 }
 
 
@@ -591,6 +672,251 @@ h1 {
 
 
 
+
+/* Target lang ang hero-box na nasa loob ng .third-section class */
+.carousel-item.third-section .hero-box {
+    background: none !important;    /* Tinatanggal ang background color */
+    border: none !important;        /* Tinatanggal ang borders */
+    box-shadow: none !important;     /* Tinatanggal ang anino kung meron man */
+    padding: 0 !important;          /* Tinatanggal ang spacing sa loob ng box */
+    backdrop-filter: none !important; /* Kung may blur effect man ito */
+}
+
+/* 1. Customization para sa H1 (Headline) */
+.carousel-item.third-section .hero-box h1 {
+    color: #006064 !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    /* Dito mo pwedeng baguhin ang size ng Headline kung gusto mo */
+}
+
+/* 2. Customization para sa P (Paragraph/Description) */
+.carousel-item.third-section .hero-box p {
+    color: #000000 !important;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    
+    /* Pampakapal ng text */
+    font-weight: 700 !important;      /* Gawing Bold (700-900 ang range nito) */
+    letter-spacing: 0.5px;           /* Kaunting space para hindi dikit-dikit kahit makapal */
+    font-size: 1.2rem;               /* Optional: kung gusto mo ring palakihin nang konti */
+}
+
+/* 2. Target ang Lead text (yung description) para siguradong white */
+.carousel-item.third-section .hero-box .text-muted {
+    color: #ffffff !important; /* Overriding bootstrap's text-muted */
+    opacity: 0.9; /* Konting transparency para classy */
+}
+
+
+
+.carousel-item.third-section {
+    /* Wide "C" / Side Glow effect mula sa kaliwa */
+    background: radial-gradient(
+        /* Ginawang 100% width at 150% height para magmukhang 'Side U' o 'C' */
+        /* 150% 100% ellipse at 50% -5%, */
+        100% 150% ellipse at 0% 50%, 
+        rgba(255, 255, 255, 0.8) 0%,   /* Solid na puti sa pinaka-kaliwa */
+        rgba(255, 255, 255, 0.3) 30%,  /* Transition/Blur sa gitna */
+        rgba(255, 255, 255, 0) 40%     /* Invisible na pagdating sa kanan */
+    ), 
+    url('bg6.png'); /* Ang background image mo */
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Siguraduhin na ang text shadow ay sapat para mabasa pa rin ang puting text sa puting gradient */
+.carousel-item.third-section .hero-box h1,
+.carousel-item.third-section .hero-box p {
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+/* 1. Animation na may smooth scaling (para mas cinematic) */
+@keyframes fadeInUpCustom {
+    0% { 
+        opacity: 0; 
+        transform: translateY(40px);
+        visibility: visible;
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateY(0);
+        visibility: visible;
+    }
+}
+
+/* 2. Siguraduhin na "Initial State" ay nakatago talaga para iwas flicker */
+.carousel-item.third-section .hero-box h1,
+.carousel-item.third-section .hero-box p,
+.carousel-item.third-section .hero-box .btn-dark {
+    opacity: 0;
+    visibility: hidden; /* Ito ang pampigil sa flicker bago mag-start ang animation */
+}
+
+/* 3. I-trigger ang animation kapag 'active' na ang slide */
+/* Dadagdagan natin ng kaunting delay para matapos muna ang slide transition ng Bootstrap */
+.carousel-item.active.third-section .hero-box h1 {
+    animation: fadeInUpCustom 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+}
+
+.carousel-item.active.third-section .hero-box p {
+    animation: fadeInUpCustom 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+}
+
+.carousel-item.active.third-section .hero-box .btn-dark {
+    animation: fadeInUpCustom 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+}
+
+
+
+
+
+/* ============================================================
+   FINAL CONSISTENT GLASS BUTTONS (ALL SECTIONS)
+   ============================================================ */
+
+/* 1. BASE STYLE: Pantay na sukat at alignment */
+.carousel-item .hero-box .btn {
+    border-radius: 5px !important;
+    padding: 12px 35px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    font-size: 1rem !important;
+    display: inline-block !important;
+    transition: all 0.3s ease-in-out !important;
+    position: relative !important;
+    top: 0;
+    box-shadow: none !important;
+    border: 2px solid transparent !important;
+}
+
+/* 2. INITIAL COLORS (SOLID STATE) */
+
+/* Blue - First Section */
+.carousel-item.first-section .hero-box .btn-outline-dark {
+    background-color: #007bff !important;
+    color: #ffffff !important;
+    border-color: #007bff !important;
+}
+
+/* Maroon - Second Section */
+.carousel-item.second-section .hero-box .btn-dark {
+    background-color: #800000 !important;
+    color: #ffffff !important;
+    border-color: #800000 !important;
+}
+
+/* White - Third Section */
+.carousel-item.third-section .hero-box .btn-dark {
+/*     background-color: #ffffff !important;
+    color: #006064 !important;
+    border-color: #ffffff !important; */
+
+    background-color: #006064 !important;
+    color: #ffffff  !important;
+    border-color: #006064 !important;
+
+}
+
+/* 3. SHARED HOVER EFFECT (THE FIX)
+   Inilagay natin ang background-color: rgba para maging glass lahat! */
+
+.carousel-item.first-section .hero-box .btn-outline-dark:hover,
+.carousel-item.second-section .hero-box .btn-dark:hover,
+.carousel-item.third-section .hero-box .btn-dark:hover {
+    /* top: -8px !important; */ /* Lift effect */
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    color: #ffffff !important; /* Lahat mag-white text sa hover */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3) !important;
+}
+
+/* 4. SPECIFIC GLASS TINTS PER SECTION */
+
+/* Hover Blue Glass */
+.carousel-item.first-section .hero-box .btn-outline-dark:hover {
+    background-color: rgba(0, 123, 255, 0.3) !important;
+}
+
+/* Hover Maroon Glass */
+.carousel-item.second-section .hero-box .btn-dark:hover {
+    background-color: rgba(128, 0, 0, 0.3) !important;
+}
+
+/* Hover Teal Glass (Third Section) - NEW UPDATE */
+.carousel-item.third-section .hero-box .btn-dark:hover {
+    background-color: rgba(0, 96, 100, 0.3) !important; /* Teal glass tint base on #006064 */
+}
+
+
+
+
+/* --- THE 2-LAYER PARALLAX EFFECT --- */
+
+.carousel-item.third-section {
+    position: relative;
+    overflow: hidden; /* Mahalaga para hindi lumampas ang layers */
+    background: #f8f9fa; /* Fallback color */
+}
+
+/* Base style para sa layers */
+.layer-bg, .layer-people {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    will-change: transform, opacity;
+}
+
+/* Layer 1: Ang Background Image */
+.carousel-item.third-section .layer-bg {
+    background-image: url('bg6_blank.png'); /* PALITAN MO ITO: Image na walang tao */
+    z-index: 1;
+    transform: scale(1.1); /* Konting zoom para sa motion space */
+}
+
+/* Layer 2: Ang Tao Image (Transparent) */
+.carousel-item.third-section .layer-people {
+    background-image: url('bg6_people.png'); /* PALITAN MO ITO: Image na tao lang */
+    z-index: 2;
+}
+
+/* --- THE ANIMATIONS --- */
+
+@keyframes layerMoveBG {
+    0% { transform: scale(1.1) translateX(0); }
+    100% { transform: scale(1.1) translateX(-20px); } /* Dahan-dahang galaw pabalik */
+}
+
+@keyframes layerMovePeople {
+    0% { transform: translateX(40px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; } /* Mas mabilis na pasok */
+}
+
+/* Trigger ang animation kapag active ang slide */
+.carousel-item.active.third-section .layer-bg {
+    animation: layerMoveBG 10s ease-out forwards;
+}
+
+.carousel-item.active.third-section .layer-people {
+    animation: layerMovePeople 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+}
+
+/* Siguraduhin na ang text box ay nasa pinaka-ibabaw */
+.carousel-item.third-section .container {
+    position: relative;
+    z-index: 3;
+}
 
 
 
