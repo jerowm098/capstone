@@ -1439,7 +1439,7 @@ html {
     /* Adjusted to flow from Top to Bottom */
 
 
-    background: linear-gradient(rgba(0, 123, 255, 0.8), rgba(79, 172, 254, 0.8)), url('bg3.png');
+    background: linear-gradient(rgba(37, 143, 255, 0.8), rgba(108, 187, 255, 0.8)), url('bg3.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed; /* Optional: adds a parallax effect */
@@ -1505,15 +1505,15 @@ html {
 /* Footer Styles */
 /* FOOTER IMPROVEMENTS */
 footer {
-    background-color: #270000 !important; /* Binago sa White para lumitaw ang Maroon logo */
-    color: #666;
+    background-color: #3c0000 !important; /* Binago sa White para lumitaw ang Maroon logo */
+    color: #d6d6d6;
     padding: 80px 0 30px 0;
     /* border-top: 2px solid #d4a017 !important; */ /* Gold top border gaya ng sa navbar */
 }
 
 /* FOOTER LOGO NAME - DEFAULT STATE (Maroon & Gold) */
 .footer-brand-text span:first-child {
-    color: #800000 !important; /* PUP Maroon */
+    color: #c10000 !important; /* PUP Maroon */
     font-size: 1.6rem;
     font-weight: 800;
     line-height: 0.9;
@@ -1530,7 +1530,7 @@ footer {
 
 /* FOOTER LOGO NAME - HOVER STATE (Darkish Maroon) */
 .footer-brand-link:hover .footer-brand-text span:first-child {
-    color: #5a0000 !important; /* Mas madilim na maroon sa hover */
+    color: #7c0000 !important; /* Mas madilim na maroon sa hover */
 }
 
 .footer-brand-link:hover .footer-brand-text span:last-child {
@@ -1546,12 +1546,12 @@ footer .brand-logo {
 
 /* Iba pang footer text adjustments para sa light background */
 .footer-description {
-    color: #666;
+    color: #ffffff;
     font-size: 0.9rem;
 }
 
 .footer-heading {
-    color: #800000; /* Maroon headings para sa academic look */
+    color: #c10000; /* Maroon headings para sa academic look */
     font-weight: 700;
     text-transform: uppercase;
     border-bottom: 2px solid #d4a017;
@@ -1560,13 +1560,13 @@ footer .brand-logo {
 }
 
 .footer-links a {
-    color: #555 !important;
+    color: #ffffff !important;
     text-decoration: none;
     transition: all 0.3s ease;
 }
 
 .footer-links a:hover {
-    color: #800000 !important; /* Mag-ma-maroon sa hover */
+    color: #c10000 !important; /* Mag-ma-maroon sa hover */
     padding-left: 5px;
 }
 
@@ -1575,7 +1575,7 @@ footer .brand-logo {
 }
 
 .copyright-text {
-    color: #999;
+    color: #ffffff;
     font-size: 0.85rem;
 }
 

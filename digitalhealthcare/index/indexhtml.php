@@ -68,9 +68,9 @@
       </ul>
 
       <div class="d-flex justify-content-center">
-        <!-- <a href="loginhtml.php" class="btn btn-login">Login</a> -->
+         <!-- <a href="loginhtml.php" class="btn btn-login">Login</a> -->
          <!-- <a href="../portal/portal.html" class="btn btn-login">Login</a> -->
-        <a href="../portal/chooseportal.php" class="btn btn-login">Login</a>
+         <a href="../portal/chooseportal.php" class="btn btn-login">Login</a>
     </div>
     </div>
   </div>

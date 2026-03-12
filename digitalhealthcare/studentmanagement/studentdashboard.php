@@ -57,6 +57,11 @@ $student_id = $_SESSION['student_id'];
                     <button class="nav-link text-start" id="v-pills-appointment-tab" data-bs-toggle="pill" data-bs-target="#v-pills-appointment" type="button" role="tab">
                         <i class="bi bi-calendar-plus me-2"></i> Book Appointment
                     </button>
+
+
+                    <button class="nav-link text-start" id="v-pills-medical-tab" data-bs-toggle="pill" data-bs-target="#v-pills-medical" type="button" role="tab" aria-controls="v-pills-medical" aria-selected="false">
+                        <i class="bi bi-hospital me-2"></i> Medical Records
+                    </button>
                 </div>
             </div>
 
@@ -81,6 +86,10 @@ $student_id = $_SESSION['student_id'];
         <li class="nav-item">
             <button class="nav-link fw-bold text-dark" id="billing-tab" data-bs-toggle="tab" data-bs-target="#billing-content" type="button" role="tab"><i class="bi bi-credit-card me-2"></i>Billing</button>
         </li>
+
+        
+
+
     </ul>
 
     <div class="tab-content" id="profileSubTabsContent">
@@ -136,6 +145,9 @@ $student_id = $_SESSION['student_id'];
             </div>
         </div>
 
+
+
+<!-- MEDICAL TAB -->
 <div class="tab-pane fade" id="medical-content" role="tabpanel">
     <div class="row g-3 mt-2">
         <div class="col-md-4">
@@ -235,6 +247,8 @@ $student_id = $_SESSION['student_id'];
     </div>
 </div>
 
+
+<!-- RECORD TAB -->
         <div class="tab-pane fade" id="records-content" role="tabpanel">
             <div class="mt-4">
                 <h6 class="fw-bold"><i class="bi bi-chat-left-text me-2"></i>Doctor's Notes & Instructions</h6>
@@ -453,6 +467,88 @@ $student_id = $_SESSION['student_id'];
 
     </div> </div>
 <!-- END OF APPOINTMENT TAB -->
+
+
+
+
+<div class="tab-pane fade" id="v-pills-medical" role="tabpanel">
+
+<div class="container mt-4">
+    <h2 style="color: maroon;">Medical Services - PUPBC CareLink</h2>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-white" style="background-color: maroon;">
+                    My Health QR Code
+                </div>
+                <div class="card-body text-center">
+                    <div id="qr-display" class="p-3 border mb-2"> [QR CODE HERE] </div>
+                    <p class="small text-muted">Present this to the clinic staff for quick medical record access.</p>
+                    <button class="btn btn-outline-danger btn-sm w-100" style="color: maroon; border-color: maroon;">View Full QR</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-white" style="background-color: maroon;">
+                    Self-Service Triage (New Visit)
+                </div>
+                <div class="card-body">
+                    <form action="process_triage.php" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">How are you feeling? (Symptoms)</label>
+                            <textarea class="form-control" name="symptoms" rows="2" placeholder="Example: Fever, Cough, Headache..."></textarea>
+                        </div>
+                        <button type="submit" class="btn text-white" style="background-color: maroon;">Submit Triage Entry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-2">
+        <div class="card-header text-white" style="background-color: maroon;">
+            Past Clinic Consultations
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0 text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date of Visit</th>
+                        <th>Diagnosis</th>
+                        <th>Treatment / Medication</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2026-03-12</td>
+                        <td>Common Cold</td>
+                        <td>Paracetamol (500mg)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
                 </div>
             </div>
         </div>

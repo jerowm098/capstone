@@ -1,86 +1,69 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold mb-0">Pharmacy Management</h2>
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-dark btn-sm"><i class="bi bi-printer me-1"></i> Print Labels</button>
-            <button class="btn btn-dark btn-sm">+ New Stock Entry</button>
-        </div>
-    </div>
-
-    <div class="row g-4">
-        <div class="col-lg-8">
-            <div class="card pharmacy-card shadow-sm">
-                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0">Incoming Prescription Queue</h6>
-                    <span class="badge rounded-pill bg-primary">5 New Orders</span>
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-maroon text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-pills me-2"></i>Prescription Fulfillment</h5>
+                    <small>Real-time Queue</small>
                 </div>
-                <div class="table-responsive p-3 pt-0">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Patient Name</th>
-                                <th>Medication</th>
-                                <th>Doctor</th>
-                                <th>Priority</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="small fw-bold">#RX-4412</td>
-                                <td>Sarah Jenkins</td>
-                                <td>Amoxicillin 500mg <br><small class="text-muted">14 Day Supply</small></td>
-                                <td class="small">Dr. Wilson</td>
-                                <td><span class="badge status-routine">Routine</span></td>
-                                <td><button class="btn btn-sm btn-dark px-3">Dispense</button></td>
-                            </tr>
-                            <tr>
-                                <td class="small fw-bold">#RX-4413</td>
-                                <td>Robert Smith</td>
-                                <td>Insulin Glargine <br><small class="text-muted">3 Vials</small></td>
-                                <td class="small">Dr. Adams</td>
-                                <td><span class="badge status-urgent">Urgent</span></td>
-                                <td><button class="btn btn-sm btn-dark px-3">Dispense</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="card pharmacy-card shadow-sm mb-4">
                 <div class="card-body">
-                    <h6 class="fw-bold mb-3">Inventory Health</h6>
-                    
-                    <div class="inventory-item mb-3">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="small text-muted">Critical Stock (Below 10%)</span>
-                            <span class="fw-bold text-danger">04</span>
-                        </div>
-                        <div class="progress inventory-progress">
-                            <div class="progress-bar bg-danger" style="width: 15%"></div>
-                        </div>
+                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                        <i class="fas fa-clock me-2"></i>
+                        <div>Pending: <strong>Jerome Mallari</strong> - Paracetamol (500mg)</div>
+                        <button class="btn btn-sm btn-maroon ms-auto text-white">Dispense Now</button>
                     </div>
-
-                    <div class="inventory-item">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="small text-muted">Near Expiry (30 Days)</span>
-                            <span class="fw-bold text-warning">12</span>
-                        </div>
-                        <div class="progress inventory-progress">
-                            <div class="progress-bar bg-warning" style="width: 45%"></div>
-                        </div>
+                    
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Medicine Name</th>
+                                    <th>Qty</th>
+                                    <th>Date/Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Student #2019-XXXXX</td>
+                                    <td>Amoxicillin</td>
+                                    <td>10 pcs</td>
+                                    <td>Oct 24, 10:30 AM</td>
+                                    <td><span class="badge bg-success">Released</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="card pharmacy-card shadow-sm p-3">
-                <label class="small fw-bold text-muted mb-2 text-uppercase">Stock Fast-Check</label>
-                <div class="input-group pharmacy-search">
-                    <input type="text" class="form-control" placeholder="Search drug name...">
-                    <button class="btn"><i class="bi bi-search"></i></button>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0 fw-bold text-maroon">Stock Inventory Alert</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Alcohol (70%)
+                            <span class="badge bg-success rounded-pill">15 bottles</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center text-danger fw-bold">
+                            Face Masks
+                            <span class="badge bg-danger rounded-pill">Low Stock: 2 boxes</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Cotton Balls
+                            <span class="badge bg-success rounded-pill">50 packs</span>
+                        </li>
+                    </ul>
+                    <div class="d-grid mt-3">
+                        <button class="btn btn-outline-secondary btn-sm">Generate Supply Report</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>

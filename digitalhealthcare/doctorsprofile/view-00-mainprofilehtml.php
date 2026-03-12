@@ -146,7 +146,7 @@
             <button class="nav-link mb-2 text-start" data-file="view-07-tabaccounts.html">
                 <i class="bi bi-wallet2 me-2"></i> Accounts
             </button>
-            <button class="nav-link mb-2 text-start" data-file="view-08-tabreports.html">
+            <button class="nav-link mb-2 text-start" data-file="view-08-tabreportshtml.php">
                 <i class="bi bi-bar-chart-line me-2"></i> Reports
             </button>
 
