@@ -806,7 +806,7 @@ html {
 
 /* 1. Customization para sa H1 (Headline) */
 .carousel-item.third-section .hero-box h1 {
-    color: #006064 !important;
+    color: #410000 !important;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     /* Dito mo pwedeng baguhin ang size ng Headline kung gusto mo */
 }
@@ -939,9 +939,13 @@ html {
     color: #006064 !important;
     border-color: #ffffff !important; */
 
-    background-color: #006064 !important;
+/*     background-color: #006064 !important;
     color: #ffffff  !important;
-    border-color: #006064 !important;
+    border-color: #006064 !important; */
+
+    background-color: #800000 !important;
+    color: #ffffff !important;
+    border-color: #800000 !important;
 
 }
 
@@ -973,7 +977,8 @@ html {
 
 /* Hover Teal Glass (Third Section) - NEW UPDATE */
 .carousel-item.third-section .hero-box .btn-dark:hover {
-    background-color: rgba(0, 96, 100, 0.3) !important; /* Teal glass tint base on #006064 */
+    /* background-color: rgba(0, 96, 100, 0.3) !important; */ /* Teal glass tint base on #006064 */
+    background-color: rgba(128, 0, 0, 0.3) !important;
 }
 
 

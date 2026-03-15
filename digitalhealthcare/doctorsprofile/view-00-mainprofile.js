@@ -24,6 +24,25 @@ $(document).ready(function() {
         });
     }
 
+// --- 2. TAB PERSISTENCE ENGINE (LocalStorage) ---
+    // Ito ang nagpapanatili ng tab kahit i-refresh ang page
+    let lastTabId = localStorage.getItem("activeTab") || "v-pills-dashboard";
+    activateTab(lastTabId);
+
+    // Click event para sa navigation tabs
+$(document).on("click", ".nav-link[data-bs-toggle='pill']", function() {
+    // Alisin ang active class sa lahat bago i-apply sa bago
+    $(".nav-link").removeClass("active");
+    $(this).addClass("active");
+
+    let targetId = $(this).attr("data-bs-target").replace("#", "");
+    localStorage.setItem("activeTab", targetId);
+    updateHeaderTitle(targetId);
+});
+
+
+
+
 
     // --- 2. FIND USER / VIEW PROFILE MODAL LOGIC ---
     // Ilagay ito dito para kasama sa initialization
@@ -49,96 +68,72 @@ $(document).on("click", ".btn-view-user", function() {
 });
 
 
-    // 1. Kunin ang huling file na binuksan mula sa storage, default ay dashboard
-    let lastFile = localStorage.getItem("activeTab") || "view-01-tabdashboard.html";
-
-    // 2. I-load ang huling page at i-activate ang tamang button
-    loadAndRelocate(lastFile);
-    
-    // Hanapin ang button na may katapat na data-file at lagyan ng 'active'
-    /* $(`.nav-link[data-file="${lastFile}"]`).addClass("active"); */
-
-    // 3. I-activate ang tamang button/link
-    let $activeLink = $(`.nav-link[data-file="${lastFile}"]`);
-    $activeLink.addClass("active");
-
-    // --- SMART COLLAPSE START ---
-    // Hanapin kung ang active link ay nasa loob ng isang sub-menu (collapse)
-    let $parentCollapse = $activeLink.closest('.collapse');
-    
-    if ($parentCollapse.length > 0) {
-        // Kung nasa loob ng sub-menu, piliting manatiling nakabukas (show)
-        $parentCollapse.addClass("show");
-        
-        // I-rotate ang arrow icon ng parent button
-        let parentId = $parentCollapse.attr('id');
-        $(`[data-bs-target="#${parentId}"] .bi-chevron-down`).addClass("rotate-icon");
-    }
-    // --- SMART COLLAPSE END ---
-
-
 
     
     // 3. Click event
-    $(document).on("click", ".nav-link[data-file]", function(e) {
-        /* e.preventDefault();
-        let file = $(this).data("file"); */
-        
-        // I-save sa localStorage para pag ni-refresh, ito pa rin ang lilitaw
+function activateTab(tabId) {
+    // 1. Hanapin ang button/link na may tamang data-bs-target
+    let $targetBtn = $(`.nav-link[data-bs-target="#${tabId}"]`);
+    
+    if ($targetBtn.length > 0) {
+        // 2. KRITIKAL: Alisin ang lahat ng 'active' class sa lahat ng nav-links
+        // para walang double highlight sa refresh.
+        $(".nav-link").removeClass("active");
 
-        /* localStorage.setItem("activeTab", file); */
-        
-        /* $(".nav-link").removeClass("active");
-        $(this).addClass("active");
+        // 3. I-activate ang tamang tab gamit ang Bootstrap Tab API
+        let tabTrigger = new bootstrap.Tab($targetBtn[0]);
+        tabTrigger.show();
 
-        loadAndRelocate(file); */
+        // 4. I-re-add ang active class sa mismong pinindot (dahil minsan inaalis ng .removeClass)
+        $targetBtn.addClass("active");
 
-    if ($(this).is('a')) {
-            e.preventDefault();
+        // 5. Logic para sa Sub-menus (Collapse)
+        let $parentCollapse = $targetBtn.closest('.collapse');
+        if ($parentCollapse.length > 0) {
+            $parentCollapse.addClass("show"); // Panatilihing bukás ang menu
+            
+            // I-rotate ang chevron icon ng parent
+            let parentId = $parentCollapse.attr('id');
+            $(`[data-bs-target="#${parentId}"] .bi-chevron-down`).addClass("rotate-icon");
+            
+            // PAALALA: Huwag lagyan ng 'active' class ang PARENT button 
+            // kung ayaw mong maging kulay puti rin ang background nito.
         }
         
-        let file = $(this).data("file");
-        if(!file) return;
+        updateHeaderTitle(tabId);
+    }
+}
 
-        localStorage.setItem("activeTab", file);
-        
-        // Highlight sidebar if applicable
-        $(".nav-link").removeClass("active");
-        $(`.nav-link[data-file="${file}"]`).addClass("active");
+    function updateHeaderTitle(tabId) {
+        // Kukuha ng text sa h2 na may class 'main-tab-title' sa loob ng tab-pane
+        let title = $(`#${tabId} .main-tab-title`).first().text();
+        if (title) {
+            $("#nav-header-target").html(`<h2 class="fw-bold m-0" style="font-size: 1.5rem;">${title}</h2>`);
+        }
+    }
 
-        loadAndRelocate(file);
-
-
-
-    });
-    // ADD THIS PART: Clear storage on Logout
-    $(document).on("click", "#logout-link", function() {
+    // Logout: Clear storage
+    $("#logout-link").click(function() {
         localStorage.removeItem("activeTab");
-        // No need to preventDefault if it's a real link to logout.php
     });
+
+    function updateHeaderTitle(tabId) {
+        // Kukunin ang text ng <h2> sa loob ng aktibong tab pane
+        let title = $(`#${tabId} .main-tab-title`).first().text() || 
+                    $(`#${tabId} h2`).first().text(); // Fallback kung walang class
+        
+        if (title) {
+            $("#nav-header-target").html(`<h2 class="fw-bold m-0" style="font-size: 1.5rem;">${title}</h2>`);
+        }
+    }
 
 
     // --- 3. PHONE NUMBER PREFIX LOGIC ---
     // Gagamit tayo ng delegation dahil ang form ay nalo-load via AJAX (.load())
-    $(document).on("submit", "#editProfileForm", function(e) {
-        // Humanap ng paraan para maisama ang +639 kung hindi mo binago ang PHP
-        // Pero dahil inayos na natin ang PHP mo kanina, ang trabaho ng JS dito
-        // ay siguraduhin na 9 digits lang ang pinapadala.
-        
-        let contactInput = $("#contactNum").val();
-        if (contactInput.length !== 9) {
-            e.preventDefault(); // Pigilan ang submit
-            Swal.fire({
-                title: 'Invalid Number',
-                text: 'Please enter exactly 9 digits for the contact number.',
-                icon: 'warning',
-                confirmButtonColor: '#212529'
-            });
-        }
-    });
+
 
         $(document).on("submit", "#editProfileForm", function(e) {
-            let phoneSuffix = $("#contactNum").val();
+            let phoneSuffix = $("#contact_num").val();
             if (phoneSuffix.length !== 9) {
                 e.preventDefault();
                 Swal.fire({
@@ -150,54 +145,7 @@ $(document).on("click", ".btn-view-user", function() {
             }
         });
 
-        
-// --- 4. DELETE USER LOGIC ---
-$(document).on("click", ".btn-delete-user", function() {
-    const userId = $(this).data("id");
-    const userName = $(this).data("name");
-
-    if (!userId) return;
-
-    Swal.fire({
-        title: 'Are you sure?',
-        text: `You are about to delete the profile of ${userName}.`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#212529',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '../delete-user.php',
-                type: 'POST',
-                data: { id: userId },
-                dataType: 'json', // Sabihin sa jQuery na i-parse na ang JSON automatically
-                success: function(res) {
-                    if(res.status === "success") {
-                        Swal.fire({
-                            title: 'Deleted!',
-                            text: 'User has been removed.',
-                            icon: 'success',
-                            confirmButtonColor: '#212529'
-                        }).then(() => {
-                            // Siguraduhin na tama ang pangalan ng file na ito:
-                            loadAndRelocate('view-02.2-findprofiletabhtml.php'); 
-                        });
-                    } else {
-                        Swal.fire('Error!', res.message || 'Could not delete user.', 'error');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // Dito mo makikita kung ano talaga ang error ng PHP
-                    console.error("Server Response:", xhr.responseText);
-                    Swal.fire('Error!', 'Server error. Check console for details.', 'error');
-                }
-            });
-        }
-    });
-});
-
+ 
 
 
 
@@ -251,24 +199,234 @@ $(document).on("change", "#fileInput", function(e) {
 });
 
 
-function loadAndRelocate(file) {
-    if(!file) return;
-
-    $("#content-area").fadeOut(100, function() {
-        $(this).load(file, function(response, status, xhr) {
-            if (status == "error") {
-                $(this).html("<div class='alert alert-danger'>Error: File not found.</div>");
-            }
-
-            // Lipat Header Logic
-            let title = $(this).find("h2").first().text();
-            if(title) {
-                $("#nav-header-target").html('<h2 class="fw-bold m-0" style="font-size: 1.5rem;">' + title + '</h2>');
-                $(this).find("h2").first().hide();
-            }
-            
-            $(this).fadeIn(150);
-            window.dispatchEvent(new Event('resize'));
-        });
+function showTab(tabId) {
+    // Itago lahat ng sections
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.style.display = 'none';
     });
+
+    // Ipakita ang napiling section
+    const activeTab = document.getElementById(tabId + '-tab');
+    if (activeTab) {
+        activeTab.style.display = 'block';
+        
+        // Update ang header title kung kinakailangan
+        const title = activeTab.querySelector('h2').innerText;
+        document.getElementById('nav-header-target').innerHTML = 
+            '<h2 class="fw-bold m-0" style="font-size: 1.5rem;">' + title + '</h2>';
+    }
 }
+
+
+
+/* FIND PROFILE JS */
+
+/* LIVESEARCH  */
+$(document).ready(function() {
+    let typingTimer;
+    const doneTypingInterval = 400; 
+    const $input = $('#searchInput');
+
+    function liveSearch(pageNum = 1) {
+        let query = $input.val() ? $input.val().trim() : '';
+        
+        $.ajax({
+            url: '../fetch-users.php', // Binago natin ang target file dito
+            type: 'GET',
+            data: { 
+                search: query, 
+                page: pageNum,
+                ajax: 1 
+            },
+            dataType: 'json',
+            success: function(response) {
+                $('#userTableBody').html(response.table);
+                $('#paginationContainer .d-flex').html(response.pagination);
+                $('#totalUsersBadge').text('Total Users: ' + response.total);
+                $('#searchStatus').html(response.searchLabel);
+            },
+            error: function() {
+                console.log("Error fetching data.");
+            }
+        });
+    }
+
+    // Initial Load ng data pagbukas ng page
+    liveSearch(1);
+
+    $input.on('keyup', function (e) {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(liveSearch, doneTypingInterval);
+    });
+
+    $(document).on('click', '#clearSearch', function(e) {
+        e.preventDefault();
+        $input.val('');
+        liveSearch(1);
+    });
+
+    $(document).on('click', '.page-nav-link', function(e) {
+        e.preventDefault();
+        let pageNum = $(this).data('page');
+        if(pageNum) liveSearch(pageNum);
+    });
+
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault();
+        clearTimeout(typingTimer);
+        liveSearch();
+    });
+});
+
+
+
+// DELETE USER FUNCTION
+// DELETE USER FUNCTION
+$(document).on('click', '.btn-delete-user', function() {
+    const userId = $(this).data('id');
+    const userName = $(this).data('name');
+
+    // SweetAlert2 Confirmation
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to delete " + userName + ". This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#212529', 
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // AJAX Call to delete
+            $.ajax({
+                url: '../delete-user.php',
+                type: 'POST',
+                data: { id: userId },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // 1. Ipakita ang success message
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: response.message,
+                            icon: 'success',
+                            timer: 2000, // Kusa itong mawawala sa loob ng 1.5 seconds
+                            showConfirmButton: false
+                        });
+
+                        // 2. KRITIKAL: Tawagin muli ang liveSearch para mag-update ang table
+                        // Ginagamit nito ang kasalukuyang search input at page 1
+                        if (typeof liveSearch === "function") {
+                            liveSearch(1); 
+                        } else {
+                            // Fallback: kung hindi ma-access ang liveSearch, i-reload ang page
+                            location.reload();
+                        }
+                    } else {
+                        Swal.fire('Error!', response.message, 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error!', 'Something went wrong with the server.', 'error');
+                }
+            });
+        }
+    });
+});
+
+
+
+
+
+// --- EDIT PROFILE TAB LOGIC JS PARTSSSS ---
+
+// 1. Toggle Password Visibility
+$(document).on('click', '.toggle-password', function() {
+    const input = $(this).closest('.input-group').find('input');
+    const icon = $(this).find('i');
+    const isPassword = input.attr('type') === 'password';
+    
+    input.attr('type', isPassword ? 'text' : 'password');
+    icon.toggleClass('bi-eye-slash bi-eye');
+});
+
+// 2. Name Validation (Bawal numbers)
+$(document).on('input', '#fname, #lname', function() {
+    let input = $(this);
+    let hint = $('#hint-' + input.attr('id'));
+    
+    input.val(input.val().replace(/[0-9]/g, '')); 
+    
+    if (input.val().trim().length < 2) {
+        hint.text("Name too short").addClass("text-danger").removeClass("text-success text-muted");
+    } else {
+        hint.text("Looks good!").addClass("text-success").removeClass("text-danger text-muted");
+    }
+});
+
+// 3. Password Match & Strength Logic
+$(document).on('input', '#newPassword, #confirmPassword', function() {
+    const newPass = $('#newPassword').val();
+    const confPass = $('#confirmPassword').val();
+    const hintPass = $('#hint-password');
+    const hintConf = $('#hint-confirm');
+
+    // Strength
+    if (newPass.length > 0 && newPass.length < 6) {
+        hintPass.text("Too short (min 6)").addClass("text-danger").removeClass("text-success text-muted");
+    } else if (newPass.length >= 6) {
+        hintPass.text("Strong enough").addClass("text-success").removeClass("text-danger text-muted");
+    } else {
+        hintPass.text("Min. 6 characters").addClass("text-muted").removeClass("text-danger text-success");
+    }
+
+    // Match
+    if (confPass === "") {
+        hintConf.text("Passwords must match").addClass("text-muted").removeClass("text-danger text-success");
+    } else if (confPass === newPass) {
+        hintConf.text("Passwords match!").addClass("text-success").removeClass("text-danger text-muted");
+    } else {
+        hintConf.text("Passwords do not match").addClass("text-danger").removeClass("text-success text-muted");
+    }
+});
+
+// 4. Contact Number Validation
+$(document).on('input', '#contact_num', function() {
+    let input = $(this);
+    input.val(input.val().replace(/[^0-9]/g, '')); 
+    
+    if (input.val().length === 9) {
+        $('#hint-contact').text("Valid number format").addClass("text-success").removeClass("text-danger text-muted");
+    } else {
+        $('#hint-contact').text("Enter exactly 9 digits").addClass("text-danger").removeClass("text-success text-muted");
+    }
+});
+
+// 5. Email Validation
+$(document).on('input', '#email', function() {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const hintEmail = $('#hint-email');
+    
+    if (re.test($(this).val())) {
+        hintEmail.text("Valid email address").addClass("text-success").removeClass("text-danger text-muted");
+    } else {
+        hintEmail.text("Invalid email format").addClass("text-danger").removeClass("text-success text-muted");
+    }
+});
+
+// 6. Final Form Submission
+$(document).on('submit', '#editProfileForm', function(e) {
+    const newPass = $('#newPassword').val();
+    const confPass = $('#confirmPassword').val();
+
+    if (newPass.length > 0 && newPass.length < 6) {
+        e.preventDefault();
+        Swal.fire({ icon: 'error', title: 'Security', text: 'New password must be at least 6 characters.' });
+    } else if (newPass !== confPass) {
+        e.preventDefault();
+        Swal.fire({ icon: 'error', title: 'Mismatch', text: 'Passwords do not match!' });
+    }
+});
+
+
+
