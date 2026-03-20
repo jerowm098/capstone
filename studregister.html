@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Register | CareLink Express</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --medical-blue: #475867;
+            --success-green: #2ecc71;
+            --clay-bg: #f0f0f0;
+            --clay-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+            --clay-inset: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(156, 12, 32, 0.8), rgba(13, 20, 26, 0.9)), 
+                        url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920');
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Expanded Container to fit both forms side-by-side */
+        .register-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            padding: 3rem;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* Mobile responsiveness: stack them on small screens */
+        @media (max-width: 768px) {
+            .register-card {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+            }
+        }
+
+        .back-btn {
+            color: var(--medical-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.3s;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover { color: var(--pup-maroon); transform: translateX(-5px); }
+
+        .form-group { margin-bottom: 20px; }
+        .form-label { font-weight: 600; color: var(--medical-blue); font-size: 0.85rem; margin-left: 10px; }
+
+        .input-group-clay {
+            background: var(--clay-bg);
+            border-radius: 20px;
+            padding: 5px 15px;
+            box-shadow: var(--clay-inset);
+            display: flex;
+            align-items: center;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .input-group-clay:focus-within { border: 2px solid var(--pup-maroon); }
+        .input-group-clay i { color: var(--pup-maroon); margin-right: 12px; font-size: 1.1rem; }
+
+        .input-group-clay input, .input-group-clay select {
+            background: transparent; border: none; outline: none;
+            width: 100%; padding: 12px 0; color: var(--medical-blue); font-size: 0.9rem;
+        }
+
+        .btn-register {
+            background: var(--pup-maroon); color: white; border: none; border-radius: 20px;
+            padding: 15px; width: 100%; font-weight: 600; margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(156, 12, 32, 0.3); transition: 0.3s;
+        }
+
+        /* Right Side: Patient ID Form/Result Preview */
+        .id-result-container {
+            background: var(--clay-bg);
+            border-radius: 30px;
+            padding: 2rem;
+            box-shadow: var(--clay-shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .patient-badge {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 15px;
+            box-shadow: var(--clay-shadow);
+            border-top: 5px solid var(--pup-maroon);
+            margin-top: 15px;
+        }
+
+        .id-title { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 2px; }
+        .patient-id-number {
+            font-family: 'Courier New', monospace;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--medical-blue);
+            margin: 10px 0;
+            letter-spacing: 1px;
+        }
+
+        .status-pill {
+            background: var(--success-green);
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+
+        .qr-placeholder {
+            width: 100px;
+            height: 100px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container d-flex justify-content-center">
+    <div class="register-card">
+        
+        <div class="registration-form">
+            <a href="studlogin.html" class="back-btn">
+                <i class="fa-solid fa-arrow-left me-2"></i>Back to Dashboard
+            </a>
+
+            <div class="mb-4">
+                <h2 class="fw-bold" style="color: var(--medical-blue);">Register</h2>
+                <p class="text-muted small">Step 1: Provide Academic Details</p>
+            </div>
+
+            <form action="#">
+                <div class="form-group">
+                    <label class="form-label">Student Number</label>
+                    <div class="input-group-clay">
+                        <i class="fa-solid fa-id-card"></i>
+                        <input type="text" placeholder="2023-XXXXX-BN-0" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <div class="input-group-clay">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Last Name, First Name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <div class="input-group-clay">
+                        <i class="fa-solid fa-building-columns"></i>
+                        <select required>
+                            <option value="" disabled selected>Select Department</option>
+                            <option value="BSIT">BSIT</option>
+                            <option value="BSBA">BSBA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-register">
+                    Submit Enrollment <i class="fa-solid fa-paper-plane ms-2"></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="id-result-container">
+            <div class="mb-3">
+                <h4 class="fw-bold" style="color: var(--medical-blue);">Clinic Profile</h4>
+                <p class="text-muted small">Generated Patient Information</p>
+            </div>
+
+            <div class="patient-badge">
+                <span class="status-pill"><i class="fa-solid fa-check-circle me-1"></i> Account Created</span>
+                <div class="qr-placeholder">
+                    <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <div class="id-title">New Patient ID (PN)</div>
+                <div class="patient-id-number">2026-0001-PN-0</div>
+                
+                <hr>
+                
+                <div class="small text-start px-2">
+                    <p class="mb-1"><strong>Status:</strong> Active Student</p>
+                    <p class="mb-0"><strong>Campus:</strong> Biñan Branch</p>
+                </div>
+            </div>
+
+            <p class="mt-4 small text-muted">
+                <i class="fa-solid fa-circle-info me-1"></i>
+                Save this ID for medical consults.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

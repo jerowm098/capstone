@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Appointment | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --medical-blue: #475867;
+            --clay-bg: #f0f0f0;
+            --clay-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+            --clay-inset: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+            --urgent-color: #d00000;
+            --slow-color: #0077b6;
+            --success-green: #4BB543;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(156, 12, 32, 0.85), rgba(13, 20, 26, 0.9)), 
+                        url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1920');
+            background-size: cover;
+            background-attachment: fixed;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; 
+        }
+
+        .appointment-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(15px);
+            border-radius: 35px;
+            padding: 1.5rem;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            width: 1300px;
+            height: 800px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto auto 1fr;
+            gap: 20px;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.4);
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .top-nav-bar {
+            grid-column: span 3;
+            background: var(--clay-bg);
+            border-radius: 20px;
+            padding: 8px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--clay-inset);
+        }
+
+        .page-header { grid-column: span 3; text-align: center; }
+        .page-header h2 { color: var(--pup-maroon); font-weight: 800; margin-bottom: 0px; font-size: 1.8rem; }
+        .page-header p { color: var(--medical-blue); font-size: 0.9rem; margin: 0; opacity: 0.8; }
+
+        .progress-container {
+            grid-column: span 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            padding-bottom: 5px;
+        }
+
+        .step-circle {
+            width: 35px; height: 35px; border-radius: 50%;
+            background: var(--clay-bg); box-shadow: var(--clay-shadow);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; color: var(--medical-blue); font-size: 0.9rem;
+            transition: all 0.4s ease;
+        }
+        .step-circle.active { background: var(--pup-maroon); color: white; }
+        
+        .step-circle.completed { 
+            background: var(--success-green) !important; 
+            color: white !important;
+            transform: scale(1.1);
+        }
+
+        .step-line { height: 4px; width: 100px; background: #d1d9e6; border-radius: 2px; transition: background 0.5s ease; }
+
+        .step-column {
+            background: var(--clay-bg); border-radius: 28px;
+            padding: 20px; box-shadow: var(--clay-shadow);
+            display: flex; flex-direction: column; text-align: center;
+            height: 100%; box-sizing: border-box;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Task 1: Lock Logic */
+        .step-locked {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        .big-step-icon {
+            width: 55px; height: 55px; background: white; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 10px auto; font-size: 1.5rem; color: var(--pup-maroon);
+            box-shadow: var(--clay-shadow);
+        }
+
+        .step-label { font-size: 0.7rem; text-transform: uppercase; color: var(--pup-maroon); font-weight: 800; margin-bottom: 2px; display: block; }
+
+        .calendar-container {
+            background: white; border-radius: 15px; padding: 10px;
+            box-shadow: var(--clay-inset); margin-top: 10px;
+        }
+        .calendar-grid {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;
+        }
+        .cal-day {
+            font-size: 0.75rem; padding: 8px 0; border-radius: 8px; cursor: pointer;
+            transition: 0.2s; font-weight: 600; color: var(--medical-blue);
+        }
+        .cal-day:hover { background: #eee; }
+        .cal-day.active { background: var(--pup-maroon); color: white; }
+        .cal-day.today { border: 2px solid var(--pup-maroon); }
+        .weekday { font-size: 0.65rem; color: #999; font-weight: 800; text-transform: uppercase; }
+
+        .form-label { font-weight: 600; color: var(--medical-blue); font-size: 0.8rem; margin-bottom: 4px; text-align: left; display: block;}
+        .input-group-clay {
+            background: white; border-radius: 12px; padding: 8px 12px;
+            box-shadow: var(--clay-inset); display: flex; align-items: center; margin-bottom: 12px;
+        }
+        .input-group-clay select, .input-group-clay input {
+            background: transparent; border: none; outline: none;
+            width: 100%; color: var(--medical-blue); font-size: 0.85rem;
+        }
+
+        .result-qr-container {
+            width: 180px; height: 180px; background: white; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            align-self: center; margin: 10px 0; box-shadow: var(--clay-inset); padding: 10px;
+        }
+        #result-qr-img { max-width: 100%; display: none; }
+        .qr-placeholder { color: #ccc; font-size: 0.75rem; font-style: italic; }
+
+        .info-row {
+            display: flex; justify-content: space-between;
+            padding: 8px 5px; border-bottom: 1px dashed #ddd; font-size: 0.85rem;
+        }
+
+        .btn-confirm {
+            background: var(--pup-maroon); color: white; border: none; border-radius: 16px;
+            padding: 18px; width: 100%; font-weight: 600; font-size: 1rem; transition: 0.3s;
+            margin-top: auto;
+        }
+        .btn-confirm:hover:not(:disabled) { filter: brightness(1.2); }
+        .btn-confirm:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="appointment-card">
+    <div class="top-nav-bar">
+        <a href="kioskdashboard.html" class="btn-back-nav btn border-0 shadow-sm" style="background:white; color:var(--pup-maroon); font-weight:600;">
+            <i class="fa-solid fa-arrow-left me-2"></i> Back to Dashboard
+        </a>
+        <div class="d-flex align-items-center gap-3">
+            <div class="text-end">
+                <h6 id="display-name" class="m-0 fw-bold" style="font-size: 0.85rem; color: var(--medical-blue);">Guest Patient</h6>
+                <span id="display-id" style="font-size: 0.7rem; color: #888;">ID: ---- - ----- - -- - -</span>
+            </div>
+            <div style="width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--clay-shadow); color: var(--pup-maroon);">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <h2>Make Online Appointment</h2>
+        <p>Schedule your clinic visit in advance by following the steps below.</p>
+    </div>
+
+    <div class="progress-container">
+        <div class="step-circle active" id="dot1">1</div>
+        <div class="step-line" id="line1"></div>
+        <div class="step-circle" id="dot2">2</div>
+        <div class="step-line" id="line2"></div>
+        <div class="step-circle" id="dot3">3</div>
+    </div>
+    
+    <div class="step-column" id="col-step1">
+        <div class="big-step-icon"><i class="fa-solid fa-calendar-days"></i></div>
+        <span class="step-label">Step 1</span>
+        <h5 class="fw-bold mb-2">Select Date</h5>
+        
+        <div class="calendar-container">
+            <div class="mb-2 fw-bold" style="font-size: 0.9rem; color: var(--pup-maroon);">March 2026</div>
+            <div class="calendar-grid">
+                <div class="weekday">S</div><div class="weekday">M</div><div class="weekday">T</div>
+                <div class="weekday">W</div><div class="weekday">T</div><div class="weekday">F</div><div class="weekday">S</div>
+                <script>
+                    const grid = document.currentScript.parentElement;
+                    for(let i=1; i<=31; i++) {
+                        const day = document.createElement('div');
+                        day.className = 'cal-day' + (i === 19 ? ' today' : '');
+                        day.innerText = i;
+                        day.onclick = function() {
+                            document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('active'));
+                            this.classList.add('active');
+                            selectDate(i);
+                        };
+                        grid.appendChild(day);
+                    }
+                </script>
+            </div>
+        </div>
+
+        <div class="mt-auto">
+            <div class="input-group-clay" style="background: #e9ecef; margin-bottom: 5px;">
+                <input type="text" id="selected-date-input" placeholder="Date: - - - -" readonly>
+            </div>
+            <button class="border-0 bg-transparent text-muted text-decoration-underline" onclick="simulateOnlineUser()" style="cursor: pointer; font-size: 0.65rem;">[ Dev: Simulate User Session ]</button>
+        </div>
+    </div>
+
+    <div class="step-column step-locked" id="col-step2">
+        <div class="big-step-icon"><i class="fa-solid fa-sliders"></i></div>
+        <span class="step-label">Step 2</span>
+        <h5 class="fw-bold mb-2">Appointment Details</h5>
+
+        <form id="onlineForm" class="text-start">
+            <label class="form-label">Triage Level</label>
+            <div class="input-group-clay">
+                <select id="urgency" onchange="validateStep2()">
+                    <option value="" selected disabled hidden>- - - - -</option>
+                    <option value="non-urgent">Regular Follow-up</option>
+                    <option value="urgent">Urgent Consultation</option>
+                </select>
+            </div>
+
+            <label class="form-label">Consultation Type</label>
+            <div class="input-group-clay">
+                <select id="consultType" onchange="validateStep2()">
+                    <option value="" selected disabled hidden>- - - - -</option>
+                    <option>Physical Examination</option>
+                    <option>Medical Certificate</option>
+                    <option>Vaccination</option>
+                    <option>Specialist Referral</option>
+                </select>
+            </div>
+            
+            <div class="mt-4 p-3" style="background:white; border-radius:15px; box-shadow: var(--clay-inset);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span style="font-size:0.8rem; color:#666;">Queue Priority:</span>
+                    <span id="priorityText" class="fw-bold" style="font-size:0.8rem; color:#ccc;">PENDING</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="step-column step-locked" id="col-step3">
+        <div class="big-step-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <span class="step-label">Step 3</span>
+        <h5 class="fw-bold mb-2">Booking Confirmation</h5>
+        
+        <div class="result-qr-container">
+            <span class="qr-placeholder" id="qr-placeholder">QR will appear after confirmation</span>
+            <img id="result-qr-img" src="" alt="Appointment QR">
+        </div>
+
+        <div class="px-2">
+            <div class="info-row">
+                <span class="text-muted">Ref No:</span>
+                <span class="fw-bold" id="res-ref">- - - -</span>
+            </div>
+            <div class="info-row">
+                <span class="text-muted">Appt Date:</span>
+                <span class="fw-bold" id="res-date">- - - -</span>
+            </div>
+            <div class="info-row" style="border:none;">
+                <span class="text-muted">Triage:</span>
+                <span class="fw-bold" id="res-triage">- - - -</span>
+            </div>
+        </div>
+
+        <button type="button" class="btn-confirm" id="btnAction" onclick="handleConfirm()" disabled>
+            Confirm Appointment <i class="fa-solid fa-calendar-check ms-2"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+    let selectedDate = null;
+    let isConfirmed = false;
+
+    function simulateOnlineUser() {
+        document.getElementById('display-name').innerText = "Jerome Mallari";
+        document.getElementById('display-id').innerText = "ID: 2023-01020-BN-0";
+    }
+
+    function selectDate(day) {
+        selectedDate = `March ${day}, 2026`;
+        document.getElementById('selected-date-input').value = "Selected: " + selectedDate;
+        
+        // Mark Step 1 Completed
+        const dot1 = document.getElementById('dot1');
+        dot1.classList.add('completed');
+        dot1.innerHTML = '<i class="fa-solid fa-check"></i>';
+
+        // Unlock Step 2
+        document.getElementById('col-step2').classList.remove('step-locked');
+        document.getElementById('dot2').classList.add('active');
+        document.getElementById('line1').style.background = 'var(--pup-maroon)';
+    }
+
+    // Task 1 Logic: Synchronize Step 2 progress based on field entry
+    function validateStep2() {
+        const urgencyVal = document.getElementById('urgency').value;
+        const consultVal = document.getElementById('consultType').value;
+        const dot2 = document.getElementById('dot2');
+        const pText = document.getElementById('priorityText');
+
+        // Update UI Priority Label
+        if (urgencyVal === 'urgent') {
+            pText.innerText = "HIGH PRIORITY";
+            pText.style.color = "var(--urgent-color)";
+        } else if (urgencyVal === 'non-urgent') {
+            pText.innerText = "NORMAL";
+            pText.style.color = "var(--slow-color)";
+        } else {
+            pText.innerText = "PENDING";
+            pText.style.color = "#ccc";
+        }
+
+        if (urgencyVal !== "" && consultVal !== "") {
+            // Mark Step 2 as Completed
+            dot2.classList.add('completed');
+            dot2.innerHTML = '<i class="fa-solid fa-check"></i>';
+            
+            // Unlock Step 3
+            document.getElementById('col-step3').classList.remove('step-locked');
+            document.getElementById('dot3').classList.add('active');
+            document.getElementById('line2').style.background = 'var(--pup-maroon)';
+            document.getElementById('btnAction').disabled = false;
+        } else {
+            dot2.classList.remove('completed');
+            dot2.innerHTML = '2';
+            document.getElementById('col-step3').classList.add('step-locked');
+            document.getElementById('dot3').classList.remove('active');
+            document.getElementById('line2').style.background = '#d1d9e6';
+            document.getElementById('btnAction').disabled = true;
+        }
+    }
+
+    function handleConfirm() {
+        const btn = document.getElementById('btnAction');
+        if (!isConfirmed) {
+            const urgency = document.getElementById('urgency').value;
+            const refID = "APT-" + Math.random().toString(36).substr(2, 6).toUpperCase();
+            
+            document.getElementById('res-ref').innerText = refID;
+            document.getElementById('res-date').innerText = selectedDate;
+            document.getElementById('res-triage').innerText = (urgency === 'urgent') ? "URGENT" : "REGULAR";
+            document.getElementById('res-triage').style.color = (urgency === 'urgent') ? "var(--urgent-color)" : "var(--slow-color)";
+
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Ref:${refID}|Date:${selectedDate}`;
+            document.getElementById('qr-placeholder').style.display = 'none';
+            const qrImg = document.getElementById('result-qr-img');
+            qrImg.src = qrUrl;
+            qrImg.style.display = 'block';
+
+            btn.innerHTML = 'Book Another <i class="fa-solid fa-rotate-right ms-2"></i>';
+            btn.style.background = "var(--medical-blue)";
+
+            // Lock inputs
+            document.getElementById('urgency').disabled = true;
+            document.getElementById('consultType').disabled = true;
+
+            // Mark Final Step Completed
+            const dot3 = document.getElementById('dot3');
+            dot3.classList.add('completed');
+            dot3.innerHTML = '<i class="fa-solid fa-check"></i>';
+
+            isConfirmed = true;
+        } else {
+            location.reload();
+        }
+    }
+</script>
+
+</body>
+</html>

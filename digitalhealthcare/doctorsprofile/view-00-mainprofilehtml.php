@@ -73,7 +73,7 @@
                     data-bs-target="#profileSubmenu" 
                     aria-expanded="false" 
                     type="button">
-                <span><i class="bi bi-person-circle me-2"></i> Profile Management</span>
+                <span><i class="bi bi-person-circle me-2"></i> Profile</span>
                 <i class="bi bi-chevron-down small"></i>
             </button>
 
@@ -121,7 +121,7 @@
 
 
             <hr class="text-secondary">
-            <a href="../login/loginhtml.php" class="nav-link text-danger text-start" id="logout-link">
+            <a href="../../portalmain.html" class="nav-link text-danger text-start" id="logout-link">
                 <i class="bi bi-box-arrow-left me-2"></i> Logout
             </a>
         </div>

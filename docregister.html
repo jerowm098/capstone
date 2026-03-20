@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="create-account.css">
+    <title>Create Account | Digital Healthcare</title>
+    <style>
+        /* --- Base Reset & Layout --- */
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.signup-container {
+    width: 100%;
+    max-width: 500px;
+    margin-top: -30px; 
+}
+
+.signup-image {
+    background-image: url('https://www.sumitomocorp.com/en/jp/enrich/contents/-/media/Images/hq/Enriching/0057/02_1.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}
+
+/* --- Base Input Styling --- */
+.form-control, 
+.input-group-text, 
+.form-select {
+    transition: none !important;
+    border-color: #dee2e6;
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: none !important;
+    border-color: #000000 !important;
+}
+
+/* --- 1. UNIVERSAL HOVER LOGIC --- */
+.input-group:hover .form-control, 
+.input-group:hover .input-group-text,
+.col-4:hover .form-select,
+.col-4:hover .form-control {
+    border-color: #999999 !important;
+}
+
+/* --- 2. FOCUS STATE --- */
+.input-group:focus-within .form-control, 
+.input-group:focus-within .input-group-text {
+    border-color: #000000 !important;
+}
+
+/* --- 3. INSTANT VALID STATE (Green & Check Icon) --- */
+.form-control:valid:not(:placeholder-shown),
+.form-select:valid:not([value=""]) {
+    border-color: #198754 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    background-size: 18px 18px !important;
+}
+
+.input-group:has(.form-control:valid:not(:placeholder-shown)) .input-group-text {
+    border-color: #198754 !important;
+}
+
+/* --- 4. INSTANT INVALID STATE (Red & X Icon) --- */
+.form-control:invalid:not(:placeholder-shown) {
+    border-color: #dc3545 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath d='M7.8 4.2l-3.6 3.6m0-3.6l3.6 3.6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    background-size: 18px 18px !important;
+}
+
+.input-group:has(.form-control:invalid:not(:placeholder-shown)) .input-group-text {
+    border-color: #dc3545 !important;
+}
+
+/* --- 5. SUBMITTED ERROR STATE (Tooltips) --- */
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid,
+.was-validated .input-group:has(:invalid) .input-group-text {
+    border-color: #dc3545 !important;
+}
+
+/* --- 6. SPECIAL ERROR HOVER (Dark Red) --- */
+.input-group:has(.form-control:invalid:not(:placeholder-shown)):hover .form-control,
+.input-group:has(.form-control:invalid:not(:placeholder-shown)):hover .input-group-text,
+.was-validated .col-4:hover .form-control:invalid,
+.was-validated .col-4:hover .form-select:invalid {
+    border-color: #a71d2a !important;
+}
+
+/* --- 7. TOOLTIP POP-UP --- */
+.invalid-tooltip {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 5;
+    padding: .25rem .5rem;
+    font-size: .75rem;
+    background-color: rgba(220, 53, 69, 0.9);
+    color: #fff;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.was-validated :invalid ~ .invalid-tooltip {
+    display: block;
+}
+
+/* --- 8. BUTTON & EYE ICON STYLING --- */
+.input-group-text { 
+    cursor: pointer; 
+    background-color: transparent;
+}
+
+.input-group button.input-group-text:hover {
+    background-color: #f8f9fa !important;
+}
+
+.input-group button.input-group-text:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.btn-dark {
+    background-color: #000000;
+    border: none;
+    font-weight: 600;
+    border-radius: 4px;
+    /* --- ADJUST HERE --- */
+    padding: 12px 20px !important; /* Taasan ang 12px para kumapal ang button */
+    margin-top: 15px !important;    /* Taasan ang 10px para lumayo sa checkbox */
+}
+.btn-dark:hover { background-color: #333333; }
+
+/* --- 9. CHECKBOX STYLING --- */
+.form-check-input:focus { box-shadow: none !important; border-color: #000000 !important; }
+.form-check-input:checked { background-color: #000000 !important; border-color: #000000 !important; }
+.form-check-input:hover { border-color: #999999 !important; cursor: pointer; }
+.form-check-input:valid:checked { background-color: #000000 !important; border-color: #000000 !important; }
+
+
+/* --- FIXED CSS PART --- */
+
+/* Siguraduhing puti ang background kahit mag-autofill ang browser */
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+}
+
+
+
+
+/* TRANSITION */
+/* Eto ang normal state - WALANG GALAW */
+.login-image, .signup-image, 
+.login-form-container, .signup-container {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Eto ang class na magti-trigger ng animation */
+.animate-left {
+    animation: slideInLeftImage 0.3s ease-out forwards;
+}
+
+.animate-right {
+    animation: slideInRight 0.3s ease-out forwards;
+}
+
+/* Panatilihin ang Keyframes */
+@keyframes slideInLeftImage {
+    from { transform: translateX(-150px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(150px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+
+
+
+
+/* HINT MESSAGES KAPAG FRESH PA UNG PAGE */
+.input-hint {
+    font-size: 0.72rem;
+    margin-top: 2px;
+    position: absolute; /* Para hindi itulak ang elements sa ilalim */
+    bottom: -18px;      /* Ilalagay natin sa labas ng container */
+    left: 20px;
+    visibility: hidden; /* Nakatago pero may "reserved" space */
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+    z-index: 5; /* Siguradong nasa ibabaw */
+}
+
+/* Eto ang class na ididikit ng JS kapag naka-focus ang user */
+.hint-visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    display: block !important;
+}
+
+/* .hint-error { color: #dc3545 !important; }
+.hint-success { color: #198754 !important; } */
+
+/* Kapag active o may error */
+
+.hint-error {
+    color: #dc3545 !important;
+    visibility: visible !important;
+    /* opacity: 1 !important; */
+}
+
+.hint-success {
+    color: #198754 !important;
+    visibility: visible !important;
+   /*  opacity: 1 !important; */
+}
+
+/* Dagdag: Lagyan ng konting margin ang mga columns para hindi magsapaw ang hints */
+/* .mb-4.position-relative {
+    margin-bottom: 2rem !important; 
+} */
+
+
+
+/* FOR POSITIONING OF ICONS AT MAX LETTERS */
+/* 1. Pigilan ang pagpatong ng text sa icons */
+.form-control {
+    padding-right: 40px !important; /* Dagdagan ang space sa kanan */
+}
+
+.was-validated .form-control:valid, .form-control.is-valid {
+    /* Ang 40px o 45px ay karaniwang sapat para hindi mag-overlap sa icons */
+    background-position: right 12px center !important; 
+}
+
+
+
+
+
+/* UNG HINT MESSAGE NA LANG ANG GAMITIN */
+/* Tanggalin ang default check at error icons ng Bootstrap */
+
+
+/* Gawing pula ang border kapag invalid pagka-submit */
+.was-validated .form-control:invalid {
+    border-color: #dc3545 !important;
+}
+
+/* Gawing green ang border kapag valid pagka-submit */
+.was-validated .form-control:valid {
+    border-color: #198754 !important;
+}
+
+/* 2nd PART */
+/* 1. Itago ang lahat ng default validation markers ng Bootstrap */
+
+
+/* 2. Siguraduhin na ang input-hint ay lilitaw kapag tinawag ng JS */
+.input-hint.hint-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
+/* Kulay ng borders para sa indicator */
+.was-validated .form-control:invalid {
+    border-color: #dc3545 !important;
+}
+.was-validated .form-control:valid {
+    border-color: #198754 !important;
+}
+
+
+
+
+/* 1. Alisin ang vertical lines sa lahat ng input groups */
+.input-group {
+    border: 1px solid #dee2e6; /* Isang border na lang para sa buong grupo */
+    border-radius: 0.25rem;
+    transition: border-color 0.2s;
+}
+
+.input-group:focus-within {
+    border-color: #000 !important; /* Itim na border kapag naka-focus */
+}
+
+.input-group .form-control, 
+.input-group .input-group-text {
+    border: none !important; /* Tanggalin ang inner borders para walang divider line */
+    background-color: transparent !important;
+}
+
+/* 2. Kulay ng hints */
+.hint-success { 
+    color: #198754 !important; 
+    font-weight: 500;
+}
+.hint-error { 
+    color: #dc3545 !important; 
+    font-weight: 500;
+}
+
+/* 3. Siguraduhin na lilitaw ang kulay agad */
+.input-hint {
+    font-size: 0.75rem;
+    margin-top: 4px;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+.hint-visible {
+    opacity: 1 !important;
+}
+
+
+
+/* Siguraduhin na ang border ay nagiging pula kapag may class na is-invalid */
+.form-control.is-invalid {
+    border-color: #dc3545 !important;
+    background-image: none !important; /* Tinatanggal ang default check icon ng Bootstrap */
+}
+
+/* Para sa email specific border */
+#email.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+
+/* --- IMPROVED FOCUS & LIVE COLOR --- */
+
+/* Default Focus (Black) kapag wala pang validation */
+.form-control:focus, .form-select:focus {
+    border-color: #000 !important;
+    box-shadow: none !important;
+}
+
+/* ETO ANG IMPORTANTE: Payagan ang JS na i-override ang border color */
+/* Ginagamit natin ang .is-valid-live at .is-invalid-live na classes */
+
+.is-valid-live {
+    border-color: #198754 !important;
+    border-width: 2px !important;
+}
+
+.is-invalid-live {
+    border-color: #dc3545 !important;
+    border-width: 2px !important;
+}
+
+/* Kung ang input ay nasa loob ng input-group (may icons), isama ang border ng grupo */
+.input-group.is-valid-live, .input-group.is-invalid-live {
+    border-width: 2px !important;
+}
+
+.input-group.is-valid-live .input-group-text, 
+.input-group.is-valid-live .form-control {
+    border-color: #198754 !important;
+}
+
+.input-group.is-invalid-live .input-group-text, 
+.input-group.is-invalid-live .form-control {
+    border-color: #dc3545 !important;
+}
+
+
+/* 1. Tanggalin lahat ng border sa loob ng group para walang mag-overlap */
+.input-group .form-control, 
+.input-group .input-group-text,
+.input-group .form-select {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 2. Ang INPUT GROUP lang ang dapat magkaroon ng border */
+.input-group {
+    border: 1px solid #dee2e6; /* Default border */
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+    
+}
+
+/* 3. Kapag clinick (Focus), gawing Black ang buong group */
+.input-group:focus-within {
+    border-color: #000000 !important;
+    border-width: 1px;
+    border: 1px solid #000000 !important;
+}
+
+/* 4. LIVE VALIDATION (Eto ang o-override sa black focus) */
+/* Gagamit tayo ng higher specificity para talunin ang focus-within */
+
+.input-group.is-valid-live {
+    border: 1px solid #198754 !important;
+}
+
+.input-group.is-invalid-live {
+    border: 1px solid #dc3545 !important;
+}
+
+/* 5. Alisin ang default validation icons ng Bootstrap para hindi magulo */
+.form-control.is-valid, .was-validated .form-control:valid,
+.form-control.is-invalid, .was-validated .form-control:invalid {
+    background-image: none !important;
+    border: none !important; /* Siguradong group border lang ang lilitaw */
+}
+
+
+
+
+
+/* --- CLEANED LAYOUT & BORDERS --- */
+.input-group {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    position: relative;
+    background-color: #fff;
+}
+
+/* Tanggalin ang borders ng elements sa loob para walang "patong" */
+.input-group .form-control, 
+.input-group .input-group-text,
+.input-group .form-select {
+    border: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+}
+
+/* Default Focus State (Black) */
+/* .input-group:focus-within {
+    border-color: #000000 !important;
+    z-index: 2;
+}
+ */
+/* --- LIVE HINT MESSAGES --- */
+.input-hint {
+    font-size: 0.72rem;
+    position: absolute;
+    bottom: -20px;
+    left: 20px;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.1s ease;
+    white-space: nowrap;
+    z-index: 5;
+    font-weight: 500;
+}
+
+.hint-visible {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.hint-error { color: #dc3545 !important; }
+.hint-success { color: #198754 !important; }
+
+
+/* Para sa normal inputs na walang group (halimbawa col-4 fields kung meron) */
+.form-control.is-invalid-live, .form-select.is-invalid-live {
+    border: 1px solid #dc3545 !important;
+}
+
+
+
+.input-group-text {
+    border-color: #dee2e6;
+    color: #495057;
+}
+
+/* Para dikit na dikit ang itsura ng prefix sa input */
+#contactNum {
+    padding-left: 5px;
+}
+
+
+
+
+/* --- 1. MATCHED UNIVERSAL HOVER LOGIC --- */
+/* Target the group container AND standalone col-4 inputs equally */
+.input-group:hover,
+.col-4:hover .form-select,
+.col-4:hover .form-control,
+.col-md-5:hover .input-group,
+.col-md-7:hover .input-group {
+    border-color: #999999 !important;
+}
+
+/* Ensure the elements inside the group don't fight for border color */
+.input-group:hover .form-control, 
+.input-group:hover .input-group-text,
+.input-group:hover .form-select {
+    border-color: transparent !important; /* Let the group container handle the color */
+}
+
+/* --- 2. MATCHED FOCUS STATE --- */
+.input-group:focus-within,
+.form-control:focus,
+.form-select:focus {
+    border-color: #000000 !important;
+    border-width: 1px !important; /* Keep it consistent */
+}
+
+/* Specific fix for date fields (col-4) to match the thickness of groups */
+.col-4 .form-control, 
+.col-4 .form-select {
+    border: 1px solid #dee2e6 !important;
+}
+
+.col-4 .form-control:hover, 
+.col-4 .form-select:hover {
+    border-color: #999999 !important;
+}
+    </style>
+</head>
+<body>
+<div id="page-content" class="animate__animated animate__fadeIn">
+    <div class="container-fluid vh-100 p-0">
+        <div class="row g-0 vh-100">
+            <div class="col-md-6 d-flex align-items-center bg-white p-4 p-lg-5">
+                <div class="signup-container mx-auto">
+                    <div class="mb-3"> <a class="navbar-brand fw-bold text-dark fs-3" href="index.html">Care<span class="text-secondary">Link</span></a>
+                        <h2 class="fw-bold mt-2">Join Our Community</h2>
+                        </div>
+
+                    <form id="signupForm" class="needs-validation" novalidate autocomplete="off">
+                        <div class="row mb-3">
+                            <div class="col-md-6 position-relative">
+                                <label class="form-label small fw-bold">FIRST NAME</label>
+                                <div class="input-group has-validation">
+                                    <input type="text" id="firstName" name="fname" class="form-control border-end-0" placeholder="ex. Juan" required>
+                                    <span class="input-group-text bg-transparent border-start-0"><i class="bi bi-person text-muted"></i></span>
+                                </div>
+                                <div id="hint-firstName" class="input-hint">Required (no numbers)</div>
+                            </div>
+
+                            <div class="col-md-6 position-relative">
+                                <label class="form-label small fw-bold">LAST NAME</label>
+                                <div class="input-group has-validation">
+                                    <input type="text" id="lastName" name="lname" class="form-control border-end-0" placeholder="ex. Dela Cruz" required>
+                                    <span class="input-group-text bg-transparent border-start-0"><i class="bi bi-person-fill text-muted"></i></span>
+                                </div>
+                                <div id="hint-lastName" class="input-hint">Required family name</div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-8 position-relative">
+                            <label class="form-label small fw-bold">CONTACT NUMBER</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0" style="font-size: 0.9rem; font-weight: bold;">+639</span>
+                                
+                                <input type="tel" id="contactNum" name="contactNum" 
+                                    class="form-control border-start-0" 
+                                    placeholder="XXXXXXXXX" 
+                                    maxlength="9" 
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                                    required>
+                                    
+                                <span class="input-group-text bg-transparent border-start-0"><i class="bi bi-phone text-muted"></i></span>
+                            </div>
+                            <div id="hint-contact" class="input-hint">Please enter the remaining 9 digits</div>
+                        </div>
+
+                            <div class="col-md-4 position-relative">
+                                <label class="form-label small fw-bold">GENDER</label>
+                                <div class="input-group">
+                                    <select id="gender" name="gender" class="form-select" style="border-radius: 4px;" required>
+                                        <option value="" selected disabled hidden>Select</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div id="hint-gender" class="input-hint">Select gender</div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <div class="col-md-7 position-relative">
+                                <label class="form-label small fw-bold text-uppercase">Email Address</label>
+                                <div class="input-group">
+                                    <input type="email" id="email" name="email" class="form-control border-end-0" placeholder="name@gmail.com" required>
+                                    <span class="input-group-text bg-transparent border-start-0"><i class="bi bi-envelope text-muted"></i></span>
+                                </div>
+                                <div id="hint-email" class="input-hint">Gmail, Yahoo, or Outlook only</div>
+                            </div>
+
+                            <div class="col-md-5 position-relative">
+                                <label class="form-label small fw-bold text-uppercase">Expertise</label>
+                                <div class="input-group">
+                                    <select id="expertise" name="expertise" class="form-select" style="border-radius: 4px;" required>
+                                        <option value="" selected disabled hidden>Select</option>
+                                        <option value="Cardiologist">Cardiologist</option>
+                                        <option value="Pediatrician">Pediatrician</option>
+                                        <option value="Neurologist">Neurologist</option>
+                                        <option value="General Physician">General Physician</option>
+                                        <option value="Neurologist">Surgeon</option>
+                                    </select>
+                                </div>
+                                <div id="hint-expertise" class="input-hint">Select your specialization</div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 position-relative">
+                                <label class="form-label small fw-bold">PASSWORD</label>
+                                <div class="input-group">
+                                    <input type="password" id="mainPassword" name="password" class="form-control border-end-0" placeholder="••••••••" required>
+                                    <span class="input-group-text bg-transparent border-start-0" style="cursor: pointer;">
+                                        <i class="bi bi-eye-slash text-muted" id="toggleMainPassword"></i>
+                                    </span>
+                                </div>
+                                <div id="hint-password" class="input-hint">Min. 6 characters</div>
+                            </div>
+
+                            <div class="col-md-6 position-relative">
+                                <label class="form-label small fw-bold">CONFIRM PASSWORD</label>
+                                <div class="input-group">
+                                    <input type="password" id="confirmPassword" class="form-control border-end-0" placeholder="••••••••" required>
+                                    <span class="input-group-text bg-transparent border-start-0" style="cursor: pointer;">
+                                        <i class="bi bi-eye-slash text-muted" id="toggleConfirmPassword"></i>
+                                    </span>
+                                </div>
+                                <div id="hint-confirm" class="input-hint">Match your password</div>
+                            </div>
+                        </div>
+
+                        <label class="form-label small fw-bold">BIRTHDAY</label>
+                        <div class="row g-2 mb-3">
+                            <div class="col-4 position-relative">
+                                <select class="form-select" id="birthMonth" name="birthMonth" required>
+                                    <option value="" selected disabled hidden>Month</option>
+                                    <option value="01">Jan</option>
+                                    <option value="02">Feb</option>
+                                    <option value="03">Mar</option>
+                                    <option value="04">Apr</option>
+                                    <option value="05">May</option>
+                                    <option value="06">Jun</option>
+                                    <option value="07">Jul</option>
+                                    <option value="08">Aug</option>
+                                    <option value="09">Sep</option>
+                                    <option value="10">Oct</option>
+                                    <option value="11">Nov</option>
+                                    <option value="12">Dec</option>
+                                </select>
+                                <div id="hint-birthMonth" class="input-hint">Required</div>
+                            </div>
+
+                            <div class="col-4 position-relative">
+                                <input type="number" id="birthDay" class="form-control" placeholder="Day" required>
+                                <div id="hint-birthDay" class="input-hint">1-31</div>
+                            </div>
+
+                            <div class="col-4 position-relative">
+                                <input type="number" id="birthYear" class="form-control" placeholder="Year" required>
+                                <div id="hint-birthYear" class="input-hint">1900-2026</div>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-3 position-relative">
+                            <input class="form-check-input" type="checkbox" id="policyCheck" required>
+                            <label class="form-check-label small text-muted" for="policyCheck">
+                                I agree to the <a href="#" class="text-dark fw-bold">Terms of Service</a>.
+                            </label>
+                            <div id="hint-policy" class="input-hint">Please agree to terms</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100 py-2 mb-2">CREATE ACCOUNT</button>
+                        <div class="text-center">
+                            <p class="small mb-0">Already have an account? <a href="portaldoctor.html" class="text-dark fw-bold text-decoration-none">Log In</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6 d-none d-md-block p-0">
+                <div class="signup-image"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

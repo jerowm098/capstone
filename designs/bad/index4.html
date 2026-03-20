@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUPBC CareLink | Clinic Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-deep: #0D141A;
+            --surface: #374445;
+            --muted-blue: #475867;
+            --active-red: #9C0C20;
+            --vibrant-red: #D51C3D;
+            --secondary-text: #63788D;
+            --primary-text: #91ABBC;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--primary-text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Glassmorphism Navigation --- */
+        .navbar {
+            background: rgba(55, 68, 69, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(145, 171, 188, 0.1);
+            padding: 1rem 2rem;
+        }
+
+        .nav-link {
+            color: var(--primary-text) !important;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--vibrant-red) !important;
+        }
+
+        .btn-login {
+            background-color: var(--vibrant-red);
+            color: white;
+            border-radius: 20px;
+            padding: 8px 25px;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: var(--active-red);
+            box-shadow: 0 0 15px rgba(213, 28, 61, 0.4);
+        }
+
+        /* --- Sections General --- */
+        section { padding: 100px 0; }
+
+        /* --- HOME Section --- */
+        #home {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #0D141A 0%, #1a252e 100%);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        /* --- SERVICES Section --- */
+        .service-card {
+            background: rgba(55, 68, 69, 0.4);
+            border: 1px solid rgba(145, 171, 188, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            background: rgba(55, 68, 69, 0.6);
+            border-color: var(--vibrant-red);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: var(--vibrant-red);
+            margin-bottom: 20px;
+        }
+
+        /* --- ABOUT Section --- */
+        #about { background-color: #111b24; }
+
+        /* --- CONTACT / FOOTER Section --- */
+        .pre-footer {
+            background-color: var(--surface);
+            padding: 60px 0;
+            border-top: 2px solid var(--vibrant-red);
+        }
+
+        footer {
+            background-color: #080d11;
+            padding: 80px 0;
+            color: var(--secondary-text);
+        }
+
+        .footer-link {
+            color: var(--primary-text);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white fw-bold" href="#">
+                <i class="fa-solid fa-heart-pulse me-2 text-danger"></i>PUPBC CareLink
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home"><i class="fa-solid fa-house-chimney me-1"></i> HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services"><i class="fa-solid fa-stethoscopes me-1"></i> SERVICES</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about"><i class="fa-solid fa-circle-info me-1"></i> ABOUT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact"><i class="fa-solid fa-envelope me-1"></i> CONTACT US</a></li>
+                </ul>
+                <button class="btn-login"><i class="fa-solid fa-user-lock me-2"></i>Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="hero-title">Better Health for <span style="color: var(--vibrant-red);">PUPians</span>.</h1>
+                    <p class="lead">The official Clinic Management System of PUP Biñan Campus. Streamlining medical records and campus health services with care.</p>
+                    <button class="btn-login btn-lg mt-3">Explore Services</button>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <i class="fa-solid fa-shield-halved" style="font-size: 15rem; color: var(--surface); opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container text-center">
+            <h2 class="mb-5 fw-bold text-white">Our Medical Services</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <i class="fa-solid fa-file-medical service-icon"></i>
+                        <h3>Digital Records</h3>
+                        <p>Secure and easy access to your student medical history.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <i class="fa-solid fa-calendar-check service-icon"></i>
+                        <h3>Appointments</h3>
+                        <p>Book a consultation with the campus doctor or nurse online.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <i class="fa-solid fa-pills service-icon"></i>
+                        <h3>Medicine Inventory</h3>
+                        <p>Check availability of basic medicines in the campus clinic.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <img src="https://via.placeholder.com/500x300/374445/91ABBC?text=PUP+Biñan+Clinic" alt="Clinic" class="img-fluid rounded-4 shadow">
+                </div>
+                <div class="col-md-6">
+                    <h2 class="text-white fw-bold">About CareLink</h2>
+                    <p>PUPBC CareLink is a student-led initiative designed to digitize health services within the PUP Biñan Campus. We aim to replace paper-based filing with a robust, secure, and user-friendly management system.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fa-solid fa-check text-danger me-2"></i> Fast & Reliable</li>
+                        <li><i class="fa-solid fa-check text-danger me-2"></i> Secure Data Handling</li>
+                        <li><i class="fa-solid fa-check text-danger me-2"></i> Accessible to all Students</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="contact">
+        <div class="pre-footer text-center">
+            <div class="container">
+                <h3 class="text-white">Need Urgent Assistance?</h3>
+                <p>Visit the clinic at the Ground Floor, Main Building.</p>
+                <div class="d-flex justify-content-center gap-4 mt-3">
+                    <span><i class="fa-solid fa-phone me-2"></i> (049) 513-XXXX</span>
+                    <span><i class="fa-solid fa-envelope me-2"></i> clinic.binan@pup.edu.ph</span>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4 class="text-white mb-4">PUPBC CareLink</h4>
+                        <p>Dedicated to the health and wellness of the PUP Biñan community.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-white mb-4">Quick Links</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#home" class="footer-link">Home</a></li>
+                            <li><a href="#services" class="footer-link">Services</a></li>
+                            <li><a href="#about" class="footer-link">About</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-white mb-4">Follow Us</h4>
+                        <div class="d-flex gap-3">
+                            <a href="#" class="footer-link fs-4"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="#" class="footer-link fs-4"><i class="fa-brands fa-twitter"></i></a>
+                            <a href="#" class="footer-link fs-4"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <hr class="mt-5" style="border-color: var(--muted-blue);">
+                <div class="text-center mt-4">
+                    <p>© 2024 PUP Biñan Campus. All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

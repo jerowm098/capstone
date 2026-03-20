@@ -1,3 +1,18 @@
+
+/* Itatago ang scrollbar pero pwedeng mag-scroll gamit ang touch o mouse wheel */
+:fullscreen ::-webkit-scrollbar {
+    display: none;
+}
+
+:fullscreen {
+    background-color: white; /* Siguradong puti ang bg pag naka-fullscreen */
+}
+
+
+
+
+
+
 /* General Theme */
 body {
     background-color: #ffffff;
@@ -136,6 +151,123 @@ nav .navbar-nav {
 
 
 /* ============================================================
+   MOBILE RESPONSIVENESS (480px)
+   ============================================================ */
+@media (min-width: 481px) and (max-width: 608px) {
+    /* 1. Reset Desktop Offsets */
+    nav .navbar-brand {
+        left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* 2. Brand Adjustments - Bahagyang mas malaki kaysa sa 480px */
+    .brand-logo {
+        height: 55px; /* Dinagdagan mula 50px */
+        margin-right: -10px !important;
+    }
+    .brand-text-wrapper span:first-child { 
+        font-size: 1.35rem; /* Dinagdagan mula 1.2rem */
+    }
+    .brand-text-wrapper span:last-child { 
+        font-size: 0.9rem; /* Dinagdagan mula 0.8rem */
+    }
+
+    /* 3. The "Moving" Gold Line Logic */
+    .navbar, .navbar > .container {
+        border-bottom: none !important;
+    }
+
+    .navbar-collapse {
+        border-bottom: 2px solid #d4a017; 
+        background-color: #ffffff;
+        transition: all 0.35s ease;
+    }
+
+    .navbar { position: relative; }
+    
+    .navbar::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #d4a017;
+        transition: opacity 0.1s;
+    }
+
+    .navbar:has(.show) ::after, 
+    .navbar:has(.collapsing) ::after {
+        opacity: 0;
+    }
+
+    /* 4. Hamburger Styling */
+    .navbar-toggler {
+        border: 2px solid #800000 !important;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+        -webkit-tap-highlight-color: transparent; 
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .navbar-toggler:active, .navbar-toggler:focus {
+        box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.2) !important;
+        background-color: rgba(128, 0, 0, 0.05);
+    }
+
+    .navbar-toggler-icon::before {
+        content: "\f479";
+        font-family: "bootstrap-icons";
+        color: #800000;
+        font-size: 1.6rem; /* Mas malaki nang kaunti */
+    }
+
+    /* 5. Menu Items */
+    nav .navbar-nav {
+        margin-left: 0 !important;
+        text-align: center;
+        padding: 25px 0; /* Mas malapad na padding */
+    }
+
+    .nav-link {
+        margin: 12px 0 !important; /* Mas malaking vertical gap */
+        font-size: 1.1rem; /* Dinagdagan mula 1rem */
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .navbar-nav .nav-item:not(:last-child)::after {
+        display: none;
+    }
+
+    /* 6. Login Button Adjustments */
+    .btn-login {
+        width: 60%; /* Ginawang 60% mula 80% dahil mas malapad ang 608px */
+        margin: 10px auto 25px auto;
+        display: block;
+        -webkit-tap-highlight-color: transparent;
+        outline: none !important;
+        padding: 10px 0;
+    }
+
+    .btn-login:hover, .btn-login:active {
+        background-color: rgba(128, 0, 0, 0.8) !important;
+        box-shadow: 0 4px 12px rgba(128, 0, 0, 0.3) !important;
+        transform: scale(0.98);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
    GLASSMORPHISM LOGIN BUTTON
    ============================================================ */
 
@@ -260,13 +392,12 @@ html {
 
 
 
-/* Controls visibility */
 .carousel-control-prev, 
 .carousel-control-next {
-    width: 5%;
+    width: auto; /* Palitan ang width para hindi ito masyadong malapad */
     opacity: 0.7;
+    z-index: 10; /* Siguraduhing nasa ibabaw ng lahat */
 }
-
 
 /* Container at Glassmorphism Effect */
 .loader-container {
@@ -279,6 +410,19 @@ html {
   cursor: pointer;
   transition: transform 0.3s ease;
 }
+
+/* Gap para sa Previous Button */
+.carousel-control-prev {
+    left: 20px !important; /* Nilagyan ng 20px na layo mula sa kaliwa */
+}
+
+/* Gap para sa Next Button */
+.carousel-control-next {
+    right: 20px !important; /* Nilagyan ng 20px na layo mula sa kanan */
+}
+
+
+
 
 /* Glass Background - Ginawang Darker at mas opaque para sa white background images */
 .glass-bg {
@@ -308,14 +452,14 @@ html {
   stroke-width: 3.5;
 }
 
-/* 2. Loading State: Gold or Bright White */
+
 .loader-track {
   fill: none;
-  stroke: #FFD700; /* Gold color para kitang-kita sa dark glass at white background */
+  stroke: #ffffff; 
   stroke-width: 3.5;
   stroke-linecap: round;
-  stroke-dasharray: 126; 
-  stroke-dashoffset: 126;
+  stroke-dasharray: 251; 
+  stroke-dashoffset: 251;
   animation: none;
 }
 
@@ -326,7 +470,7 @@ html {
 }
 
 @keyframes loading-circle {
-  0% { stroke-dashoffset: 126; }
+  0% { stroke-dashoffset: 251; }
   100% { stroke-dashoffset: 0; }
 }
 
@@ -840,12 +984,12 @@ html {
         rgba(255, 255, 255, 0.3) 30%,  /* Transition/Blur sa gitna */
         rgba(255, 255, 255, 0) 40%     /* Invisible na pagdating sa kanan */
     ), 
-    url('bg6_blank.png'); /* Ang background image mo */
+    url('bg6.png'); /* Ang background image mo */
 
-    background-size: cover;
+        background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 90vh;
+    height: 90vh; /* O depende sa height ng banner mo */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1036,7 +1180,347 @@ html {
 
 
 
+/* ============================================================
+   MEDIA QUERY FOR 480PX (MOBILE VIEW)
+   ============================================================ */
+@media (max-width: 480px) {
+    /* 1. Overall Section Height Adjustment */
+    #home, .carousel-item {
+        height: 80vh !important; /* Bahagyang mas mababa para hindi sakop ang buong screen */
+        min-height: 500px;
+    }
 
+    /* Lock horizontal scroll and fix overflow */
+    html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        position: relative !important;
+    }
+
+
+    /* 2. Global Hero Box Scaling - FIXED FOR TEXT VISIBILITY */
+    .hero-box {
+        /* Dinagdagan natin ang padding sa gilid (left/right) para itulak ang text papasok */
+        padding: 20px 45px !important; 
+        
+        /* Binawasan ang width para hindi siya dumidikit sa prev/next arrows */
+        width: 85% !important; 
+        margin: 0 auto !important;
+        
+        /* Sinisiguro nating nasa gitna ang lahat ng text */
+        text-align: center !important;
+    }
+
+    /* 3. Headers and Paragraphs - ADJUSTED LINE HEIGHT */
+    .hero-box h1 {
+        font-size: 1.6rem !important; /* Binawasan nang kaunti para hindi masyadong malapad */
+        line-height: 1.2 !important;
+        margin-bottom: 15px !important;
+        word-wrap: break-word; /* Para hindi lumampas ang mahabang words */
+    }
+
+    .hero-box p.lead {
+        font-size: 0.85rem !important;
+        margin-bottom: 20px !important;
+        /* Safe space para sa mahabang paragraphs */
+        padding: 0 5px !important; 
+    }
+
+    /* 4. First Section Specific (PUPBC CareLink) */
+    .first-section .hero-box {
+        margin-top: -100px !important; /* Inakyat para hindi matakpan ng buttons */
+    }
+    
+    .first-section-header {
+        transform: scale(1.1) !important; /* Less aggressive scale for mobile */
+    }
+
+    .first-section-p .p-top, 
+    .first-section-p .p-bottom {
+        font-size: 0.8rem !important;
+        padding: 2px 5px !important;
+    }
+
+    /* 5. Second Section Specific */
+    .second-section .hero-box h1 {
+        font-size: 1.6rem !important;
+        white-space: normal !important; /* Allow wrapping on mobile for safety */
+        letter-spacing: -1px !important;
+    }
+
+    .second-section .hero-box .d-sm-flex {
+        margin-top: 30px !important; /* Reduced margin */
+    }
+
+    /* 7. Carousel Controls - FIXED & CLEANED */
+    .loader-container {
+        width: 35px !important;
+        height: 35px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: relative !important;
+        padding: 0 !important;
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .loader-svg {
+        width: 100% !important;
+        height: 100% !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .custom-arrow {
+        width: 10px !important;
+        height: 10px !important;
+        background: none !important;
+        border-top: 3px solid #ffffff !important;
+        border-right: 3px solid #ffffff !important;
+        display: block !important;
+        z-index: 5;
+    }
+
+    .left-arrow {
+        transform: rotate(-135deg) !important;
+        margin-left: 4px !important;
+    }
+    
+    .right-arrow {
+        transform: rotate(45deg) !important;
+        margin-right: 4px !important;
+    }
+
+    /* Tinanggal na natin ang duplicate na ::before dito */
+    .custom-arrow::before {
+        display: none !important;
+    }
+
+    .carousel-control-prev, 
+    .carousel-control-next {
+        width: 10% !important; /* Mas maliit na touch area para hindi takpan ang text */
+        opacity: 1 !important;
+    }
+
+    .custom-arrow::before {
+        width: 6px !important;
+        height: 6px !important;
+        border-width: 2px 2px 0 0 !important; /* Mas manipis na linya ng arrow */
+    }
+
+    /* 8. Buttons Adjustment - FIXED TO SHRINK & MATCH */
+    .carousel-item .hero-box .btn {
+        /* Hindi na natin gagawing 100% para hindi siya magmukhang block */
+        width: auto !important; 
+        min-width: 160px !important; /* Minimum width para madaling pindutin pero hindi sakop buong screen */
+        
+        /* Manipis na padding para mag-shrink ang button */
+        padding: 8px 20px !important; 
+        
+        /* Smaller font to match the shrunk headers */
+        font-size: 0.8rem !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        
+        /* Centering */
+        display: inline-block !important;
+        margin: 0 auto !important;
+        border-radius: 5px !important; /* Mas bagay sa medical theme ang slightly rounded kaysa pills */
+    }
+
+    /* Siguraduhin na ang container ay hindi pilit na ginagawang column na 100% width */
+    .hero-box .d-grid, 
+    .hero-box .d-sm-flex {
+        display: flex !important;
+        justify-content: center !important; /* I-center ang shrunk button */
+        width: 100%;
+        margin-top: 10px !important;
+    }
+    
+}
+
+
+
+
+@media (max-width: 608px) {
+    /* 1. Overall Section Height Adjustment */
+    #home, .carousel-item {
+        height: 85vh !important; 
+        min-height: 550px;
+    }
+
+    /* 2. Hero Box Scaling - Mas compact para sa mobile/small tablets */
+    .hero-box {
+        padding: 15px 20px !important; /* Binawasan ang side padding para lumapad ang text area */
+        width: 92% !important; /* Ginawang 92% para mas malapad ang content box */
+        margin: 0 auto !important;
+        text-align: center !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* Iwas overflow */
+    }
+
+    .carousel-item .hero-box h1 {
+        /* Ginawang 1.5rem ang max para pumantay sa First Section */
+        font-size: clamp(1.2rem, 5vw, 1.5rem) !important; 
+        line-height: 1.2 !important;
+        margin-bottom: 12px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase;
+        width: 100% !important;
+        letter-spacing: normal !important; /* Iwas dikit-dikit */
+    }
+
+    /* 2. Pantay na Paragraph Size para sa 1st, 2nd, at 3rd Section */
+    .carousel-item .hero-box p.lead {
+        font-size: 0.85rem !important; 
+        line-height: 1.5 !important;
+        margin-bottom: 20px !important;
+        padding: 0 15px !important;
+        max-width: 100% !important;
+    }
+
+
+    .second-section h1, 
+    #home .carousel-item:nth-child(2) h1 {
+        font-size: clamp(1.2rem, 5vw, 1.5rem) !important;
+        word-spacing: -1px; /* Para magkasya ang mahahabang salita */
+    }
+
+
+    /* 4. First Section Scaling (PUPBC CareLink) - Refined para hindi rin masyadong maliit */
+    .first-section-header {
+        transform: scale(1.0) !important; /* I-reset ang scale para match sa flat text ng iba */
+        font-size: 1.5rem !important; 
+    }
+
+    /* 5. Button Consistency */
+    .carousel-item .hero-box .btn {
+        min-width: 160px !important; 
+        padding: 8px 20px !important; 
+        font-size: 0.85rem !important;
+    }
+
+    /* 3. Headers and Paragraphs - Dynamic Scaling */
+    .hero-box h1 {
+        /* Ginamit natin ang 'vw' unit para kusa siyang liliit base sa lapad ng screen */
+        font-size: clamp(1.4rem, 6vw, 1.7rem) !important; 
+        line-height: 1.1 !important;
+        margin-bottom: 15px !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        
+        /* Eto ang solusyon sa text na lumalampas */
+        width: 100% !important;
+        overflow-wrap: break-word !important;
+        word-wrap: break-word !important;
+        hyphens: auto !important;
+        white-space: normal !important; /* Pinapayagan ang pag-wrap */
+    }
+
+    .hero-box p.lead {
+        font-size: 0.9rem !important; 
+        line-height: 1.4 !important;
+        margin-bottom: 20px !important;
+        padding: 0 10px !important;
+        max-width: 100% !important;
+        overflow-wrap: break-word !important;
+    }
+
+    /* Fix para sa Second Section specifically kung may mahabang headings */
+    .second-section h1 {
+        letter-spacing: -0.5px !important; /* Medyo dikit para mag-kasya */
+    }
+
+    /* 4. First Section Specific (PUPBC CareLink) - Refined */
+    .first-section .hero-box {
+        margin-top: -30px !important; 
+    }
+    
+    .first-section-header {
+        transform: scale(1.1) !important; /* Bahagyang binawasan ang scale */
+    }
+
+    .first-section-p .p-top, 
+    .first-section-p .p-bottom {
+        font-size: 0.85rem !important;
+        padding: 3px 8px !important;
+        display: inline-block;
+    }
+
+    /* 5. Carousel Controls (Loader) - Nanatiling matched sa desktop view */
+    .loader-container {
+        width: 40px !important; /* Bahagyang mas maliit para sa mobile screen */
+        height: 40px !important;
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: none !important;
+    }
+
+    .loader-container .glass-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 50% !important;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        z-index: 1;
+    }
+
+    .custom-arrow {
+        position: relative !important;
+        z-index: 3 !important;
+        width: 14px !important; /* Inadjust ang size ng arrow */
+        height: 2px !important;
+        background-color: #ffffff !important;
+        display: block !important;
+        border: none !important;
+    }
+
+    .custom-arrow::before {
+        content: '' !important;
+        display: block !important;
+        position: absolute !important;
+        width: 7px !important;
+        height: 7px !important;
+        border-top: 2px solid #ffffff !important;
+        border-right: 2px solid #ffffff !important;
+        top: -3px !important;
+    }
+
+    .right-arrow::before { right: 0 !important; transform: rotate(45deg) !important; }
+    .left-arrow::before { left: 0 !important; transform: rotate(-135deg) !important; }
+
+    /* 6. Buttons Adjustment - Inayos para hindi masyadong malaki sa mobile */
+    .carousel-item .hero-box .btn {
+        width: auto !important; 
+        min-width: 180px !important; 
+        padding: 10px 25px !important; 
+        font-size: 0.9rem !important; 
+        font-weight: 600;
+        border-radius: 4px !important;
+        letter-spacing: 1px;
+    }
+
+    /* Responsive Flex for Buttons */
+    .hero-box .d-grid, 
+    .hero-box .d-sm-flex {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px;
+        align-items: center;
+        width: 100%;
+        margin-top: 15px !important;
+    }
+}
 
 
 /* ABOUT */

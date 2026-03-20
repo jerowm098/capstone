@@ -23,7 +23,9 @@
         justify-content: center;
         padding: 4rem;
     }
-
+    .welcome-section {
+    margin-top: -20px; /* Baguhin mo 'to base sa gusto mong distansya */
+    }
 /* --- Common Portal Button Style --- */
     .btn-portal {
         padding: 18px;
@@ -100,11 +102,14 @@
 
         <div class="col-md-4 bg-white portal-content fade-in-content">
             
-            <div class="mb-5">
-                <a class="navbar-brand fw-bold text-dark fs-2" href="indexhtml.php">HEALTH<span class="text-secondary">CARE</span></a>
-            </div>
+<div class="mb-5">
+    <a class="navbar-brand fw-bold text-dark fs-2 d-inline-flex flex-column lh-1" href="indexhtml.php">
+        PUPBC
+        <span class="text-secondary">CareLink</span>
+    </a>
+</div>
 
-            <div class="mb-4">
+            <div class="welcome-section mb-4">
                 <h2 class="fw-bold text-dark">Welcome Back</h2>
                 <p class="text-muted fs-5">Please choose which management portal you would like to access today.</p>
             </div>

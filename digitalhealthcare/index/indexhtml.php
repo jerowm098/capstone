@@ -26,24 +26,11 @@
       </div>
     </a>
 
-<!--     <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
-      <img src="logo1.png" alt="Logo" class="brand-logo me-2">
-      
-      <div class="brand-text-wrapper">
-        <span class="d-block">PUPBC</span>
-        <span class="d-block">
-          <span class="text-care">Care</span><span class="text-link">Link</span>
-        </span>
-      </div>
-    </a> -->
-
-
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- <ul class="navbar-nav mx-auto text-center"> -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="#home">Home</a>
@@ -68,10 +55,12 @@
       </ul>
 
       <div class="d-flex justify-content-center">
-         <!-- <a href="loginhtml.php" class="btn btn-login">Login</a> -->
-         <!-- <a href="../portal/portal.html" class="btn btn-login">Login</a> -->
          <a href="../portal/chooseportal.php" class="btn btn-login">Login</a>
-    </div>
+      </div>
+
+   
+</div>
+
     </div>
   </div>
 </nav>
@@ -108,11 +97,6 @@
       <div class="carousel-item second-section">
         <div class="container h-100 d-flex align-items-center">
           <div class="hero-box">
-<!--             <h1 class="display-3 fw-bold mb-4">Our Expertise <br>at your Service</h1>
-            <p class="lead mb-5 text-muted">
-              Your Online Link to PUPBC Health <br>
-              Services PUP Biñan Campus Clinic
-            </p> -->
 
             <h1 class="display-3 fw-bold mb-4">Your Health and Safety, Our Top Priority</h1>
             <p class="lead mb-5 text-muted">
@@ -122,33 +106,18 @@
 
             <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
               <a href="#services" class="btn btn-dark btn-lg px-5 py-3">Services</a>
-              <!-- <a href="#about" class="btn btn-outline-dark btn-lg px-5 py-3">Learn More</a> -->
             </div>
           </div>
         </div>
       </div>
 
-<!--       <div class="carousel-item third-section">       
-        <div class="container h-100 d-flex align-items-center">
-          <div class="hero-box">
-            <h1 class="display-3 fw-bold mb-4">Book Online <br>Appointments</h1>
-            <p class="lead mb-5">
-              Skip the long lines. Book your medical consultation <br>
-              online anytime, anywhere within the campus.
-            </p>
-            <div class="d-grid gap-3 d-sm-flex justify-content-sm-start">
-              <a href="appointment_form.php" class="btn btn-dark btn-lg px-5 py-3">Book Now</a>
-            </div>
-          </div>
-        </div>
-      </div> -->
 
 
 
 <div class="carousel-item third-section">       
-    <div class="sliding-image-container">
+<!--     <div class="sliding-image-container">
         <img src="3.png" alt="Sliding Doc" class="sliding-img">
-    </div>
+    </div> -->
 
     <div class="container h-100 d-flex align-items-center">
         <div class="hero-box">
@@ -168,13 +137,7 @@
 
 
     </div>
-<!-- 
-      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button> -->
+
 
 <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
   <div class="loader-container">
@@ -189,9 +152,9 @@
 <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
   <div class="loader-container next-loader">
     <div class="glass-bg"></div>
-<svg class="loader-svg" viewBox="0 0 50 50">
-  <circle class="loader-bg" cx="25" cy="25" r="20"></circle>
-  <circle class="loader-track" cx="25" cy="25" r="20"></circle>
+<svg class="loader-svg" viewBox="0 0 100 100">
+  <circle class="loader-bg" cx="50" cy="50" r="40"></circle>
+  <circle class="loader-track" cx="50" cy="50" r="40"></circle>
 </svg>
     <div class="custom-arrow right-arrow"></div>
   </div>
@@ -687,6 +650,9 @@ document.addEventListener('DOMContentLoaded', function () {
     resetAnimation();
   });
 });
+
+
+
 
 
 </script>
