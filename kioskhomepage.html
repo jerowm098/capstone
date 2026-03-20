@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareLink Express | Carousel Home</title>
+    <title>CareLink Express | Dashboard</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
@@ -14,137 +15,233 @@
             --pup-maroon: #9C0C20;
             --medical-blue: #475867;
             --clay-bg: #f0f0f0;
-            --clay-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
-            --clay-inset: inset 6px 6px 12px #d1d9e6, inset -6px -6px 12px #ffffff;
+            --gold-accent: #d4a017;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(rgba(156, 12, 32, 0.85), rgba(13, 20, 26, 0.9)), 
-                        url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1920');
-            background-size: cover;
-            height: 100vh;
             margin: 0;
+            height: 100vh;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #000; 
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
-        /* --- NAVIGATION OUTSIDE FORM (< >) --- */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: inherit;
+            background-size: cover;
+            background-position: center;
+            filter: blur(6px) brightness(0.4); 
+            z-index: -2;
+            transform: scale(1);
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: -1;
+        }
+
         .nav-trigger {
             position: fixed;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.4);
             font-size: 4.5rem;
-            font-weight: 200;
             cursor: pointer;
             z-index: 1000;
             transition: 0.3s;
             padding: 20px;
         }
-        .nav-trigger:hover { color: white; transform: translateY(-50%) scale(1.1); }
+        .nav-trigger:hover { color: white; }
         .prev-trigger { left: 30px; }
         .next-trigger { right: 30px; }
 
-        /* --- FIXED PORTAL CARD --- */
         .portal-card {
-            background: rgba(255, 255, 255, 0.98);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             border-radius: 40px;
-            width: 1300px; /* Exact Width */
-            height: 800px; /* Exact Height */
-            box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+            width: 1300px;
+            height: 800px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
             z-index: 5;
+            border: 1.5px solid #ffffff; 
         }
 
-        /* --- NAVBAR (Fixed) --- */
-        .navbar-custom {
-            padding: 30px 60px;
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            align-items: center;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            z-index: 10;
+        .card-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.55); 
+            z-index: 1;
         }
-        .logo-area { display: flex; align-items: center; gap: 12px; }
-        .logo-area img { height: 45px; width: auto; }
-        .logo-area span { font-weight: 800; font-size: 1.5rem; color: var(--pup-maroon); letter-spacing: -0.5px; }
+
+        .navbar-custom {
+            position: absolute;
+            top: 20px; left: 20px; right: 20px;
+            padding: 15px 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            align-items: center;
+            background: white;
+            border-radius: 25px;
+            z-index: 100;
+        }
+        .logo-area { display: flex; align-items: center; gap: 12px; justify-content: flex-start; }
+        .logo-area img { height: 45px; }
+        .logo-area span { font-weight: 800; font-size: 1.5rem; color: var(--pup-maroon); }
 
         .nav-menu { display: flex; justify-content: center; gap: 40px; list-style: none; margin: 0; padding: 0; }
-        .nav-menu li { 
-            font-weight: 600; color: var(--medical-blue); cursor: pointer; position: relative; transition: 0.3s;
-        }
+        .nav-menu li { font-weight: 600; color: var(--medical-blue); cursor: pointer; }
         .nav-menu li.active { color: var(--pup-maroon); }
-        .nav-menu li:hover { opacity: 0.7; }
 
-        .login-area { text-align: right; }
+        /* --- UPDATED LOGIN & SWITCH MODE BUTTON STYLES --- */
+        .login-area { 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        /* Unified sizing for both buttons */
+        .btn-login, .btn-outline-maroon {
+            height: 48px; /* Fixed height for consistency */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+        }
+
         .btn-login {
             background: var(--pup-maroon);
             color: white;
-            padding: 12px 35px;
-            border-radius: 50px;
-            text-decoration: none !important;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(156, 12, 32, 0.3);
+            border: none;
         }
 
-        /* --- CAROUSEL CONTENT --- */
-        .carousel-outer {
-            flex-grow: 1;
-            position: relative;
-            overflow: hidden;
+        .btn-outline-maroon {
+            color: #800000 !important;
+            border: 2px solid #800000 !important;
+            background: transparent;
         }
+
+        .btn-outline-maroon:hover {
+            background-color: rgba(128, 0, 0, 0.1) !important;
+        }
+
+        /* Dropdown Item Styles */
+        .dropdown-item {
+            font-weight: 500;
+            color: #4a4a4a;
+            padding: 10px 20px;
+        }
+        .dropdown-item i { color: #800000; }
+
+        /* --- CAROUSEL & CALENDAR --- */
+        .carousel-outer { flex-grow: 1; position: relative; overflow: hidden; z-index: 2; }
         .carousel-inner-container {
             display: flex;
             height: 100%;
-            transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .carousel-pane {
             min-width: 100%;
             height: 100%;
-            padding: 40px 80px;
+            padding: 140px 100px 60px 100px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 0.8fr;
             align-items: center;
-            gap: 60px;
+            gap: 40px;
         }
 
-        .hero-text h1 { font-size: 4.5rem; font-weight: 800; color: var(--medical-blue); line-height: 1; margin-bottom: 20px; }
-        .hero-text p { font-size: 1.2rem; color: #666; margin-bottom: 40px; max-width: 500px; }
-
-        /* --- INTERACTIVE CARDS --- */
-        .interactive-card {
-            background: var(--clay-bg);
-            border-radius: 35px;
-            padding: 50px;
-            box-shadow: var(--clay-shadow);
-            text-align: center;
-            transition: 0.4s ease;
-            cursor: pointer;
-            border: 1px solid white;
+        .hero-text h1 { 
+            font-size: 4.75rem; 
+            font-weight: 800; 
+            color: #ffffff; 
+            line-height: 1; 
+            margin-bottom: 20px; 
         }
-        .interactive-card:active { box-shadow: var(--clay-inset); transform: scale(0.98); }
-        .card-icon {
-            width: 120px; height: 120px;
-            background: white;
+        .hero-text p { 
+            font-size: 1.18rem; 
+            color: rgba(255,255,255,0.9); 
+            margin-bottom: 40px; 
+        }
+
+        .calendar-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
             border-radius: 30px;
-            margin: 0 auto 30px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3rem; color: var(--pup-maroon);
-            box-shadow: var(--clay-shadow);
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            text-align: center;
+        }
+        .calendar-header {
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: white;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        .day-name {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--gold-accent);
+            margin-bottom: 5px;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .calendar-day:hover {
+            background: var(--pup-maroon);
+            transform: scale(1.1);
+        }
+        .calendar-day.today {
+            background: var(--pup-maroon);
+            border: 2px solid white;
+            box-shadow: 0 0 15px rgba(156, 12, 32, 0.5);
         }
 
-        /* --- INDICATORS (Inside Bottom) --- */
         .indicator-box {
             position: absolute;
-            bottom: 40px;
+            bottom: 25px;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -152,124 +249,74 @@
             z-index: 20;
         }
         .dot {
-            width: 12px; height: 12px;
-            background: #ddd;
+            width: 10px; height: 10px;
+            background: rgba(255,255,255,0.3);
             border-radius: 50%;
             cursor: pointer;
-            transition: 0.4s;
         }
-        .dot.active { width: 45px; background: var(--pup-maroon); border-radius: 10px; }
-
-        /* Custom Outline Button for the Kiosk Page */
-        .btn-outline-maroon-kiosk {
-            color: var(--pup-maroon);
-            border: 2px solid var(--pup-maroon);
-            border-radius: 50px;
-            padding: 10px 25px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            background: transparent;
-        }
-        .btn-outline-maroon-kiosk:hover {
-            background-color: rgba(156, 12, 32, 0.1);
-            color: var(--pup-maroon);
-            border-color: var(--pup-maroon);
-        }
-        /* Dropdown Menu Styling to match your Gold theme */
-        .dropdown-menu {
-            border: 1px solid #d4a017; /* Gold border */
-            border-radius: 15px;
-            padding: 10px;
-            margin-top: 10px !important;
-        }
-        .dropdown-item {
-            border-radius: 8px;
-            font-weight: 600;
-            color: var(--medical-blue);
-            padding: 10px 15px;
-        }
-        .dropdown-item:hover {
-            background-color: rgba(156, 12, 32, 0.05);
-            color: var(--pup-maroon);
-        }
-        .dropdown-item i {
-            color: #d4a017; /* Gold icons in dropdown */
-        }
+        .dot.active { width: 40px; background: white; border-radius: 10px; }
     </style>
 </head>
 <body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <button class="nav-trigger prev-trigger" onclick="changeSlide(-1)">&lt;</button>
     <button class="nav-trigger next-trigger" onclick="changeSlide(1)">&gt;</button>
 
-    <div class="portal-card">
+    <div class="portal-card" id="card">
+        <div class="card-overlay"></div>
+        
         <nav class="navbar-custom">
             <div class="logo-area">
-                <img src="https://cdn-icons-png.flaticon.com/512/822/822118.png" alt="Logo">
+                <img src="https://www.pup.edu.ph/about/images/PUPLogo.png" alt="Logo">
                 <span>CARELINK</span>
             </div>
             <ul class="nav-menu">
                 <li class="active" onclick="jumpTo(0)">Home</li>
                 <li onclick="jumpTo(1)">Appointments</li>
-                <li onclick="jumpTo(2)">Pharmacy</li>
             </ul>
-            <!-- <div class="login-area">
-                <a href="kiosklogin.html" class="btn-login">LOGIN</a>
-            </div> -->
-            <div class="login-area d-flex align-items-center justify-content-end gap-2">
-            <div class="dropdown">
-                <button class="btn btn-outline-maroon-kiosk dropdown-toggle" type="button" id="modeSelector" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-display me-1"></i> Switch Mode
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="modeSelector">
+            
+            <div class="login-area">
+                <div class="dropdown">
+                  <button class="btn btn-outline-maroon dropdown-toggle" type="button" id="modeSelector" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-display me-2"></i> Switch Mode
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="modeSelector">
                     <li>
-                        <a class="dropdown-item" href="digitalhealthcare/index/indexhtml.php">
-                            <i class="fa-solid fa-globe me-2"></i>Website Mode
-                        </a>
+                      <a class="dropdown-item" href="digitalhealthcare/index/indexhtml.php">
+                        <i class="bi bi-fullscreen me-2"></i> Website Mode
+                      </a>
                     </li>
-                </ul>
+                  </ul>
+                </div>
+                <a href="kiosklogin.html" class="btn-login">LOGIN</a>
             </div>
-
-            <a href="kiosklogin.html" class="btn-login">LOGIN</a>
-        </div>
         </nav>
 
         <div class="carousel-outer">
             <div class="carousel-inner-container" id="slider">
                 
-                <div class="carousel-pane">
+                <div class="carousel-pane" style="grid-template-columns: 1fr;">
                     <div class="hero-text">
-                        <h1>Health<br>First.</h1>
-                        <p>Welcome to PUP Biñan's Express Clinic Kiosk. Your health journey simplified through technology.</p>
-                        <div class="d-flex gap-3">
-                            <div class="p-3 bg-light rounded-4 shadow-sm text-center" style="width: 120px;">
-                                <h4 class="mb-0 fw-bold">24/7</h4>
-                                <small>Access</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="interactive-card">
-                        <div class="card-icon"><i class="fa-solid fa- stethoscope"></i></div>
-                        <h2 class="fw-bold">Start Request</h2>
-                        <p class="text-muted">Tap here to begin your medical consultation or inquiry.</p>
+                        <h1>Your Health,<br>Our Safety.</h1>
+                        <p style="max-width: 700px;">Ensuring a secure and healthy environment for <br>every Iskolar ng Bayan through accessible campus care.</p>
                     </div>
                 </div>
 
                 <div class="carousel-pane">
                     <div class="hero-text">
                         <h1>Instant<br>Booking.</h1>
-                        <p>Schedule your clinic visits without the long wait. Pick your preferred time and date instantly.</p>
+                        <p>Planning a future visit? Secure your slot now by selecting a date.</p>
                     </div>
-                    <div class="interactive-card">
-                        <div class="card-icon"><i class="fa-solid fa-calendar-check"></i></div>
-                        <h2 class="fw-bold">Book Slot</h2>
-                        <p class="text-muted">View available doctors and secure your appointment time.</p>
+                    <div class="calendar-container">
+                        <div class="calendar-header" id="monthDisplay">March 2026</div>
+                        <div class="calendar-grid">
+                            <div class="day-name">S</div><div class="day-name">M</div><div class="day-name">T</div>
+                            <div class="day-name">W</div><div class="day-name">T</div><div class="day-name">F</div><div class="day-name">S</div>
+                        </div>
+                        <div class="calendar-grid" id="calendarDays">
+                        </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="indicator-box">
@@ -279,20 +326,26 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        const tabImages = [
+            "url('https://5.imimg.com/data5/SELLER/Default/2023/6/316157293/TP/IJ/GK/5863015/healthcare-kiosk-solutions-1000x1000.jpg')",
+            "url('https://englishonline.britishcouncil.org/wp-content/uploads/2025/03/asking-for-doctors-appointment-english.jpg')"
+        ];
+
         let currentIdx = 0;
-        const totalSlides = 2;
+        const totalSlides = tabImages.length;
         const slider = document.getElementById('slider');
+        const card = document.getElementById('card');
         const dots = document.querySelectorAll('.dot');
         const menuItems = document.querySelectorAll('.nav-menu li');
 
         function updateSlider() {
             slider.style.transform = `translateX(-${currentIdx * 100}%)`;
-            
-            // Update dots
+            const newImg = tabImages[currentIdx];
+            document.body.style.backgroundImage = newImg;
+            card.style.backgroundImage = newImg;
             dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIdx));
-            
-            // Update nav menu active state
             menuItems.forEach((li, i) => li.classList.toggle('active', i === currentIdx));
         }
 
@@ -305,6 +358,28 @@
             currentIdx = idx;
             updateSlider();
         }
+
+        function initCalendar() {
+            const grid = document.getElementById('calendarDays');
+            const now = new Date();
+            const today = now.getDate();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            document.getElementById('monthDisplay').innerText = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+
+            for (let i = 1; i <= 31; i++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.classList.add('calendar-day');
+                dayDiv.innerText = i;
+                if (i === today) dayDiv.classList.add('today');
+                grid.appendChild(dayDiv);
+            }
+        }
+
+        window.onload = () => {
+            updateSlider();
+            initCalendar();
+        };
     </script>
 </body>
 </html>
