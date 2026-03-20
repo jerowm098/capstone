@@ -1,13 +1,4 @@
 
-/* Itatago ang scrollbar pero pwedeng mag-scroll gamit ang touch o mouse wheel */
-:fullscreen ::-webkit-scrollbar {
-    display: none;
-}
-
-:fullscreen {
-    background-color: white; /* Siguradong puti ang bg pag naka-fullscreen */
-}
-
 
 
 
@@ -260,7 +251,37 @@ nav .navbar-nav {
 
 
 
+/* SWITCH MODE PART */
+/* Custom Outline Button for the Switch Mode */
+.btn-outline-maroon {
+    color: #800000 !important;
+    border: 2px solid #800000 !important;
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    background: transparent;
+    display: flex;
+    align-items: center;
+}
 
+.btn-outline-maroon:hover {
+    background-color: rgba(128, 0, 0, 0.1) !important;
+    color: #800000 !important;
+}
+
+/* Ensure dropdown items align nicely */
+.dropdown-item {
+    font-weight: 500;
+    color: #4a4a4a;
+    padding: 10px 20px;
+}
+
+.dropdown-item i {
+    color: #800000; /* Maroon icon */
+}
 
 
 

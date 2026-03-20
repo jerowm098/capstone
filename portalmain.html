@@ -35,7 +35,7 @@
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(15px);
             border-radius: 50px;
-            padding: 3.1rem; /* INCREASED slightly from 2.8rem for ~3% height bump */
+            padding: 3.1rem; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.4);
             width: 100%;
             max-width: 580px; 
@@ -69,8 +69,8 @@
             background: var(--clay-bg);
             border: none;
             border-radius: 20px;
-            padding: 18px; /* INCREASED from 16px */
-            margin-bottom: 14px; /* INCREASED from 12px */
+            padding: 18px; 
+            margin-bottom: 14px; 
             box-shadow: var(--clay-shadow);
             transition: 0.3s;
             width: 100%;
@@ -119,7 +119,8 @@
             </div>
         </div>
 
-        <div id="role-selector" class="row g-2 mb-4"> <div class="col-12">
+        <div id="role-selector" class="row g-2 mb-4"> 
+            <div class="col-12">
                 <a href="portaladmin.html" class="role-btn">
                     <i class="fa-solid fa-user-shield"></i>
                     <div>
@@ -138,65 +139,27 @@
                 </a>
             </div>
             <div class="col-12">
-                <button type="button" class="role-btn" onclick="showStudentOptions()">
+                <a href="studlogin.html" class="role-btn">
                     <i class="fa-solid fa-user-graduate"></i>
                     <div>
                         <span>Student Portal</span>
                         <span class="role-description">Appointments & certificates</span>
                     </div>
-                </button>
+                </a>
             </div>
             
             <div class="text-center mt-3">
-                <a href="index.html" class="text-muted small text-decoration-none fw-bold" style="font-size: 0.75rem; opacity: 0.8;">
+                <a href="digitalhealthcare/index/indexhtml.php" class="text-muted small text-decoration-none fw-bold" style="font-size: 0.75rem; opacity: 0.8;">
                     <i class="fa-solid fa-arrow-left-long me-2"></i> Return to Home Page
                 </a>
             </div>
         </div>
 
-        <div id="student-destination" class="row g-2 mb-4 d-none">
-            <div class="col-12">
-                <a href="studlogin.html" class="role-btn">
-                    <i class="fa-solid fa-globe"></i>
-                    <div>
-                        <span>Website Mode</span>
-                        <span class="role-description">Access via personal device</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12">
-                <a href="kiosklogin.html" class="role-btn">
-                    <i class="fa-solid fa-desktop"></i>
-                    <div>
-                        <span>Kiosk Mode</span>
-                        <span class="role-description">On-campus terminal access</span>
-                    </div>
-                </a>
-            </div>
-            <div class="text-center mt-2">
-                <button class="btn btn-link text-muted small text-decoration-none fw-bold" style="font-size: 0.75rem;" onclick="goBack()">
-                    <i class="fa-solid fa-chevron-left me-1"></i> Back to main roles
-                </button>
-            </div>
-        </div>
-
-        <div class="text-center pt-4 border-top mt-4" style="border-color: rgba(0,0,0,0.05) !important;"> <p class="small text-muted mb-0" style="font-size: 0.75rem;">Trouble logging in? <a href="#" class="text-decoration-none" style="color: var(--pup-maroon); font-weight: 600;">Contact IT Support</a></p>
+        <div class="text-center pt-4 border-top mt-4" style="border-color: rgba(0,0,0,0.05) !important;"> 
+            <p class="small text-muted mb-0" style="font-size: 0.75rem;">Trouble logging in? <a href="#" class="text-decoration-none" style="color: var(--pup-maroon); font-weight: 600;">Contact IT Support</a></p>
         </div>
     </div>
 </div>
 
-<script>
-    function showStudentOptions() {
-        document.getElementById('role-selector').classList.add('d-none');
-        document.getElementById('student-destination').classList.remove('d-none');
-        document.getElementById('portal-subtitle').innerText = "Choose your access mode.";
-    }
-
-    function goBack() {
-        document.getElementById('role-selector').classList.remove('d-none');
-        document.getElementById('student-destination').classList.add('d-none');
-        document.getElementById('portal-subtitle').innerText = "Good day, Scholar! Please select your portal.";
-    }
-</script>
 </body>
 </html>

@@ -160,9 +160,47 @@
         }
         .dot.active { width: 45px; background: var(--pup-maroon); border-radius: 10px; }
 
+        /* Custom Outline Button for the Kiosk Page */
+        .btn-outline-maroon-kiosk {
+            color: var(--pup-maroon);
+            border: 2px solid var(--pup-maroon);
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        .btn-outline-maroon-kiosk:hover {
+            background-color: rgba(156, 12, 32, 0.1);
+            color: var(--pup-maroon);
+            border-color: var(--pup-maroon);
+        }
+        /* Dropdown Menu Styling to match your Gold theme */
+        .dropdown-menu {
+            border: 1px solid #d4a017; /* Gold border */
+            border-radius: 15px;
+            padding: 10px;
+            margin-top: 10px !important;
+        }
+        .dropdown-item {
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--medical-blue);
+            padding: 10px 15px;
+        }
+        .dropdown-item:hover {
+            background-color: rgba(156, 12, 32, 0.05);
+            color: var(--pup-maroon);
+        }
+        .dropdown-item i {
+            color: #d4a017; /* Gold icons in dropdown */
+        }
     </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <button class="nav-trigger prev-trigger" onclick="changeSlide(-1)">&lt;</button>
     <button class="nav-trigger next-trigger" onclick="changeSlide(1)">&gt;</button>
@@ -178,9 +216,25 @@
                 <li onclick="jumpTo(1)">Appointments</li>
                 <li onclick="jumpTo(2)">Pharmacy</li>
             </ul>
-            <div class="login-area">
+            <!-- <div class="login-area">
                 <a href="kiosklogin.html" class="btn-login">LOGIN</a>
+            </div> -->
+            <div class="login-area d-flex align-items-center justify-content-end gap-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-maroon-kiosk dropdown-toggle" type="button" id="modeSelector" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-display me-1"></i> Switch Mode
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="modeSelector">
+                    <li>
+                        <a class="dropdown-item" href="digitalhealthcare/index/indexhtml.php">
+                            <i class="fa-solid fa-globe me-2"></i>Website Mode
+                        </a>
+                    </li>
+                </ul>
             </div>
+
+            <a href="kiosklogin.html" class="btn-login">LOGIN</a>
+        </div>
         </nav>
 
         <div class="carousel-outer">

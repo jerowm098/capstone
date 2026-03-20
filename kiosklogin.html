@@ -23,31 +23,40 @@
             height: 100%;
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background: #e0e5ec;
+            background: linear-gradient(rgba(156, 12, 32, 0.8), rgba(13, 20, 26, 0.9)), 
+                        url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920');
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
         }
 
-        .kiosk-container {
+        .portal-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            width: 1300px;  
+            height: 800px; 
             display: grid;
             grid-template-columns: 1fr 1fr;
-            height: 100vh;
-            width: 100vw;
+            overflow: hidden;
         }
 
-        /* --- LEFT SIDE: THE SCANNER --- */
         .scanner-panel {
             background: linear-gradient(135deg, var(--pup-maroon), #6b0816);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 4rem;
+            padding: 3rem;
             position: relative;
         }
 
         .scanner-frame {
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
             aspect-ratio: 1/1;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -71,11 +80,7 @@
             width: 100% !important;
             height: 100% !important;
             object-fit: cover !important;
-            border-radius: 35px;
         }
-
-        #reader__scan_region { background: transparent !important; }
-        #reader__dashboard { display: none !important; }
 
         .laser {
             position: absolute;
@@ -100,62 +105,59 @@
             color: white;
             padding: 10px 25px;
             border-radius: 30px;
-            font-size: 0.8rem;
             transition: 0.3s;
-            backdrop-filter: blur(5px);
         }
 
         .btn-demo:hover {
             background: white;
             color: var(--pup-maroon);
-            transform: translateY(-2px);
         }
 
-        /* --- RIGHT SIDE: THE INFO --- */
         .info-panel {
-            background: #e0e5ec;
-            padding: 5rem;
+            background: transparent;
+            padding: 4rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .kiosk-header { margin-bottom: 3rem; }
+        .kiosk-header { margin-bottom: 2rem; }
 
         .info-label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--medical-blue);
-            margin-left: 15px;
+            margin-left: 5px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            opacity: 0.7;
         }
 
         .display-box {
             background: var(--clay-bg);
-            border-radius: 20px;
-            padding: 1.2rem 2rem;
-            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.2rem;
             box-shadow: var(--clay-inset);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #888;
             transition: 0.4s;
-            border: 1px solid transparent;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .display-box.active {
             color: var(--pup-maroon);
             font-weight: 600;
-            border: 1px solid rgba(156, 12, 32, 0.1);
             background: #fff;
+            border: 1px solid rgba(156, 12, 32, 0.1);
         }
 
         .status-badge {
             display: inline-block;
-            padding: 8px 20px;
+            padding: 6px 18px;
             border-radius: 50px;
             background: #d1d9e6;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: var(--medical-blue);
             margin-bottom: 1rem;
@@ -164,17 +166,15 @@
         .pulse-text { animation: pulse-opacity 2s infinite; }
         @keyframes pulse-opacity { 50% { opacity: 0.5; } }
 
-        /* Permanent Button Styles */
-        .action-container {
-            margin-top: 2rem;
-        }
-
         .btn-confirm {
             background: var(--pup-maroon);
-            border-radius: 20px;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
             transition: 0.3s;
             opacity: 0.5;
             cursor: not-allowed;
+            border: none;
         }
 
         .btn-confirm.ready {
@@ -183,29 +183,35 @@
             box-shadow: 0 10px 20px rgba(156, 12, 32, 0.3);
         }
 
-        .btn-back {
-            background: #e0e5ec;
+        /* Task 1 & 2: Link Styling */
+        .hyperlink-msg {
+            text-decoration: none;
             color: var(--medical-blue);
-            border-radius: 20px;
-            box-shadow: var(--clay-shadow);
-            border: none;
+            font-size: 0.9rem;
+            font-weight: 500;
             transition: 0.3s;
         }
 
-        .btn-back:hover {
-            box-shadow: var(--clay-inset);
+        .hyperlink-msg:hover {
             color: var(--pup-maroon);
+            text-decoration: underline;
+        }
+
+        .register-container {
+            text-align: right;
+            margin-bottom: 10px;
+            margin-top: -5px;
         }
 
     </style>
 </head>
 <body>
 
-<div class="kiosk-container">
+<div class="portal-card">
     <div class="scanner-panel">
-        <div class="text-center text-white mb-5">
-            <h1 class="fw-bold">CareLink Express</h1>
-            <p class="opacity-75">KIOSK MODE: PORTAL ACCESS</p>
+        <div class="text-center text-white mb-4">
+            <h1 class="fw-bold mb-1">CareLink Express</h1>
+            <p class="opacity-75 small">KIOSK MODE: PORTAL ACCESS</p>
         </div>
 
         <div class="scanner-frame">
@@ -226,19 +232,19 @@
         <div class="kiosk-header">
             <div class="status-badge pulse-text" id="status-tag">SYSTEM READY</div>
             <h2 class="fw-bold" style="color: var(--medical-blue);">Verification</h2>
-            <p class="text-muted">Information will appear upon successful scan.</p>
+            <p class="text-muted small">Information will appear upon successful scan.</p>
         </div>
 
         <div>
             <label class="info-label">Student Patient ID</label>
             <div class="display-box" id="out-id">Waiting for scan...</div>
 
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row g-2">
+                <div class="col-6">
                     <label class="info-label">First Name</label>
                     <div class="display-box" id="out-fname">---</div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-6">
                     <label class="info-label">Last Name</label>
                     <div class="display-box" id="out-lname">---</div>
                 </div>
@@ -246,16 +252,23 @@
 
             <label class="info-label">Department / Program</label>
             <div class="display-box" id="out-dept">---</div>
+            
+            <div class="register-container">
+                <span class="text-muted small">Don't have an account?</span>
+                <a href="register.html" class="hyperlink-msg ms-1">Register here</a>
+            </div>
         </div>
 
-        <div class="action-container d-flex flex-column gap-3">
+        <div class="mt-2 d-flex flex-column gap-3">
             <button id="btn-login" class="btn btn-lg w-100 py-3 btn-confirm" onclick="handleLogin()" disabled>
                 CONFIRM & LOGIN <i class="fa-solid fa-right-to-bracket ms-2"></i>
             </button>
             
-            <button class="btn btn-lg w-100 py-3 btn-back" onclick="location.href='kioskhomepage.html'">
-                <i class="fa-solid fa-arrow-left me-2"></i> BACK TO HOME
-            </button>
+            <div class="text-center mt-2">
+                <a href="kioskhomepage.html" class="hyperlink-msg">
+                    <i class="fa-solid fa-house me-1"></i> Back to Home
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -286,7 +299,6 @@
             populateInfo("ID-PENDING", "Student", "User", "BSIT");
         }
 
-        // Enable the confirm button
         const loginBtn = document.getElementById('btn-login');
         loginBtn.disabled = false;
         loginBtn.classList.add('ready');
@@ -315,7 +327,6 @@
 
     html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
     .catch(err => {
-        console.warn("Retrying without strict aspect constraints...");
         html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, onScanSuccess);
     });
 </script>

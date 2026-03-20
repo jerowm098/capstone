@@ -54,11 +54,21 @@
 
       </ul>
 
-      <div class="d-flex justify-content-center">
-         <a href="../portal/chooseportal.php" class="btn btn-login">Login</a>
-      </div>
+      <div class="d-flex justify-content-center align-items-center gap-2">
+  <div class="dropdown">
+    <button class="btn btn-outline-maroon dropdown-toggle" type="button" id="modeSelector" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-display me-1"></i> Switch Mode
+    </button>
+    <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="modeSelector">
+      <li>
+        <a class="dropdown-item" href="../../kioskhomepage.html" onclick="enterKioskMode()">
+          <i class="bi bi-fullscreen me-2"></i>Kiosk Mode
+        </a>
+      </li>
+    </ul>
+  </div>
 
-   
+  <a href="../../portalmain.html" class="btn btn-login">Login</a>
 </div>
 
     </div>
@@ -650,7 +660,6 @@ document.addEventListener('DOMContentLoaded', function () {
     resetAnimation();
   });
 });
-
 
 
 
