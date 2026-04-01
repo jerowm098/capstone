@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Login | PUPBC CareLink</title>
+    <title>Doctor Portal | PUPBC CareLink</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,7 +12,7 @@
     <style>
         :root {
             --pup-maroon: #9C0C20;
-            --medical-blue: #475867;
+            --medical-blue: #475867; /* Kept from your Admin class */
             --clay-bg: #f0f0f0;
             --clay-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
             --clay-inset: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
@@ -28,13 +28,14 @@
             background: #000;
         }
 
-        /* Mirrored & Blurred Background */
+        /* Mirrored & Blurred Background using your requested Image */
         body::before {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200');
+            /* Use a simple dark gradient to ensure text is visible without changing image colors */
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
+                        url('https://media.istockphoto.com/id/1501183871/photo/doctors-registering-patients-at-the-hospital.jpg?s=612x612&w=0&k=20&c=mnjpoSNO69dNWp11zMmbmMx5S0ch4cG_d-8sMvKzKwI=');
             background-size: cover;
             background-position: center;
             filter: blur(10px);
@@ -49,16 +50,18 @@
             border-radius: 40px;
             display: grid; grid-template-columns: 1.2fr 1fr;
             overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
             position: relative;
             backdrop-filter: blur(5px);
         }
 
-        /* BRAND SIDE - Using Admin Image/Colors */
+        /* BRAND SIDE - Updated content based on Document Objectives */
         .brand-side {
-            background: linear-gradient(rgba(156, 12, 32, 0.85), rgba(0, 0, 0, 0.4)), 
-                        url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200');
+            /* Changed from maroon/blue-grey tint to a neutral dark overlay */
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), 
+                        url('https://media.istockphoto.com/id/1501183871/photo/doctors-registering-patients-at-the-hospital.jpg?s=612x612&w=0&k=20&c=mnjpoSNO69dNWp11zMmbmMx5S0ch4cG_d-8sMvKzKwI=');
             background-size: cover;
+            background-position: center;
             padding: 4rem;
             display: flex; flex-direction: column; justify-content: center;
             color: white;
@@ -71,8 +74,8 @@
             display: flex; flex-direction: column; justify-content: center;
         }
 
-        .login-header h2 { font-weight: 700; color: var(--pup-maroon); margin-bottom: 0.5rem; }
-        .login-header p { color: var(--medical-blue); font-size: 0.9rem; margin-bottom: 2.5rem; }
+        .login-header h2 { font-weight: 700; color: var(--medical-blue); margin-bottom: 0.5rem; }
+        .login-header p { color: #666; font-size: 0.85rem; margin-bottom: 2rem; }
 
         /* Claymorphism Inputs */
         .input-box {
@@ -83,11 +86,11 @@
             display: flex; 
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border: 2px solid transparent;
             transition: 0.3s;
         }
-        .input-box:focus-within { border-color: var(--pup-maroon); }
+        .input-box:focus-within { border-color: var(--medical-blue); }
         .input-box i { color: var(--medical-blue); margin-left: 15px; opacity: 0.6; }
         .input-box input {
             background: transparent; border: none; outline: none;
@@ -95,31 +98,22 @@
             color: var(--medical-blue);
         }
 
-        /* Buttons */
-        .btn-login {
-            background: var(--pup-maroon);
+        .btn-doctor {
+            background: var(--medical-blue);
             color: white; border: none; border-radius: 20px;
             padding: 15px; width: 100%; font-weight: 600;
-            box-shadow: 0 10px 20px rgba(156, 12, 32, 0.2);
-            transition: 0.3s; margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(71, 88, 103, 0.2);
+            transition: 0.3s; margin-top: 5px;
         }
-        .btn-login:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(156, 12, 32, 0.3); }
+        .btn-doctor:hover { transform: translateY(-3px); background: #35424d; }
 
-        .form-footer { margin-top: 2rem; text-align: center; font-size: 0.85rem; color: #888; }
+        .form-footer { margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: #888; }
         .form-footer a { color: var(--pup-maroon); text-decoration: none; font-weight: 600; }
         
         .btn-back-footer {
-            display: inline-block;
-            margin-top: 1.5rem;
+            display: inline-block; margin-top: 1rem;
             color: var(--medical-blue) !important;
-            font-size: 0.8rem;
-            transition: 0.3s;
-            opacity: 0.8;
-        }
-        .btn-back-footer:hover {
-            opacity: 1;
-            transform: translateX(-3px);
-            color: var(--pup-maroon) !important;
+            font-size: 0.8rem; transition: 0.3s; opacity: 0.8;
         }
     </style>
 </head>
@@ -127,60 +121,60 @@
 
 <div class="login-container">
     <div class="brand-side">
-        <h1 class="display-4 fw-bold">PUPBC<br>CareLink</h1>
-        <p class="lead opacity-75">Centralized Health Information System for the PUP Biñan Community.</p>
+        <h1 class="fw-bold">Medical<br>Portal</h1>
+        <p class="lead opacity-75">Health Information System & Triage Management</p>
         
         <div class="mt-4">
             <div class="d-flex align-items-center mb-3">
-                <i class="fa-solid fa-id-card-clip me-3 fs-4"></i>
-                <span>Secure Digital Identification</span>
+                <i class="fa-solid fa-file-medical me-3 fs-4"></i>
+                <span>EHR & Health Record Management</span>
             </div>
             <div class="d-flex align-items-center mb-3">
-                <i class="fa-solid fa-notes-medical me-3 fs-4"></i>
-                <span>Electronic Health Records</span>
+                <i class="fa-solid fa-heart-pulse me-3 fs-4"></i>
+                <span>Real-time Triage Urgency Monitoring</span>
             </div>
             <div class="d-flex align-items-center mb-3">
-                <i class="fa-solid fa-hospital-user me-3 fs-4"></i>
-                <span>Self-Service Patient Triage</span>
+                <i class="fa-solid fa-qrcode me-3 fs-4"></i>
+                <span>QR-Integrated Patient Identification</span>
             </div>
         </div>
     </div>
 
     <div class="form-side">
         <div class="login-header">
-            <h2>Student Portal</h2>
-            <p>Please log in with your credentials to access clinic services.</p>
+            <h2>Staff Login</h2>
+            <p>Authorized Clinic Personnel Access Only</p>
         </div>
 
-        <form action="studdashboard.html" method="GET">
-            <label class="small fw-bold mb-1 ms-2" style="color: var(--medical-blue);">STUDENT ID NUMBER</label>
+        <form action="nursedashboard.html" method="GET">
+            <label class="small fw-bold mb-1 ms-2" style="color: var(--medical-blue);">EMPLOYEE / LICENSE ID</label>
             <div class="input-box">
-                <input type="text" placeholder="e.g. 2023-00000-BN-0" required>
+                <input type="text" placeholder="EMP-2026-XXXX" required>
                 <i class="fa-solid fa-id-card"></i>
             </div>
 
-            <label class="small fw-bold mb-1 ms-2" style="color: var(--medical-blue);">PASSWORD</label>
+            <label class="small fw-bold mb-1 ms-2" style="color: var(--medical-blue);">SECURITY PASSCODE</label>
             <div class="input-box">
                 <input type="password" placeholder="••••••••" required>
-                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-shield-halved"></i>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-4 px-2">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="remember">
-                    <label class="form-check-label small text-muted" for="remember">Stay signed in</label>
+                    <input class="form-check-input" type="checkbox" id="rememberDoctor">
+                    <label class="form-check-label small text-muted" for="rememberDoctor">Keep me logged in</label>
                 </div>
-                <a href="#" class="small text-decoration-none" style="color: var(--pup-maroon);">Forgot Password?</a>
+                <a href="#" class="small text-decoration-none" style="color: var(--medical-blue); font-weight: 600;">Forgot?</a>
             </div>
 
-            <button type="submit" class="btn-login">
-                Sign In to Portal <i class="fa-solid fa-right-to-bracket ms-2"></i>
+            <button type="submit" class="btn-doctor">
+                ACCESS SYSTEM <i class="fa-solid fa-right-to-bracket ms-2"></i>
             </button>
         </form>
 
         <div class="form-footer">
-            New to the system? <br>
-            <a href="studregister.html">Create a Health Profile Account</a>
+            New medical staff? <br>
+            <a href="nurseregister.html">Request Account Access</a>
             <br>
             <a href="portalmain.html" class="btn-back-footer">
                 <i class="fa-solid fa-arrow-left-long"></i> Back to Main Portal

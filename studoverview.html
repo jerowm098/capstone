@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --medical-blue: #475867;
+            --float-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: transparent;
+            padding: 25px;
+            color: #333;
+        }
+
+        /* --- STAT CARDS --- */
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            border: none;
+            box-shadow: var(--float-shadow);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-card:hover { transform: translateY(-5px); }
+
+        .stat-icon {
+            width: 55px; height: 55px;
+            border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .bg-maroon-light { background: rgba(156, 12, 32, 0.1); color: var(--pup-maroon); }
+        .bg-blue-light { background: rgba(71, 88, 103, 0.1); color: var(--medical-blue); }
+        .bg-success-light { background: rgba(25, 135, 84, 0.1); color: #198754; }
+
+        /* --- UPDATED HEALTH INSIGHT (White Style) --- */
+        .insight-card-white {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: var(--float-shadow);
+            border-left: 5px solid var(--pup-maroon); /* Subtle accent line */
+            height: 100%;
+        }
+
+        .insight-card-white h5 {
+            color: var(--pup-maroon);
+            font-size: 1.1rem;
+        }
+
+        .insight-card-white p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* --- TABLE DESIGN --- */
+        .custom-table-card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: var(--float-shadow);
+        }
+
+        .table thead th {
+            background-color: #f8fafb;
+            border: none;
+            color: #888;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            padding: 15px;
+        }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f1f1;
+            font-size: 0.9rem;
+        }
+
+        .qr-badge {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--medical-blue);
+        }
+        
+        .text-maroon { color: var(--pup-maroon); }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon bg-maroon-light"><i class="fa-solid fa-calendar-check"></i></div>
+                    <div>
+                        <h4 class="fw-bold mb-0">04</h4>
+                        <small class="text-muted">Appointments</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon bg-blue-light"><i class="fa-solid fa-qrcode"></i></div>
+                    <div>
+                        <h4 class="fw-bold mb-0">12</h4>
+                        <small class="text-muted">QR Taps/Logins</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon bg-success-light"><i class="fa-solid fa-file-medical"></i></div>
+                    <div>
+                        <h4 class="fw-bold mb-0">08</h4>
+                        <small class="text-muted">Medical Records</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(255, 193, 7, 0.1); color: #ffc107;">
+                        <i class="fa-solid fa-droplet"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0">B+</h4>
+                        <small class="text-muted">Blood Type</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-8">
+                <div class="custom-table-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h6 class="fw-bold mb-0"><i class="fa-solid fa-clock-rotate-left me-2 text-maroon"></i> Recent QR Activity</h6>
+                        <button class="btn btn-sm btn-light rounded-pill px-3">View All Activity</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Activity Type</th>
+                                    <th>Location/Detail</th>
+                                    <th>Timestamp</th>
+                                    <th>Token ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10">Clinic Entry</span></td>
+                                    <td>Main Lobby Kiosk</td>
+                                    <td>Mar 22, 08:30 AM</td>
+                                    <td><span class="qr-badge">#QR-9901</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge rounded-pill bg-info bg-opacity-10 text-info border border-info border-opacity-10">Timestamp</span></td>
+                                    <td>Medicine Retrieval</td>
+                                    <td>Mar 20, 02:15 PM</td>
+                                    <td><span class="qr-badge">#QR-8722</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-10">Appointment</span></td>
+                                    <td>Dental Unit</td>
+                                    <td>Mar 18, 10:00 AM</td>
+                                    <td><span class="qr-badge">#QR-7611</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-10">Exit Log</span></td>
+                                    <td>Main Lobby Kiosk</td>
+                                    <td>Mar 18, 11:30 AM</td>
+                                    <td><span class="qr-badge">#QR-7615</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="insight-card-white">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fa-solid fa-heart-pulse text-maroon"></i>
+                        <h5 class="fw-bold mb-0">Health Insight</h5>
+                    </div>
+                    <p class="mb-4">
+                        Based on your last 3 visits, your blood pressure has stabilized. Keep maintaining your current hydration levels!
+                    </p>
+                    <hr style="border-top: 1px dashed #ddd;">
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="stat-icon bg-maroon-light" style="width: 45px; height: 45px; font-size: 1.1rem;">
+                                <i class="fa-solid fa-hospital-user"></i>
+                            </div>
+                            <div>
+                                <small class="d-block text-muted" style="font-size: 0.75rem;">Next Routine Checkup</small>
+                                <span class="fw-bold text-dark">April 15, 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 rounded-4 bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted fw-bold">Overall Status</small>
+                            <span class="badge bg-success text-white px-3">Stable</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+            // Tinitingnan kung ang page ay HINDI naka-iframe
+        if (window.self === window.top) {
+            // Kunin ang pangalan ng file na ito (e.g., studappointments.html)
+            const currentPage = window.location.pathname.split("/").pop();
+            
+            // I-redirect sa main dashboard pero lagyan ng parameter
+            window.location.href = "studdashboard.html?page=" + currentPage;
+        }
+</script>
+</body>
+</html>

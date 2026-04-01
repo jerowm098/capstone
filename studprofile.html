@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --main-form-width: 1150px;
+            --main-border-radius: 30px;
+            --card-border-radius: 20px;
+            --standard-padding: 30px;
+            --side-col-top-gap: 48px;
+
+            --pup-maroon: #9C0C20; 
+            /* In-update na Shadow: Mas malambot at pantay ang pagkakalat para hindi mukhang 'broken' */
+            --clay-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+            --border-subtle: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: var(--standard-padding);
+            margin: 0;
+        }
+
+        .master-floating-container {
+            background: white;
+            width: 100%;
+            max-width: var(--main-form-width);
+            min-height: 200px !important;
+            border-radius: var(--main-border-radius);
+            box-shadow: var(--clay-shadow); /* Clean and modern shadow */
+            border: var(--border-subtle); /* Dinagdag para sa malinaw na outline */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .internal-navbar-tabs {
+            background: var(--pup-maroon);
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: flex-start;
+            z-index: 10; /* Sinisiguro na hindi matatakpan ang tabs */
+        }
+
+        .nav-tabs-custom {
+            border-bottom: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-tabs-custom .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 1.2rem 1.5rem;
+            font-weight: 600;
+            background: transparent !important;
+            position: relative;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-tabs-custom .nav-link:hover,
+        .nav-tabs-custom .nav-link.active {
+            color: #ffffff !important;
+            background: transparent !important;
+        }
+
+        .nav-tabs-custom .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: white;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-tabs-custom .nav-link.active::after {
+            width: 80%;
+        }
+
+        #profile-frame {
+            width: 100%;
+            min-height: 550px; 
+            border: none;
+            background: transparent;
+            display: block;
+        }
+
+        .profile-body {
+            flex-grow: 1;
+            display: block;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="master-floating-container">
+        <div class="internal-navbar-tabs">
+            <div class="nav nav-tabs nav-tabs-custom" id="nav-tab">
+                <a href="studprofileinfo.html" target="profile-frame" class="nav-link active">
+                    <i class="fa-solid fa-id-card me-2"></i>Profile Info
+                </a>
+                <a href="studprofileqrinfo.html" target="profile-frame" class="nav-link">
+                    <i class="fa-solid fa-qrcode me-2"></i>QR Info
+                </a>
+            </div>
+        </div>
+
+        <div class="profile-body">
+            <iframe src="studprofileinfo.html" name="profile-frame" id="profile-frame"></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const subTabs = document.querySelectorAll('.nav-tabs-custom .nav-link');
+            subTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    subTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const subpage = urlParams.get('subpage');
+
+            if (subpage) {
+                const iframe = document.getElementById('profile-frame');
+                iframe.src = subpage;
+                subTabs.forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.getAttribute('href') === subpage) {
+                        tab.classList.add('active');
+                    }
+                });
+            }
+
+            if (window.self === window.top) {
+                const currentPage = window.location.pathname.split("/").pop();
+                const activeIframeSrc = document.getElementById('profile-frame').getAttribute('src');
+                window.location.href = "studdashboard.html?page=" + currentPage + "&subpage=" + activeIframeSrc;
+            }
+        });
+    </script>
+</body>
+</html>

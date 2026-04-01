@@ -19,27 +19,63 @@
             --clay-inset: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(rgba(156, 12, 32, 0.8), rgba(13, 20, 26, 0.9)), 
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh; /* height: 100vh; */
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    margin: 0;
+    overflow-x: hidden; /* Pinayagan ang vertical scroll, bawal lang horizontal */
+    position: relative;
+    background: #000;
+}
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
                         url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920');
             background-size: cover;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            background-position: center;
+            filter: blur(10px);
+            transform: scale(1.1);
+            z-index: -1;
         }
 
-        .portal-card {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(15px);
-            border-radius: 50px;
-            padding: 3.1rem; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-            width: 100%;
-            max-width: 580px; 
-            transition: all 0.4s ease;
+        .portal-container {
+            width: 100%; 
+            max-width: 1100px;
+            height: 650px;
+            background: transparent;
+            border-radius: 40px;
+            display: grid; 
+            grid-template-columns: 1.2fr 1fr;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .brand-side {
+            background: linear-gradient(rgba(156, 12, 32, 0.85), rgba(0, 0, 0, 0.4)), 
+                        url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1200');
+            background-size: cover;
+            padding: 4rem;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+            color: white;
+        }
+
+        .selection-side {
+            padding: 3rem 4rem;
+            background: rgba(253, 253, 253, 0.95);
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; /* This centers the content vertically */
+            height: 100%;
         }
 
         .welcome-badge {
@@ -53,16 +89,6 @@
             margin-bottom: 12px;
             letter-spacing: 1px;
             text-transform: uppercase;
-        }
-
-        .status-dot {
-            height: 8px;
-            width: 8px;
-            background-color: #28a745;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 5px;
-            box-shadow: 0 0 8px #28a745;
         }
 
         .role-btn {
@@ -101,62 +127,134 @@
             font-weight: 400;
             color: #888;
         }
+
+        /* NEW: Horizontal Line style */
+        .portal-divider {
+            border: 0;
+            height: 1px;
+            background: rgba(0,0,0,0.1);
+            margin: 2rem 0 1.5rem 0;
+            width: 100%;
+        }
+
+
+        /* Para sa Tablets (below 992px) */
+@media (max-width: 991px) {
+body {
+        align-items: flex-start; /* Simula sa taas para hindi maputol ang tuktok */
+        padding: 40px 0;         /* Space sa taas at baba habang nag-o-overflow */
+        height: auto;
+    }
+
+    .portal-container {
+        max-width: 90%;
+        height: auto; 
+        grid-template-columns: 1fr; 
+        margin: 20px auto;       /* Centering at spacing */
+    }
+
+    .brand-side {
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .brand-side .mt-4 {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+}
+
+/* Para sa Mobile Phones (below 576px) */
+@media (max-width: 575px) {
+    body {
+        overflow-y: auto; /* Payagan ang scrolling sa maliit na screen */
+        align-items: flex-start; /* Simula sa taas */
+        padding: 20px 0;
+    }
+
+    .portal-container {
+        border-radius: 20px;
+        margin: 10px;
+    }
+
+    .brand-side {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .brand-side h1 {
+        font-size: 2rem;
+    }
+
+    .selection-side {
+        padding: 2rem 1.5rem;
+    }
+
+    .brand-side .mt-4 {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+    }
+}
     </style>
 </head>
 <body>
 
-<div class="container d-flex justify-content-center">
-    <div class="portal-card">
-        
+<div class="portal-container">
+    <div class="brand-side">
+        <h1 class="display-4 fw-bold">CareLink<br>Portals</h1>
+        <p class="lead opacity-75">Access the University Health System tailored to your role.</p>
+        <div class="mt-4">
+            <div class="d-flex align-items-center mb-3">
+                <i class="fa-solid fa-shield-halved me-3"></i>
+                <span>Secure Access Points</span>
+            </div>
+            <div class="d-flex align-items-center mb-3">
+                <i class="fa-solid fa-clock-rotate-left me-3"></i>
+                <span>24/7 System Availability</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="selection-side">
         <div class="text-center mb-4">
             <span class="welcome-badge">University Health System</span>
-            <h1 class="fw-bold mb-1" style="color: var(--pup-maroon); letter-spacing: -1px; font-size: 2rem;">Welcome to CareLink</h1>
-            <p class="text-muted px-4 mb-2" id="portal-subtitle" style="font-size: 0.9rem;">
-                Good day, Scholar! Please select your portal.
-            </p>
-            <div style="font-size: 0.65rem; color: #666;">
-                <span class="status-dot"></span> System Online
-            </div>
+            <h2 class="fw-bold mb-1" style="color: var(--pup-maroon);">Welcome back!</h2>
+            <p class="text-muted" style="font-size: 0.9rem;">Please select your destination portal.</p>
         </div>
 
-        <div id="role-selector" class="row g-2 mb-4"> 
-            <div class="col-12">
-                <a href="portaladmin.html" class="role-btn">
-                    <i class="fa-solid fa-user-shield"></i>
-                    <div>
-                        <span>Admin Portal</span>
-                        <span class="role-description">System management & oversight</span>
-                    </div>
-                </a>
-            </div>            
-            <div class="col-12">
-                <a href="portaldoctor.html" class="role-btn">
-                    <i class="fa-solid fa-hand-holding-medical"></i>
-                    <div>
-                        <span>Doctors Portal</span>
-                        <span class="role-description">Consultations & records</span>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12">
-                <a href="studlogin.html" class="role-btn">
-                    <i class="fa-solid fa-user-graduate"></i>
-                    <div>
-                        <span>Student Portal</span>
-                        <span class="role-description">Appointments & certificates</span>
-                    </div>
-                </a>
-            </div>
+        <div id="role-selector"> 
+<!--             <a href="adminlogin.html" class="role-btn">
+                <i class="fa-solid fa-user-shield"></i>
+                <div>
+                    <span>Admin Portal</span>
+                    <span class="role-description">System management & oversight</span>
+                </div>
+            </a> -->
             
-            <div class="text-center mt-3">
-                <a href="digitalhealthcare/index/indexhtml.php" class="text-muted small text-decoration-none fw-bold" style="font-size: 0.75rem; opacity: 0.8;">
-                    <i class="fa-solid fa-arrow-left-long me-2"></i> Return to Home Page
-                </a>
-            </div>
+            <a href="nurselogin.html" class="role-btn">
+                <i class="fa-solid fa-hand-holding-medical"></i>
+                <div>
+                    <span>Nurse Portal</span>
+                    <span class="role-description">Consultations & records</span>
+                </div>
+            </a>
+
+            <a href="studlogin.html" class="role-btn">
+                <i class="fa-solid fa-user-graduate"></i>
+                <div>
+                    <span>Student Portal</span>
+                    <span class="role-description">Appointments & certificates</span>
+                </div>
+            </a>
         </div>
 
-        <div class="text-center pt-4 border-top mt-4" style="border-color: rgba(0,0,0,0.05) !important;"> 
-            <p class="small text-muted mb-0" style="font-size: 0.75rem;">Trouble logging in? <a href="#" class="text-decoration-none" style="color: var(--pup-maroon); font-weight: 600;">Contact IT Support</a></p>
+        <hr class="portal-divider">
+
+        <div class="text-center">
+            <a href="index.html" class="text-muted small text-decoration-none fw-bold" style="font-size: 0.75rem; opacity: 0.8;">
+                <i class="fa-solid fa-arrow-left-long me-2"></i> Return to Home Page
+            </a>
         </div>
     </div>
 </div>

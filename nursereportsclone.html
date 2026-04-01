@@ -1,0 +1,67 @@
+need to kapag seperated class na 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.nav-link-tab');
+        const contents = {
+            'summary': document.getElementById('summary-content'),
+            'appointments': document.getElementById('appointments-content'),
+            'medications': document.getElementById('medications-content')
+        };
+
+        function switchTab(tabId) {
+            // Hide all content panes
+            Object.values(contents).forEach(content => {
+                if (content) content.style.display = 'none';
+            });
+            
+            // Show selected content
+            if (contents[tabId]) {
+                contents[tabId].style.display = 'block';
+            }
+            
+            // Update active class on tabs
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-tab') === tabId) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+
+        // Add click event listeners
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                if (tabId) {
+                    switchTab(tabId);
+                    
+                    // Optional: I-update ang URL hash para hindi mawala ang "active" state 
+                    // pero hindi ito mase-save sa session para pag refresh/balik, back to main.
+                    window.history.replaceState(null, null, "#" + tabId);
+                }
+            });
+        });
+
+        // --- DITO ANG PINAKAMAHALAGA (URL Parameter Logic) ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const tabParam = urlParams.get('tab');
+
+        if (tabParam && contents[tabParam]) {
+            // Kung may "?tab=medications" sa URL, yun ang ipakita
+            switchTab(tabParam);
+        } else {
+            // Kung wala (default), laging "summary" ang start
+            switchTab('summary');
+        }
+
+        // Security Redirect (Para kapag ni-ctrl+click ang page, babalik sa dashboard)
+        if (window.self === window.top) {
+            const currentPage = window.location.pathname.split("/").pop();
+            // Kukunin natin kung anong tab ang active ngayon
+            const activeTab = document.querySelector('.nav-link-tab.active').getAttribute('data-tab');
+            window.location.href = "nursedashboard.html?page=" + currentPage + "&tab=" + activeTab;
+        }
+    });
+</script>

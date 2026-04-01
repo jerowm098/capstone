@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Registration | CareLink Express</title>
+    <title>Doctor Registration | PUPBC CareLink</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -32,8 +32,8 @@
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200');
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://media.istockphoto.com/id/1501183871/photo/doctors-registering-patients-at-the-hospital.jpg?s=612x612&w=0&k=20&c=mnjpoSNO69dNWp11zMmbmMx5S0ch4cG_d-8sMvKzKwI=');
             background-size: cover;
             background-position: center;
             filter: blur(10px);
@@ -46,50 +46,50 @@
             height: 650px;
             background: transparent;
             border-radius: 40px;
-            /* SWAPPED: Form Side (1.2fr) is wider on Left, Image (1fr) is on Right */
+            /* SWAPPED: Form Side (1.2fr) is wider on the Left, Brand (1fr) is narrower on the Right */
             display: grid; grid-template-columns: 1.2fr 1fr;
             overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
             position: relative;
             backdrop-filter: blur(5px);
         }
 
         /* BRAND SIDE (NOW ON RIGHT) */
         .brand-side {
-            background: linear-gradient(rgba(156, 12, 32, 0.85), rgba(0, 0, 0, 0.4)), 
-                        url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200');
+            background: linear-gradient(rgba(71, 88, 103, 0.9), rgba(0, 0, 0, 0.5)), 
+                        url('https://media.istockphoto.com/id/1501183871/photo/doctors-registering-patients-at-the-hospital.jpg?s=612x612&w=0&k=20&c=mnjpoSNO69dNWp11zMmbmMx5S0ch4cG_d-8sMvKzKwI=');
             background-size: cover;
             background-position: center;
             padding: 4rem;
             display: flex; flex-direction: column; justify-content: center;
             color: white;
-            order: 2; /* Forces brand side to the right */
+            order: 2; /* Moves to right */
         }
 
         /* FORM SIDE (NOW ON LEFT) */
         .form-side {
-            padding: 2.5rem 4rem;
+            padding: 3rem 4rem;
             background: rgba(253, 253, 253, 0.95);
             display: flex; flex-direction: column; justify-content: center;
-            order: 1; /* Forces form side to the left */
+            order: 1; /* Moves to left */
         }
 
-        .registration-header h2 { font-weight: 700; color: var(--pup-maroon); margin-bottom: 0.3rem; }
-        .registration-header p { color: var(--medical-blue); font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .registration-header h2 { font-weight: 700; color: var(--medical-blue); margin-bottom: 0.5rem; text-align: center; }
+        .registration-header p { color: #666; font-size: 0.9rem; margin-bottom: 2rem; text-align: center; }
 
         .input-box {
             background: var(--clay-bg);
-            border-radius: 18px;
+            border-radius: 20px;
             padding: 2px 20px;
             box-shadow: var(--clay-inset);
             display: flex; 
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             border: 2px solid transparent;
             transition: 0.3s;
         }
-        .input-box:focus-within { border-color: var(--pup-maroon); }
+        .input-box:focus-within { border-color: var(--medical-blue); }
         .input-box i { color: var(--medical-blue); margin-left: 10px; opacity: 0.6; font-size: 0.8rem; }
         .input-box input {
             background: transparent; border: none; outline: none;
@@ -97,32 +97,32 @@
             color: var(--medical-blue);
         }
 
-        /* Grid for side-by-side inputs */
+        /* Side-by-Side Grid */
         .input-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
 
-        .btn-register {
-            background: var(--pup-maroon);
+        .btn-doctor {
+            background: var(--medical-blue);
             color: white; border: none; border-radius: 20px;
-            padding: 14px; width: 100%; font-weight: 600;
-            box-shadow: 0 10px 20px rgba(156, 12, 32, 0.2);
+            padding: 15px; width: 100%; font-weight: 600;
+            box-shadow: 0 10px 20px rgba(71, 88, 103, 0.2);
             transition: 0.3s; margin-top: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .btn-register:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(156, 12, 32, 0.3); }
+        .btn-doctor:hover { transform: translateY(-3px); background: #35424d; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
 
-        .form-footer { margin-top: 1.2rem; text-align: center; font-size: 0.8rem; color: #888; }
+        .form-footer { margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: #888; }
         .form-footer a { color: var(--pup-maroon); text-decoration: none; font-weight: 600; }
         
         .btn-back-footer {
             display: inline-block;
             margin-top: 1rem;
             color: var(--medical-blue) !important;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             transition: 0.3s;
             opacity: 0.8;
             text-decoration: none;
@@ -135,29 +135,29 @@
 <div class="registration-container">
     <div class="form-side">
         <div class="registration-header">
-            <h2>Create Account</h2>
-            <p>Enroll your details to access the Health Portal.</p>
+            <h2>Staff Registration</h2>
+            <p>Join the PUPBC CareLink Medical Team</p>
         </div>
 
-        <form action="studlogin.html" method="POST">
+        <form action="#" method="POST">
             <div class="input-row">
                 <div>
                     <label class="small fw-bold mb-1 ms-2" style="color: var(--medical-blue);">FIRST NAME</label>
                     <div class="input-box">
-                        <input type="text" placeholder="e.g. Juan" required>
+                        <input type="text" placeholder="First Name" required>
                     </div>
                 </div>
                 <div>
                     <label class="small fw-bold mb-1 ms-2" style="color: var(--medical-blue);">LAST NAME</label>
                     <div class="input-box">
-                        <input type="text" placeholder="e.g. Dela Cruz" required>
+                        <input type="text" placeholder="Last Name" required>
                     </div>
                 </div>
             </div>
 
-            <label class="small fw-bold mb-1 ms-2" style="color: var(--medical-blue);">WEBMAIL EMAIL</label>
+            <label class="small fw-bold mb-1 ms-2" style="color: var(--medical-blue);">OFFICIAL EMAIL</label>
             <div class="input-box">
-                <input type="email" placeholder="student@iskolarngbayan.pup.edu.ph" required>
+                <input type="email" placeholder="doctor@pup.edu.ph" required>
                 <i class="fa-solid fa-envelope"></i>
             </div>
 
@@ -173,19 +173,19 @@
                     <label class="small fw-bold mb-1 ms-2" style="color: var(--medical-blue);">CONFIRM</label>
                     <div class="input-box">
                         <input type="password" placeholder="••••••••" required>
-                        <i class="fa-solid fa-circle-check"></i>
+                        <i class="fa-solid fa-shield-halved"></i>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="btn-register">
-                Register Profile <i class="fa-solid fa-user-plus ms-2"></i>
+            <button type="submit" class="btn-doctor">
+                COMPLETE REGISTRATION <i class="fa-solid fa-user-doctor ms-2"></i>
             </button>
         </form>
 
         <div class="form-footer">
-            Already have a health profile? <br>
-            <a href="studlogin.html">Login Student Account</a>
+            Already have an account? <br>
+            <a href="nurselogin.html">Login Access Here</a>
             <br>
             <a href="portalmain.html" class="btn-back-footer">
                 <i class="fa-solid fa-arrow-left-long"></i> Back to Portal
@@ -194,16 +194,16 @@
     </div>
 
     <div class="brand-side">
-        <h1 class="display-4 fw-bold">Join<br>CareLink</h1>
-        <p class="lead opacity-75">Start your digital health journey today.</p>
+        <h1 class="display-4 fw-bold">Medical<br>Enrollment</h1>
+        <p class="lead opacity-75">Professional Healthcare Management System.</p>
         <div class="mt-4">
             <div class="d-flex align-items-center mb-3">
-                <i class="fa-solid fa-file-medical me-3"></i>
-                <span>One-time Enrollment</span>
+                <i class="fa-solid fa-id-card-clip me-3"></i>
+                <span>Credential Verification</span>
             </div>
             <div class="d-flex align-items-center">
-                <i class="fa-solid fa-shield-heart me-3"></i>
-                <span>Secure Data Privacy</span>
+                <i class="fa-solid fa-house-medical-circle-check me-3"></i>
+                <span>Staff Account Security</span>
             </div>
         </div>
     </div>

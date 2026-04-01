@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Overview | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --medical-blue: #475867;
+            --clay-bg: #f4f7f6;
+        }
+    	html {
+            overflow-y: scroll; 
+            scrollbar-gutter: stable;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            padding: 2rem;
+            color: #333;
+            min-height: 101vh;
+        }
+
+        /* --- STAT CARDS --- */
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--clay-shadow);
+            border: none;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .bg-patients { background: #4e73df; }
+        .bg-appointments { background: #1cc88a; }
+        .bg-lab { background: #f6c23e; }
+        .bg-pharmacy { background: #e74a3b; }
+
+        /* --- CONTENT CARDS --- */
+        .overview-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--clay-shadow);
+            margin-top: 2rem;
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--medical-blue);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        /* --- TIMELINE --- */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: #e9ecef;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--pup-maroon);
+            border: 2px solid white;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-patients"><i class="fa-solid fa-hospital-user"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0">124</h4>
+                    <small class="text-muted">Total Patients</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-appointments"><i class="fa-solid fa-calendar-check"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0">08</h4>
+                    <small class="text-muted">Today's Appts</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-lab"><i class="fa-solid fa-vial-circle-check"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0">12</h4>
+                    <small class="text-muted">Lab Results</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-pharmacy"><i class="fa-solid fa-pills"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0">05</h4>
+                    <small class="text-muted">Low Stock Meds</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="overview-section">
+                <h5 class="section-title"><i class="fa-regular fa-clock me-2"></i>Upcoming Activity</h5>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h6 class="fw-bold mb-1">09:00 AM - Patient Check-up</h6>
+                        <p class="text-muted small">John Smith - Physical Examination for Sports</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h6 class="fw-bold mb-1">10:30 AM - Laboratory Review</h6>
+                        <p class="text-muted small">Review CBC results for 3 students from Engineering Dept.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h6 class="fw-bold mb-1">01:00 PM - Faculty Consultation</h6>
+                        <p class="text-muted small">Maria Clara - Follow-up on hypertension meds</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h6 class="fw-bold mb-1">03:30 PM - Inventory Audit</h6>
+                        <p class="text-muted small">Weekly check of first-aid supplies and paracetamol stock.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="overview-section">
+                <h5 class="section-title"><i class="fa-solid fa-bolt me-2"></i>Quick Actions</h5>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-dark text-start py-3 rounded-4 shadow-sm border-0 bg-light">
+                        <i class="fa-solid fa-plus-circle me-2 text-primary"></i> New Patient Intake
+                    </button>
+                    <button class="btn btn-outline-dark text-start py-3 rounded-4 shadow-sm border-0 bg-light">
+                        <i class="fa-solid fa-flask me-2 text-warning"></i> Upload Lab Results
+                    </button>
+                    <button class="btn btn-outline-dark text-start py-3 rounded-4 shadow-sm border-0 bg-light">
+                        <i class="fa-solid fa-print me-2 text-success"></i> Print Daily Summary
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    // Anti-Direct Access Logic
+    if (window.self === window.top) {
+        const currentPage = window.location.pathname.split("/").pop();
+        window.location.href = "nursedashboard.html?page=" + currentPage;
+    }
+</script>
+</body>
+</html>

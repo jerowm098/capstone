@@ -151,13 +151,7 @@
             background-color: rgba(128, 0, 0, 0.1) !important;
         }
 
-        /* Dropdown Item Styles */
-        .dropdown-item {
-            font-weight: 500;
-            color: #4a4a4a;
-            padding: 10px 20px;
-        }
-        .dropdown-item i { color: #800000; }
+
 
         /* --- CAROUSEL & CALENDAR --- */
         .carousel-outer { flex-grow: 1; position: relative; overflow: hidden; z-index: 2; }
@@ -268,7 +262,7 @@
         <nav class="navbar-custom">
             <div class="logo-area">
                 <img src="https://www.pup.edu.ph/about/images/PUPLogo.png" alt="Logo">
-                <span>CARELINK</span>
+                <span>CareLink</span>
             </div>
             <ul class="nav-menu">
                 <li class="active" onclick="jumpTo(0)">Home</li>
@@ -276,19 +270,11 @@
             </ul>
             
             <div class="login-area">
-                <div class="dropdown">
-                  <button class="btn btn-outline-maroon dropdown-toggle" type="button" id="modeSelector" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-display me-2"></i> Switch Mode
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="modeSelector">
-                    <li>
-                      <a class="dropdown-item" href="digitalhealthcare/index/indexhtml.php">
-                        <i class="bi bi-fullscreen me-2"></i> Website Mode
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <a href="kiosklogin.html" class="btn-login">LOGIN</a>
+                <a href="index.html" class="btn-outline-maroon">
+                    <i class="bi bi-pc-display me-2"></i> Desktop Mode
+                </a>
+                
+                <a href="kioskdashboard.html" class="btn-login">DASHBOARD</a>
             </div>
         </nav>
 

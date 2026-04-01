@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical History | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* --- Original Layout & Branding --- */
+            --main-form-width: 1150px;
+            --main-min-height: auto;
+            --layout-margin-top: 2rem;
+            --standard-padding: 30px;
+            --main-border-radius: 30px;
+            --card-border-radius: 20px;
+            --border-subtle: 1px solid rgba(0, 0, 0, 0.05);
+            --pup-maroon: #9C0C20;
+            --white: #ffffff;
+            --subtle-gray: #f8fafb;
+            --medical-blue: #475867;
+
+            /* --- Nav Styles --- */
+            --nav-header-padding: 0 1.5rem;
+            --nav-link-padding: 1.2rem 1.5rem;
+            --nav-indicator-height: 3px;
+            --nav-indicator-bottom: 8px;
+            --clay-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: transparent; 
+            margin: 0;
+            padding: var(--layout-margin-top) 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* --- MAIN FLOATING LAYOUT --- */
+        .main-floating-container {
+            width: 95%;
+            max-width: var(--main-form-width);
+            min-height: var(--main-min-height);
+            background: var(--white);
+            border-radius: var(--main-border-radius);
+            box-shadow: var(--clay-shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: var(--border-subtle);
+        }
+
+        /* --- HEADER --- */
+        .nav-header {
+            background-color: var(--pup-maroon);
+            padding: var(--nav-header-padding);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-header .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            padding: var(--nav-link-padding);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-header .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: var(--nav-indicator-bottom);
+            left: 1.5rem;
+            right: 1.5rem;
+            height: var(--nav-indicator-height);
+            background-color: var(--white);
+            border-radius: 10px;
+        }
+
+        /* --- CONTENT --- */
+        .content-body {
+            padding: var(--standard-padding);
+            flex-grow: 1;
+        }
+
+        .history-layout {
+            display: flex;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .list-column {
+            flex: 1;
+            max-height: 530px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .detail-column {
+            flex: 1.5;
+            background: var(--subtle-gray);
+            border-radius: var(--card-border-radius);
+            padding: var(--standard-padding);
+            border: var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- CARDS --- */
+        .history-card {
+            padding: 15px;
+            border-radius: var(--card-border-radius);
+            background: var(--white);
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: var(--transition-speed);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .history-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .history-card.active {
+            border-left: 5px solid var(--pup-maroon);
+            background: #fffafa;
+        }
+
+        .card-date { font-size: 0.7rem; font-weight: 700; color: var(--pup-maroon); }
+        .card-reason { font-size: 0.95rem; font-weight: 600; color: var(--medical-blue); }
+
+        /* --- DETAILS --- */
+        .detail-header {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: #e7f9ee;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .detail-box {
+            background: var(--white);
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: var(--border-subtle);
+        }
+
+        .detail-label { font-size: 0.7rem; font-weight: 700; color: #aaa; text-transform: uppercase; margin-bottom: 5px; }
+        .detail-text { font-size: 0.9rem; color: #333; line-height: 1.5; }
+
+        .list-column::-webkit-scrollbar { width: 5px; }
+        .list-column::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="main-floating-container">
+        
+        <header class="nav-header">
+            <div class="nav-link">
+                <i class="fa-solid fa-clock-rotate-left me-2"></i>History Records
+            </div>
+        </header>
+
+        <div class="content-body">
+            <div class="history-layout">
+                
+                <div class="list-column">
+                    <div class="section-title"><i class="fa-solid fa-list-ul"></i> Select Record</div>
+                    
+                    <div class="history-card active" onclick="showDetail('Fever and Chills', 'March 15, 2026', 'Success Consultation', 'Paracetamol 500mg (3x a day), Bed rest for 3 days.', 'Patient presented with high grade fever (38.5C). Lungs are clear.', 'Dr. Jose Rizal')">
+                        <div class="card-date">MAR 15, 2026</div>
+                        <div class="card-reason">Fever and Chills</div>
+                        <small class="text-muted">Dr. Jose Rizal</small>
+                    </div>
+
+                    <div class="history-card" onclick="showDetail('Severe Toothache', 'Feb 02, 2026', 'Procedure Completed', 'Mefenamic Acid for pain, Chlorhexidine mouthwash.', 'Extraction of upper right molar due to deep caries.', 'Dr. Galicano Apacible')">
+                        <div class="card-date">FEB 02, 2026</div>
+                        <div class="card-reason">Severe Toothache</div>
+                        <small class="text-muted">Dr. Galicano Apacible</small>
+                    </div>
+
+                    <div class="history-card" onclick="showDetail('Allergic Rhinitis', 'Jan 10, 2026', 'Cleared', 'Loratadine 10mg once daily.', 'Sneezing and itchy eyes since the start of the week.', 'Nurse Maria Clara')">
+                        <div class="card-date">JAN 10, 2026</div>
+                        <div class="card-reason">Allergic Rhinitis</div>
+                        <small class="text-muted">Nurse Maria Clara</small>
+                    </div>
+                </div>
+
+                <div class="detail-column" id="detail-view">
+                    <div class="section-title"><i class="fa-solid fa-circle-info"></i> Medical Assessment</div>
+                    
+                    <div class="detail-header">
+                        <span class="detail-tag" id="det-status">Success Consultation</span>
+                        <h4 class="fw-bold mb-1" id="det-title" style="color: var(--medical-blue);">Fever and Chills</h4>
+                        <p class="text-muted small mb-0" id="det-date">Date of Visit: March 15, 2026</p>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="detail-label">Doctor's Findings / Results</div>
+                        <div class="detail-text" id="det-findings">Patient presented with high grade fever (38.5C). Lungs are clear. Body aches reported.</div>
+                    </div>
+
+                    <div class="detail-box" style="border-left: 4px solid var(--pup-maroon);">
+                        <div class="detail-label" style="color: var(--pup-maroon);">Prescription & Recommendation</div>
+                        <div class="detail-text" id="det-prescription">Paracetamol 500mg (3x a day after meals), Bed rest for 3 days.</div>
+                    </div>
+
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3" style="border-top: 1px solid rgba(0,0,0,0.05);">
+                        <small class="text-muted">Examined by: <strong id="det-doc">Dr. Jose Rizal</strong></small>
+                        <button class="btn btn-sm btn-outline-danger rounded-pill px-3"><i class="fa-solid fa-print me-1"></i> Print Result</button>
+                    </div>
+                </div>
+
+            </div> 
+        </div>
+    </div>
+
+    <script>
+        function showDetail(title, date, status, prescription, findings, doctor) {
+            document.getElementById('det-title').innerText = title;
+            document.getElementById('det-date').innerText = "Date of Visit: " + date;
+            document.getElementById('det-status').innerText = status;
+            document.getElementById('det-prescription').innerText = prescription;
+            document.getElementById('det-findings').innerText = findings;
+            document.getElementById('det-doc').innerText = doctor;
+
+            const cards = document.querySelectorAll('.history-card');
+            cards.forEach(card => card.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

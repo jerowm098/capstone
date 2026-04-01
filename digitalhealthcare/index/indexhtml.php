@@ -30,48 +30,42 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="#home">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#about">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#services">Services</a>
-        </li>
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle d-flex align-items-center" href="#home" id="homeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Home <i class="bi bi-chevron-down ms-1" style="font-size: 0.8rem;"></i>
+                  </a>
+                  <ul class="dropdown-menu shadow border-0" aria-labelledby="homeDropdown" style="border-radius: 12px;">
+                      <li><a class="dropdown-item" href="../../index.html"><i class="bi bi-house-door me-2"></i> home page 1</a></li>
+                  </ul>
+              </li>
 
-        <li class="nav-item">
-            <a class="nav-link" href="#doctors">Doctors</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#review">Review</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#contact">Contact Us</a>
-        </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#about">About</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#services">Services</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#doctors">Doctors</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#review">Review</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#contact">Contact Us</a>
+              </li>
+          </ul>
 
-      </ul>
-
-      <div class="d-flex justify-content-center align-items-center gap-2">
-  <div class="dropdown">
-    <button class="btn btn-outline-maroon dropdown-toggle" type="button" id="modeSelector" data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="bi bi-display me-1"></i> Switch Mode
-    </button>
-    <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="modeSelector">
-      <li>
-        <a class="dropdown-item" href="../../kioskhomepage.html" onclick="enterKioskMode()">
-          <i class="bi bi-fullscreen me-2"></i>Kiosk Mode
-        </a>
-      </li>
-    </ul>
-  </div>
-
-  <a href="../../portalmain.html" class="btn btn-login">Login</a>
+          <div class="d-flex gap-3 align-items-center">
+    <a href="../../kioskhomepage.html" class="btn-kiosk-nav">
+        <i class="bi bi-desktop me-1"></i> Kiosk Mode
+    </a>
+    
+    <a href="../../portalmain.html" class="btn-login-nav">Login</a>
 </div>
-
-    </div>
+      </div>
   </div>
 </nav>
 
@@ -661,7 +655,12 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-
+document.getElementById('homeDropdown').addEventListener('click', function(e) {
+        // If the screen is wide (desktop), navigate immediately
+        // On mobile, users usually need the click to open the menu, 
+        // but this will force the scroll to #home regardless.
+        window.location.href = '#home';
+    });
 
 
 </script>

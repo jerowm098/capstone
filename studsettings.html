@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- In-apply ang iyong Custom Root CSS --- */
+        :root {
+            --main-form-width: 1150px;
+            --main-min-height: 650px;
+            --iframe-min-height: 550px;
+            --layout-margin-top: 2rem;
+            --standard-padding: 30px;
+            --side-col-top-gap: 48px;
+            --nav-gap: 15px;
+            --main-border-radius: 30px;
+            --card-border-radius: 20px;
+            --border-subtle: 1px solid rgba(0, 0, 0, 0.05);
+            --pup-maroon: #9C0C20;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --nav-header-padding: 0 1.5rem;
+            --nav-link-padding: 1.2rem 1.5rem;
+            --nav-indicator-height: 3px;
+            --nav-indicator-bottom: 8px;
+            --nav-text-inactive: rgba(255, 255, 255, 0.7);
+            --nav-text-active: #ffffff;
+            --clay-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+            --transition-speed: 0.3s;
+            --input-bg: #f8fafb;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: transparent; /* Maintained para sa iframe */
+            padding-top: var(--layout-margin-top);
+            display: flex;
+            justify-content: center;
+            min-height: var(--main-min-height);
+        }
+
+        /* --- MAIN FLOATING FORM --- */
+        .main-floating-form {
+            width: 100%;
+            max-width: var(--main-form-width);
+            background-color: var(--white);
+            border-radius: var(--main-border-radius);
+            box-shadow: var(--clay-shadow);
+            overflow: hidden; /* Para malinis ang edges */
+            border: var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- NAVBAR HEADER (Inside the Form) --- */
+        .settings-nav-header {
+            background-color: var(--pup-maroon);
+            padding: var(--nav-header-padding);
+            display: flex;
+            gap: var(--nav-gap);
+        }
+
+        .nav-item-tab {
+            color: var(--nav-text-active);
+            text-decoration: none;
+            font-weight: 600;
+            padding: var(--nav-link-padding);
+            font-size: 0.95rem;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition-speed);
+        }
+
+        .nav-item-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: var(--nav-indicator-bottom);
+            left: 1.5rem;
+            right: 1.5rem;
+            height: var(--nav-indicator-height);
+            background-color: var(--white);
+            border-radius: 10px;
+        }
+
+        /* --- CONTENT AREA --- */
+        .form-content-body {
+            padding: var(--standard-padding);
+            background-color: var(--white);
+        }
+
+        .settings-grid {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+
+        .floating-card {
+            background: white;
+            border-radius: var(--card-border-radius);
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: var(--border-subtle);
+            transition: var(--transition-speed) ease;
+        }
+        
+        .floating-card:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .column-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--pup-maroon);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- FORM STYLING --- */
+        .form-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 12px 15px;
+            background-color: var(--input-bg);
+            border: 1px solid #eee;
+            font-size: 0.9rem;
+            transition: var(--transition-speed);
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 4px rgba(156, 12, 32, 0.1);
+            border-color: var(--pup-maroon);
+            background-color: white;
+            outline: none;
+        }
+
+        /* --- PREFERENCES TOGGLES --- */
+        .pref-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: var(--border-subtle);
+        }
+
+        .pref-item:last-child { border-bottom: none; }
+
+        .pref-info h6 { margin-bottom: 2px; font-size: 0.95rem; font-weight: 600; }
+        .pref-info p { margin-bottom: 0; font-size: 0.8rem; color: #888; }
+
+        .form-check-input:checked {
+            background-color: var(--pup-maroon);
+            border-color: var(--pup-maroon);
+        }
+
+        .btn-save {
+            background-color: var(--pup-maroon);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 20px;
+            transition: var(--transition-speed);
+        }
+
+        .btn-save:hover {
+            filter: brightness(0.9);
+            box-shadow: 0 5px 15px rgba(156, 12, 32, 0.2);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .settings-grid { flex-direction: column; }
+            .main-floating-form { width: 95%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-floating-form">
+        
+        <header class="settings-nav-header">
+            <div class="nav-item-tab active">
+                <i class="fa-solid fa-user-gear me-2"></i>Account Settings & Security
+            </div>
+            </header>
+
+        <div class="form-content-body">
+            <div class="settings-grid">
+                
+                <div class="floating-card" style="flex: 1;">
+                    <div class="column-title"><i class="fa-solid fa-shield-halved"></i> Security & Password</div>
+                    
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Current Password</label>
+                            <input type="password" class="form-control" placeholder="••••••••">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <input type="password" class="form-control" placeholder="Enter new password">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" placeholder="Repeat new password">
+                        </div>
+                        
+                        <button type="submit" class="btn-save">UPDATE PASSWORD</button>
+                        <p class="text-center mt-3 mb-0" style="font-size: 0.75rem; color: #aaa;">
+                            <i class="fa-solid fa-circle-info me-1"></i> Use at least 8 characters with numbers.
+                        </p>
+                    </form>
+                </div>
+
+                <div class="floating-card" style="flex: 1.2;">
+                    <div class="column-title"><i class="fa-solid fa-sliders"></i> System Preferences</div>
+                    
+                    <div class="pref-item">
+                        <div class="pref-info">
+                            <h6>Email Notifications</h6>
+                            <p>Receive appointment updates via email.</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" checked>
+                        </div>
+                    </div>
+
+                    <div class="pref-item">
+                        <div class="pref-info">
+                            <h6>SMS Alerts</h6>
+                            <p>Get queue reminders on your mobile phone.</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox">
+                        </div>
+                    </div>
+
+                    <div class="pref-item">
+                        <div class="pref-info">
+                            <h6>Public Profile</h6>
+                            <p>Allow medical staff to see your health history.</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" checked>
+                        </div>
+                    </div>
+
+                    <div class="pref-item">
+                        <div class="pref-info">
+                            <h6>Dark Mode</h6>
+                            <p>Adjust the interface for night-time use.</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox">
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 rounded-4" style="background: #fff8f8; border: 1px dashed #ffcccc;">
+                        <div class="d-flex gap-3 align-items-center">
+                            <i class="fa-solid fa-triangle-exclamation text-danger fs-4"></i>
+                            <div>
+                                <h6 class="mb-0 text-danger fw-bold" style="font-size: 0.85rem;">Account Deactivation</h6>
+                                <p class="mb-0" style="font-size: 0.75rem; color: #888;">Temporarily disable your CareLink access.</p>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-danger ms-auto rounded-pill px-3" style="font-size: 0.7rem;">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div> </div> </div> <script>
+    // Iframe redirect security
+    if (window.self === window.top) {
+        const currentPage = window.location.pathname.split("/").pop();
+        window.location.href = "studdashboard.html?page=" + currentPage;
+    }
+</script>
+</body>
+</html>

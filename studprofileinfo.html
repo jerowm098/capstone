@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --pup-maroon: #9C0C20; --clay-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff; }
+        body { font-family: 'Poppins', sans-serif; background: transparent; padding: 1.5rem; overflow-x: hidden; }
+        .left-info-column { background: #f8f9fa; border-radius: 25px; padding: 2.5rem 1.5rem; text-align: center; border: 1px solid #eee; }
+        .section-title { color: var(--pup-maroon); font-weight: 700; font-size: 1.1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .section-title::after { content: ""; flex-grow: 1; height: 1px; background: #eee; }
+        .form-floating > .form-control { border-radius: 15px; }
+        .form-control:not([readonly]) { border-color: var(--pup-maroon); background-color: #fff !important; }
+        .btn-action-group { display: flex; justify-content: flex-end; gap: 10px; margin-top: 2rem; }
+        .btn-edit-master { border-radius: 12px; padding: 10px 20px; font-weight: 600; }
+        .btn-save-changes { background: #212529; color: white; border-radius: 12px; padding: 10px 25px; font-weight: 600; border: none; }
+        .btn-save-changes:disabled { background: #ccc; cursor: not-allowed; }
+        .row {
+    margin: 0;
+}
+    </style>
+</head>
+<body>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="left-info-column">
+                <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px; box-shadow: var(--clay-shadow);">
+                    <i class="fa-solid fa-user-graduate fa-3xl" style="color: var(--pup-maroon);"></i>
+                </div>
+                <h5 class="fw-bold mb-1">Juan Dela Cruz</h5>
+                <p class="text-muted small">2023-00000-BN-0</p>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h5 class="section-title">Personal Information</h5>
+            <div class="row g-3">
+                <div class="col-12"><div class="form-floating"><input type="text" class="form-control edit-field" value="Juan Dela Cruz" readonly><label>Complete Name</label></div></div>
+                <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control edit-field" value="January 01, 2004" readonly><label>Birth Date</label></div></div>
+                <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control edit-field" value="Male" readonly><label>Gender</label></div></div>
+            </div>
+            <div class="btn-action-group">
+                <button class="btn btn-outline-danger btn-edit-master" onclick="enableEditing(this)">Edit Info</button>
+                <button class="btn btn-save-changes save-btn" onclick="saveChanges(this)" disabled>Save Changes</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function enableEditing(btn) {
+            const row = btn.closest('.col-md-8');
+            row.querySelectorAll('.edit-field').forEach(f => f.removeAttribute('readonly'));
+            row.querySelector('.save-btn').disabled = false;
+        }
+        function saveChanges(btn) {
+            const row = btn.closest('.col-md-8');
+            row.querySelectorAll('.edit-field').forEach(f => f.setAttribute('readonly', true));
+            btn.disabled = true;
+            alert("Updated!");
+        }
+
+                // Tinitingnan kung ang page ay HINDI naka-iframe
+        if (window.self === window.top) {
+            // Kunin ang pangalan ng file na ito (e.g., studappointments.html)
+            const currentPage = window.location.pathname.split("/").pop();
+            
+            // I-redirect sa main dashboard pero lagyan ng parameter
+            window.location.href = "studdashboard.html?page=studprofile.html&subpage=" + currentPage;
+        }
+    </script>
+</body>
+</html>
