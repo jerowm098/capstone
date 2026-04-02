@@ -17,18 +17,16 @@
             --clay-bg: #f8f9fa;
             --clay-shadow: 12px 12px 24px #d1d9e6, -12px -12px 24px #ffffff;
             --clay-inset: inset 6px 6px 12px #d1d9e6, inset -6px -6px 12px #ffffff;
+            --success-green: #28a745;
         }
 
         body, html {
-            height: 100%;
-            margin: 0;
+            height: 100%; margin: 0;
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(rgba(156, 12, 32, 0.8), rgba(13, 20, 26, 0.9)), 
                         url('https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920');
             background-size: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             overflow: hidden;
         }
 
@@ -37,172 +35,84 @@
             backdrop-filter: blur(12px);
             border-radius: 40px;
             box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-            width: 1300px;  
-            height: 800px; 
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            width: 1300px; height: 800px; 
+            display: grid; grid-template-columns: 1fr 1fr;
             overflow: hidden;
         }
 
         .scanner-panel {
             background: linear-gradient(135deg, var(--pup-maroon), #6b0816);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem;
-            position: relative;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 3rem; position: relative;
         }
 
         .scanner-frame {
-            width: 100%;
-            max-width: 400px;
-            aspect-ratio: 1/1;
+            width: 100%; max-width: 400px; aspect-ratio: 1/1;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 50px;
-            border: 2px solid rgba(255,255,255,0.2);
-            padding: 20px;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
+            border-radius: 50px; border: 2px solid rgba(255,255,255,0.2);
+            padding: 20px; box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+            position: relative; overflow: hidden;
         }
 
-        #reader {
-            width: 100%;
-            height: 100%;
-            border-radius: 35px;
-            overflow: hidden;
-            background: #000;
-        }
-
-        #reader video {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: cover !important;
-        }
+        #reader { width: 100%; height: 100%; border-radius: 35px; overflow: hidden; background: #000; }
+        #reader video { width: 100% !important; height: 100% !important; object-fit: cover !important; }
 
         .laser {
-            position: absolute;
-            width: 90%;
-            height: 4px;
-            background: #ff4d4d;
-            left: 5%;
-            z-index: 10;
-            box-shadow: 0 0 20px #ff4d4d;
+            position: absolute; width: 90%; height: 4px; background: #ff4d4d;
+            left: 5%; z-index: 10; box-shadow: 0 0 20px #ff4d4d;
             animation: scan-anim 3s infinite ease-in-out;
         }
 
-        @keyframes scan-anim {
-            0%, 100% { top: 10%; }
-            50% { top: 85%; }
-        }
+        @keyframes scan-anim { 0%, 100% { top: 10%; } 50% { top: 85%; } }
 
         .btn-demo {
-            margin-top: 30px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 30px;
-            transition: 0.3s;
+            margin-top: 30px; background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3); color: white;
+            padding: 10px 25px; border-radius: 30px; transition: 0.3s;
         }
+        .btn-demo:hover { background: white; color: var(--pup-maroon); }
 
-        .btn-demo:hover {
-            background: white;
-            color: var(--pup-maroon);
-        }
-
-        .info-panel {
-            background: transparent;
-            padding: 4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .kiosk-header { margin-bottom: 2rem; }
-
-        .info-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--medical-blue);
-            margin-left: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.7;
-        }
+        .info-panel { padding: 4rem; display: flex; flex-direction: column; justify-content: center; }
 
         .display-box {
-            background: var(--clay-bg);
-            border-radius: 15px;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.2rem;
-            box-shadow: var(--clay-inset);
-            font-size: 1.1rem;
-            color: #888;
-            transition: 0.4s;
-            border: 1px solid rgba(0,0,0,0.05);
+            background: var(--clay-bg); border-radius: 15px;
+            padding: 1rem 1.5rem; margin-bottom: 1.2rem;
+            box-shadow: var(--clay-inset); font-size: 1.1rem; color: #888;
+            transition: 0.4s; border: 1px solid rgba(0,0,0,0.05);
         }
 
         .display-box.active {
-            color: var(--pup-maroon);
-            font-weight: 600;
-            background: #fff;
-            border: 1px solid rgba(156, 12, 32, 0.1);
+            color: var(--pup-maroon); font-weight: 600;
+            background: #fff; border: 1px solid rgba(156, 12, 32, 0.1);
         }
 
         .status-badge {
-            display: inline-block;
-            padding: 6px 18px;
-            border-radius: 50px;
-            background: #d1d9e6;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--medical-blue);
-            margin-bottom: 1rem;
+            display: inline-block; padding: 6px 18px; border-radius: 50px;
+            background: #d1d9e6; font-size: 0.7rem; font-weight: 600;
+            color: var(--medical-blue); margin-bottom: 1rem;
         }
 
         .pulse-text { animation: pulse-opacity 2s infinite; }
         @keyframes pulse-opacity { 50% { opacity: 0.5; } }
 
-        .btn-confirm {
-            background: var(--pup-maroon);
-            border-radius: 15px;
-            color: white;
-            font-weight: 600;
-            transition: 0.3s;
-            opacity: 0.5;
-            cursor: not-allowed;
-            border: none;
+        .status-container {
+            height: 64px; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 1.1rem; transition: all 0.5s ease;
+            background: var(--medical-blue); color: white; opacity: 0.4;
         }
 
-        .btn-confirm.ready {
-            opacity: 1;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(156, 12, 32, 0.3);
+        .status-container.redirecting {
+            background: var(--success-green);
+            color: white; opacity: 1;
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.2);
         }
 
-        /* Task 1 & 2: Link Styling */
-        .hyperlink-msg {
-            text-decoration: none;
-            color: var(--medical-blue);
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .hyperlink-msg:hover {
-            color: var(--pup-maroon);
-            text-decoration: underline;
-        }
-
-        .register-container {
-            text-align: right;
-            margin-bottom: 10px;
-            margin-top: -5px;
-        }
-
+        .hyperlink-msg { text-decoration: none; color: var(--medical-blue); font-size: 0.9rem; font-weight: 500; transition: 0.3s; }
+        .hyperlink-msg:hover { color: var(--pup-maroon); text-decoration: underline; }
+        .info-label { font-size: 0.75rem; font-weight: 600; color: var(--medical-blue); text-transform: uppercase; opacity: 0.7; }
     </style>
 </head>
 <body>
@@ -252,21 +162,16 @@
 
             <label class="info-label">Department / Program</label>
             <div class="display-box" id="out-dept">---</div>
-            
-            <div class="register-container">
-                <span class="text-muted small">Don't have an account?</span>
-                <a href="register.html" class="hyperlink-msg ms-1">Register here</a>
-            </div>
         </div>
 
-        <div class="mt-2 d-flex flex-column gap-3">
-            <button id="btn-login" class="btn btn-lg w-100 py-3 btn-confirm" onclick="handleLogin()" disabled>
-                CONFIRM & LOGIN <i class="fa-solid fa-right-to-bracket ms-2"></i>
-            </button>
+        <div class="mt-4 d-flex flex-column gap-3">
+            <div id="redirect-status" class="status-container">
+                <i class="fa-solid fa-qrcode me-2"></i> WAITING FOR SCAN...
+            </div>
             
             <div class="text-center mt-2">
-                <a href="kioskdashboard.html" class="hyperlink-msg">
-                    <i class="fa-solid fa-house me-1"></i> Back to Dashboard
+                <a href="kioskportal.html" class="hyperlink-msg">
+                    <i class="fa-solid fa-arrow-left-long me-1"></i> Back to Portal
                 </a>
             </div>
         </div>
@@ -287,21 +192,22 @@
     }
 
     function processData(text) {
-        document.getElementById('status-tag').innerText = "IDENTITY VERIFIED";
-        document.getElementById('status-tag').style.background = "#d4edda";
-        document.getElementById('status-tag').style.color = "#155724";
-        document.getElementById('status-tag').classList.remove('pulse-text');
+        const tag = document.getElementById('status-tag');
+        tag.innerText = "IDENTITY VERIFIED";
+        tag.style.background = "#d4edda";
+        tag.style.color = "#155724";
+        tag.classList.remove('pulse-text');
 
         const data = text.split(',');
-        if(data.length >= 4) {
-            populateInfo(data[0], data[1], data[2], data[3]);
-        } else {
-            populateInfo("ID-PENDING", "Student", "User", "BSIT");
-        }
+        populateInfo(data[0] || "ID-PENDING", data[1] || "Student", data[2] || "User", data[3] || "BSIT");
 
-        const loginBtn = document.getElementById('btn-login');
-        loginBtn.disabled = false;
-        loginBtn.classList.add('ready');
+        const statusBox = document.getElementById('redirect-status');
+        statusBox.classList.add('redirecting');
+        statusBox.innerHTML = 'Redirecting User... <i class="fa-solid fa-circle-notch fa-spin ms-2"></i>';
+
+        setTimeout(() => {
+            location.href = 'kioskdashboard.html';
+        }, 2000);
     }
 
     function populateInfo(id, fname, lname, dept) {
@@ -310,21 +216,12 @@
         document.getElementById('out-lname').innerText = lname;
         document.getElementById('out-dept').innerText = dept;
 
-        ['out-id', 'out-fname', 'out-lname', 'out-dept'].forEach(id => {
-            document.getElementById(id).classList.add('active');
+        ['out-id', 'out-fname', 'out-lname', 'out-dept'].forEach(elId => {
+            document.getElementById(elId).classList.add('active');
         });
     }
 
-    function handleLogin() {
-        location.href = 'kioskdashboard.html';
-    }
-
-    const config = { 
-        fps: 20, 
-        qrbox: { width: 250, height: 250 },
-        aspectRatio: 1.0 
-    };
-
+    const config = { fps: 20, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 };
     html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
     .catch(err => {
         html5QrCode.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, onScanSuccess);

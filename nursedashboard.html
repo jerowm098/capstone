@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Nurse Dashboard | PUPBC CareLink</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -127,16 +130,48 @@
         .main-content { flex-grow: 1; display: flex; flex-direction: column; background: #fdfdfd; }
 
         .dashboard-header {
-            padding: 0.5rem 3rem; 
+            padding: 0.3rem 1.5rem; 
             background: white;
             display: flex; 
             justify-content: space-between; 
             align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.02);
             min-height: 60px;
+            border-bottom: 1px solid rgba(71, 88, 103, 0.1);
+        }
+        
+        /* New container for welcome text + profile image (side by side) */
+        .header-right-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        /* Welcome text styling - now beside profile icon */
+        .welcome-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--medical-blue);
+            margin: 0;
+            white-space: nowrap;
+            letter-spacing: -0.2px;
+        }
+        
+        @media (max-width: 550px) {
+            .welcome-text {
+                font-size: 0.85rem;
+                white-space: normal;
+                text-align: right;
+            }
+            .header-right-group {
+                gap: 12px;
+            }
+            .dashboard-header {
+                padding: 0.5rem 1rem;
+            }
         }
 
-        /* Header right section: profile image with dropdown */
+        /* Header right section: profile image with dropdown (permanently positioned) */
         .header-actions {
             display: flex;
             align-items: center;
@@ -148,8 +183,9 @@
             cursor: pointer;
         }
 
-        /* Profile image icon - mirrors the sidebar profile image style */
+        /* Profile image icon - elegant circular style, stays fixed in top bar */
         .header-profile-icon {
+            position: relative;
             width: 48px;
             height: 48px;
             background: var(--clay-bg);
@@ -160,17 +196,40 @@
             color: var(--medical-blue);
             font-size: 1.5rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: all 0.2s ease;
+            /* REMOVED: transition and hover scale effect */
             border: 2px solid white;
             cursor: pointer;
         }
         
-        .header-profile-icon:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(71, 88, 103, 0.2);
+        /* REMOVED: .header-profile-icon:hover effect - no more scale transform */
+        
+        /* SIMPLE INDICATOR: a small caret/chevron icon at bottom-right of profile image */
+        .profile-indicator {
+            position: absolute;
+            bottom: -2px;
+            right: -4px;
+            background: var(--medical-blue);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            border: 2px solid white;
+            /* REMOVED: transition property */
         }
         
-        /* Dropdown menu styling */
+        /* REMOVED: pulse animation and hover effect on profile-indicator */
+        
+        .profile-indicator i {
+            font-size: 8px;
+            margin-top: 1px;
+        }
+        
+        /* Dropdown menu styling - elegant and modern */
         .dropdown-menu-custom {
             position: absolute;
             top: calc(100% + 12px);
@@ -178,7 +237,7 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-            min-width: 240px;
+            min-width: 260px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
@@ -325,7 +384,7 @@
             }
 
             .dashboard-header {
-                padding: 1rem;
+                padding: 0.4rem 1rem;
                 flex-direction: row;
                 flex-wrap: wrap;
                 gap: 10px;
@@ -338,10 +397,47 @@
                 font-size: 1.3rem;
             }
             
+            .profile-indicator {
+                width: 16px;
+                height: 16px;
+                bottom: -3px;
+                right: -4px;
+            }
+            
+            .profile-indicator i {
+                font-size: 7px;
+            }
+            
             .dropdown-menu-custom {
                 min-width: 220px;
                 right: -10px;
             }
+            
+            .welcome-text {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* For extra small devices, ensure welcome text doesn't break layout */
+        @media (max-width: 480px) {
+            .header-right-group {
+                gap: 8px;
+            }
+            .welcome-text {
+                font-size: 0.75rem;
+                max-width: 140px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+        
+        /* REMOVED: Tooltip hint completely - no more hover text */
+        /* REMOVED: .profile-dropdown::before entirely */
+        
+        /* Simple static styling - no hover effects on profile area */
+        .profile-dropdown {
+            position: relative;
         }
     </style>
 </head>
@@ -359,7 +455,7 @@
             <div class="profile-img-placeholder">
                 <i class="fa-solid fa-user-nurse"></i>
             </div>
-            <h6 class="fw-bold mb-0">Nurse Jane Doe</h6>
+            <h6 class="fw-bold mb-0">Nurse Name</h6>
             <small class="text-muted">NURSE-2026-001</small>
         </div>
 
@@ -375,13 +471,10 @@
                 <i class="fa-solid fa-calendar-check"></i> Appointments
             </a>
             <a href="nurseclinicpersonnel.html" target="content-frame" class="nav-link-custom">
-                <i class="fa-solid fa-user-gear"></i> Personnel Mgt.
+                <i class="fa-solid fa-user-gear"></i> Clinic Personnel
             </a>
-
-
-            <!-- <i class="fa-solid fa-user-gear"></i> Personnel Mgt. -->
             <a href="nursepatient.html" target="content-frame" class="nav-link-custom">
-                <i class="fa-solid fa-hospital-user"></i> Patients
+                <i class="fa-solid fa-hospital-user"></i> Patient Directory
             </a>
             <a href="nurselaboratory.html" target="content-frame" class="nav-link-custom">
                 <i class="fa-solid fa-flask-vial"></i> Laboratory
@@ -397,42 +490,53 @@
 
     <div class="main-content">
         <header class="dashboard-header">
-            <div>
-                <h5 class="fw-bold mb-0" style="color: var(--medical-blue);">Welcome to Nurse Portal!</h5>
-            </div>
-
-            <!-- Header area: replaced Sign Out button with Profile Image Icon that triggers dropdown -->
-            <div class="header-actions">
-                <div class="profile-dropdown" id="profileDropdown">
-                    <div class="header-profile-icon" id="profileIconBtn">
-                        <i class="fa-solid fa-user-nurse"></i>
-                    </div>
-                    
-                    <!-- Dropdown menu with user name and logout option -->
-                    <div class="dropdown-menu-custom">
-                        <div class="dropdown-user-info">
-                            <div class="user-avatar-sm">
-                                <i class="fa-solid fa-user-nurse"></i>
-                            </div>
-                            <div class="user-name">Nurse Jane Doe</div>
-                            <div class="user-role">NURSE-2026-001 • Staff Nurse</div>
-                        </div>
-                        <div class="dropdown-options">
-                            <!-- Option: User Name (acts as profile shortcut if needed, but shows user info) -->
-                            <a href="nurseprofile.html" target="content-frame" class="dropdown-option" id="profileOptionLink">
-                                <i class="fa-solid fa-id-card"></i>
-                                <span>My Profile</span>
-                            </a>
-                            <!-- Logout Option -->
-                            <a href="nurselogin.html" class="dropdown-option logout-option" id="logoutOptionBtn">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                                <span>Sign Out</span>
-                            </a>
-                        </div>
-                    </div>
+            <!-- Left side: empty spacer -->
+            <div></div>
+            
+            <!-- Right side group: Welcome text + profile image dropdown (side by side) -->
+            <div class="header-right-group">
+                <!-- Welcome text moved to beside profile image -->
+                <div class="welcome-text">
+                    Welcome to Nurse Portal!
                 </div>
-                <!-- Backdrop for closing dropdown when clicking outside -->
-                <div class="dropdown-backdrop" id="dropdownBackdrop"></div>
+                
+                <!-- Header area: profile image dropdown with simple indicator -->
+                <div class="header-actions">
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="header-profile-icon" id="profileIconBtn">
+                            <i class="fa-solid fa-user-nurse"></i>
+                            <!-- SIMPLE INDICATOR: a small chevron-down icon to show there's an option list -->
+                            <span class="profile-indicator">
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        
+                        <!-- Dropdown menu with user name and logout option -->
+                        <div class="dropdown-menu-custom">
+                            <div class="dropdown-user-info">
+                                <div class="user-avatar-sm">
+                                    <i class="fa-solid fa-user-nurse"></i>
+                                </div>
+                                <div class="user-name">Nurse Jane Doe</div>
+                                <div class="user-role">NURSE-2026-001 • Staff Nurse</div>
+                            </div>
+                            <div class="dropdown-options">
+                                <!-- Option: Profile shortcut -->
+                                <a href="nurseprofile.html" target="content-frame" class="dropdown-option" id="profileOptionLink">
+                                    <i class="fa-solid fa-id-card"></i>
+                                    <span>My Profile</span>
+                                </a>
+                                <!-- Logout Option -->
+                                <a href="nurselogin.html" class="dropdown-option logout-option" id="logoutOptionBtn">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <span>Sign Out</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Backdrop for closing dropdown when clicking outside -->
+                    <div class="dropdown-backdrop" id="dropdownBackdrop"></div>
+                </div>
             </div>
         </header>
 
@@ -507,7 +611,7 @@
     const logoutOptionBtn = document.getElementById('logoutOptionBtn');
     if (logoutOptionBtn) {
         logoutOptionBtn.addEventListener('click', function(e) {
-            // No need to prevent default - direct link to nurselogin.html works
+            // Allow default navigation to nurselogin.html, just close dropdown before leaving
             closeDropdown();
         });
     }
@@ -582,11 +686,14 @@
     document.addEventListener('click', function(event) {
         if (profileDropdown && !profileDropdown.contains(event.target) && profileDropdown.classList.contains('active')) {
             // Check if click is not inside dropdown and not on profile icon (profile icon click handled separately)
-            if (!profileIconBtn.contains(event.target)) {
+            if (profileIconBtn && !profileIconBtn.contains(event.target)) {
                 closeDropdown();
             }
         }
     });
+    
+    // Remove the mutation observer that was rotating the chevron - not needed anymore
+    // Keep dropdown functionality clean without extra animations
 </script>
 
 </body>

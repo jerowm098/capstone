@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareLink | Kiosk Entrance</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --medical-blue: #475867;
+            --clay-bg: #f0f0f0;
+            --clay-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+            --clay-inset: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            margin: 0;
+            overflow: hidden; 
+            position: relative;
+            background: #000;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1920');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: scale(1.1);
+            z-index: -1;
+        }
+
+        .portal-container {
+            width: 1300px; 
+            height: 800px;
+            background: transparent;
+            border-radius: 40px;
+            display: grid; 
+            grid-template-columns: 1.2fr 1fr;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .brand-side {
+            background: linear-gradient(rgba(156, 12, 32, 0.85), rgba(0, 0, 0, 0.4)), 
+                        url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200');
+            background-size: cover;
+            padding: 5rem; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+            color: white;
+        }
+
+        .brand-side h1 {
+            font-size: 5rem; 
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .selection-side {
+            padding: 4rem 5rem;
+            background: rgba(253, 253, 253, 0.95);
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+            height: 100%;
+        }
+
+        .welcome-badge {
+            display: inline-block;
+            background: rgba(156, 12, 32, 0.1);
+            color: var(--pup-maroon);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* FIXED: Role Buttons Size Matching */
+        .role-btn {
+            background: var(--clay-bg);
+            border: none;
+            border-radius: 25px;
+            padding: 35px 30px; 
+            margin-bottom: 25px; 
+            box-shadow: var(--clay-shadow);
+            transition: 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            color: var(--medical-blue);
+            text-decoration: none;
+            
+            /* Dito ang trick para mag-match ang size sa mas malaking button */
+            min-height: 160px; 
+        }
+
+        .role-btn i { 
+            font-size: 3.5rem; /* Ginawang uniform ang laki ng icon */
+            min-width: 80px;  /* Para laging pantay ang simula ng text */
+            margin-right: 15px; 
+            color: var(--pup-maroon); 
+            display: flex;
+            justify-content: center;
+        }
+
+        .role-btn span.title {
+            display: block;
+            font-size: 1.8rem; /* Medyo pinalaki para sa kiosk */
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .role-btn span.desc {
+            display: block;
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .role-btn:hover {
+            box-shadow: var(--clay-inset);
+            transform: translateY(2px);
+            color: var(--pup-maroon);
+        }
+
+        .portal-divider {
+            border: 0;
+            height: 1px;
+            background: rgba(0,0,0,0.1);
+            margin: 2.5rem 0;
+            width: 100%;
+        }
+
+        @media (max-width: 1350px) {
+            .portal-container {
+                transform: scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="portal-container">
+    <div class="brand-side">
+        <p class="text-uppercase mb-2" style="letter-spacing: 3px; font-size: 1.1rem; font-weight: 600;">University Clinic</p>
+        <h1 class="fw-bold">CareLink<br>Kiosk</h1>
+        <p class="lead opacity-75 mt-3" style="font-size: 1.4rem;">Streamlined medical registration and entry for the Biñan Campus.</p>
+        
+        <div class="mt-5">
+            <div class="d-flex align-items-center mb-4">
+                <i class="fa-solid fa-qrcode fa-2x me-3"></i>
+                <span style="font-size: 1.2rem;">Instant QR Scanning</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <i class="fa-solid fa-user-check fa-2x me-3"></i>
+                <span style="font-size: 1.2rem;">Fast Profile Creation</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="selection-side">
+        <div class="text-center mb-5">
+            <span class="welcome-badge">Touch to Select</span>
+            <h2 class="display-5 fw-bold mb-2" style="color: var(--pup-maroon);">Welcome!</h2>
+            <p class="text-muted" style="font-size: 1.1rem;">Choose your access method below</p>
+        </div>
+
+        <div id="role-selector"> 
+            <a href="kiosklogin.html" class="role-btn">
+                <i class="fa-solid fa-expand"></i>
+                <div>
+                    <span class="title">Kiosk Login</span>
+                    <span class="desc">Scan your QR Code for instant entry</span>
+                </div>
+            </a>
+
+            <a href="kioskregister.html" class="role-btn">
+                <i class="fa-solid fa-id-card"></i>
+                <div>
+                    <span class="title">New Student</span>
+                    <span class="desc">Create a medical profile for the first time</span>
+                </div>
+            </a>
+        </div>
+
+        <hr class="portal-divider">
+
+        <div class="text-center">
+            <a href="kioskhomepage.html" class="text-muted text-decoration-none fw-bold" style="font-size: 1rem; opacity: 0.8;">
+                <i class="fa-solid fa-arrow-left-long me-2"></i> RETURN TO HOME
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

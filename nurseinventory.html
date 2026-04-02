@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Nurse Inventory | PUPBC CareLink</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -63,7 +66,7 @@
         }
 
         /* ============================================= */
-        /* NAVIGATION TAB HEADER - MATCHING nurseappointment.html STYLE */
+        /* NAVIGATION TAB HEADER - MATCHING nursereports.html STYLE */
         /* ============================================= */
         .nav-header-tab {
             background-color: var(--brand-primary);
@@ -73,7 +76,7 @@
             height: 60px;
         }
 
-        /* Tab links styling - directly in navbar header (matching the h5 style but as tabs) */
+        /* Tab links styling - directly in navbar header */
         .nav-header-tab .nav-tabs-inline {
             display: flex;
             gap: 2rem;
@@ -141,13 +144,13 @@
 <body>
 
     <div class="floating-form-container">
-        <!-- NAVIGATION TAB HEADER - Matching nurseappointment.html style (same navbar header with underline hover effect) -->
+        <!-- NAVIGATION TAB HEADER - Matching nursereports.html style -->
         <nav class="nav-header-tab">
             <div class="nav-tabs-inline" id="inventoryTabs">
-                <a href="nurseinventoryavailable.html" target="inventory-frame" class="nav-link-tab active" id="available-tab">
+                <a href="nurseinventoryavailable.html" data-tab="available" class="nav-link-tab active" id="available-tab">
                     Available Drugs
                 </a>
-                <a href="nurseinventoryregister.html" target="inventory-frame" class="nav-link-tab" id="register-tab">
+                <a href="nurseinventoryregister.html" data-tab="register" class="nav-link-tab" id="register-tab">
                     Register New Drug
                 </a>
             </div>
@@ -159,76 +162,154 @@
     </div>
 
     <script>
+        // SECURITY REDIRECT: If opened alone outside dashboard
+        if (window.self === window.top) {
+            const currentPage = window.location.pathname.split("/").pop();
+            const urlParams = new URLSearchParams(window.location.search);
+            const sub = urlParams.get('subpage') || 'nurseinventoryavailable.html';
+            
+            // Redirect to dashboard with page and subpage parameters
+            window.location.href = "nursedashboard.html?page=" + currentPage + "&subpage=" + sub;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            const subTabs = document.querySelectorAll('.nav-link-tab');
+            const tabs = document.querySelectorAll('.nav-link-tab');
             const iframe = document.getElementById('inventory-frame');
 
-            // 1. Handle normal clicking - tab switching
-            subTabs.forEach(tab => {
-                tab.addEventListener('click', function(e) {
-                    // Don't prevent default - let the link work normally
-                    subTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Store the current tab in sessionStorage for persistence
-                    sessionStorage.setItem('activeInventoryTab', this.getAttribute('href'));
-                });
-            });
-
-            // 2. Handle Ctrl + Click / URL parameters for dashboard integration
-            const urlParams = new URLSearchParams(window.location.search);
-            const subpage = urlParams.get('subpage');
-
-            if (subpage) {
-                iframe.src = subpage;
-                subTabs.forEach(tab => {
-                    tab.classList.remove('active');
-                    if (tab.getAttribute('href') === subpage) {
-                        tab.classList.add('active');
+            // Function to switch tabs (similar to nursereports.html)
+            function switchTab(tabId) {
+                // Determine the iframe source based on tabId
+                let iframeSrc = '';
+                if (tabId === 'available') {
+                    iframeSrc = 'nurseinventoryavailable.html';
+                } else if (tabId === 'register') {
+                    iframeSrc = 'nurseinventoryregister.html';
+                }
+                
+                // Update iframe source
+                iframe.src = iframeSrc;
+                
+                // Update active tab style
+                tabs.forEach(t => {
+                    t.classList.remove('active');
+                    if (t.getAttribute('data-tab') === tabId) {
+                        t.classList.add('active');
                     }
                 });
             }
 
-            // 3. Restore last active tab from sessionStorage (for within-session persistence)
-            const lastActiveTab = sessionStorage.getItem('activeInventoryTab');
-            if (lastActiveTab && !subpage) {
-                // Check if the stored tab exists in our tabs
-                const matchingTab = Array.from(subTabs).find(tab => tab.getAttribute('href') === lastActiveTab);
-                if (matchingTab) {
-                    subTabs.forEach(tab => tab.classList.remove('active'));
-                    matchingTab.classList.add('active');
-                    iframe.src = lastActiveTab;
+            // Read the 'subpage' from PARENT URL (Dashboard URL)
+            // This is the key part - it checks the parent dashboard's URL parameters
+            let activeSub = 'available'; // Default value
+            
+            try {
+                // Check if we're inside an iframe (has parent)
+                if (window.parent !== window.self) {
+                    const parentParams = new URLSearchParams(window.parent.location.search);
+                    const parentSubpage = parentParams.get('subpage');
+                    
+                    if (parentSubpage) {
+                        // Extract tab ID from the subpage filename
+                        if (parentSubpage.includes('nurseinventoryregister.html')) {
+                            activeSub = 'register';
+                        } else if (parentSubpage.includes('nurseinventoryavailable.html')) {
+                            activeSub = 'available';
+                        } else {
+                            activeSub = 'available';
+                        }
+                    }
+                } else {
+                    // If not in iframe, check URL parameters directly
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const subpage = urlParams.get('subpage');
+                    
+                    if (subpage) {
+                        if (subpage.includes('nurseinventoryregister.html')) {
+                            activeSub = 'register';
+                        } else if (subpage.includes('nurseinventoryavailable.html')) {
+                            activeSub = 'available';
+                        }
+                    }
                 }
+            } catch(e) {
+                // Cross-origin error when accessing parent, fallback to default
+                console.log('Cannot access parent URL, using default tab');
+                activeSub = 'available';
             }
+            
+            // Initial switch based on parent dashboard's subpage parameter
+            switchTab(activeSub);
 
-            // 4. Handle iframe load events to sync active tab when iframe navigates internally
+            // Event listeners for manual click (similar to nursereports.html)
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    // If Ctrl+Click or Meta+Click (Cmd+Click on Mac), let the link open normally
+                    if (!e.ctrlKey && !e.metaKey) {
+                        e.preventDefault();
+                        const tabId = this.getAttribute('data-tab');
+                        switchTab(tabId);
+                        
+                        // Update the Dashboard URL bar without refreshing (if inside iframe)
+                        try {
+                            if (window.parent !== window.self) {
+                                // Determine the subpage filename based on tabId
+                                let subpageFile = '';
+                                if (tabId === 'available') {
+                                    subpageFile = 'nurseinventoryavailable.html';
+                                } else if (tabId === 'register') {
+                                    subpageFile = 'nurseinventoryregister.html';
+                                }
+                                
+                                const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                            '?page=nurseinventory.html&subpage=' + subpageFile;
+                                window.parent.history.replaceState({ path: newURL }, '', newURL);
+                            }
+                        } catch(e) {
+                            // Cross-origin error, ignore
+                            console.log('Cannot update parent URL');
+                        }
+                    }
+                    // If Ctrl+Click, let the default behavior happen (opens in new tab)
+                });
+            });
+
+            // Handle iframe load events to sync active tab when iframe navigates internally
             iframe.addEventListener('load', function() {
                 try {
                     const iframeSrc = iframe.contentWindow.location.pathname.split('/').pop();
-                    const matchingTab = Array.from(subTabs).find(tab => {
-                        const tabHref = tab.getAttribute('href');
-                        return tabHref === iframeSrc || tabHref.includes(iframeSrc);
-                    });
-                    if (matchingTab) {
-                        subTabs.forEach(t => t.classList.remove('active'));
-                        matchingTab.classList.add('active');
-                        sessionStorage.setItem('activeInventoryTab', matchingTab.getAttribute('href'));
+                    let activeTabId = '';
+                    
+                    if (iframeSrc === 'nurseinventoryregister.html') {
+                        activeTabId = 'register';
+                    } else if (iframeSrc === 'nurseinventoryavailable.html') {
+                        activeTabId = 'available';
+                    }
+                    
+                    if (activeTabId) {
+                        // Update active tab style
+                        tabs.forEach(t => {
+                            t.classList.remove('active');
+                            if (t.getAttribute('data-tab') === activeTabId) {
+                                t.classList.add('active');
+                            }
+                        });
+                        
+                        // Update parent dashboard URL if inside iframe
+                        try {
+                            if (window.parent !== window.self) {
+                                const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                            '?page=nurseinventory.html&subpage=' + iframeSrc;
+                                window.parent.history.replaceState({ path: newURL }, '', newURL);
+                            }
+                        } catch(e) {
+                            console.log('Cannot update parent URL from iframe load');
+                        }
                     }
                 } catch(e) {
                     // Cross-origin errors may occur, ignore
                     console.log('Cannot access iframe location due to cross-origin policy');
                 }
             });
-
-            // 5. Security Redirect (If opened alone outside dashboard)
-            if (window.self === window.top) {
-                const currentPage = window.location.pathname.split("/").pop();
-                const activeIframeSrc = iframe.getAttribute('src');
-                // Only redirect if we're not already in the dashboard context
-                if (!window.location.href.includes('nursedashboard.html')) {
-                    window.location.href = "nursedashboard.html?page=" + currentPage + "&subpage=" + activeIframeSrc;
-                }
-            }
         });
     </script>
 </body>
