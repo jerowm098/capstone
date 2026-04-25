@@ -37,7 +37,7 @@
                       Home <i class="bi bi-chevron-down ms-1" style="font-size: 0.8rem;"></i>
                   </a>
                   <ul class="dropdown-menu shadow border-0" aria-labelledby="homeDropdown" style="border-radius: 12px;">
-                      <li><a class="dropdown-item" href="../../index.html"><i class="bi bi-house-door me-2"></i> home page 1</a></li>
+                      <li><a class="dropdown-item" href="../../index.html">home page 1</a></li>
                   </ul>
               </li>
 

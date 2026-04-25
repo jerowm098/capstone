@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Dashboard Overview | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN for the graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --medical-blue: #475867;
+            --medical-blue-dark: #1a2127;
+            --medical-blue-light: #667f94;
+            --medical-blue-soft: rgba(71, 88, 103, 0.08);
+            --clay-bg: #f4f7f6;
+            --white: #ffffff;
+            --text-main: #28313a;
+            --text-muted: #5c7285;
+            --success-green: #28a745;
+            --warning-orange: #f39c12;
+            --danger-red: #e74a3b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--clay-bg);
+            padding: 2rem;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* --- STAT CARDS (original style) --- */
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: none;
+            transition: transform 0.3s ease;
+            min-height: 130px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .bg-patients { background: #4e73df; }
+        .bg-appointments { background: #1cc88a; }
+        .bg-lab { background: #f6c23e; }
+        .bg-pharmacy { background: #e74a3b; }
+
+        /* --- CONTENT CARDS (Graph container) --- */
+        .overview-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid rgba(40, 49, 58, 0.05);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease;
+        }
+        
+        .overview-section:hover {
+            transform: translateY(-3px);
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--medical-blue);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            letter-spacing: -0.2px;
+        }
+        
+        .section-title i {
+            color: var(--pup-maroon);
+            margin-right: 8px;
+        }
+
+        /* --- TIMELINE (Upcoming activity) --- */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: #e9ecef;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 16px;
+        }
+        
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--pup-maroon);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px rgba(156, 12, 32, 0.2);
+        }
+        
+        .timeline-item h6 {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--medical-blue-dark);
+            margin-bottom: 2px;
+        }
+        
+        .timeline-item p {
+            font-size: 0.75rem;
+            margin-bottom: 0;
+            color: var(--text-muted);
+        }
+
+        /* Graph container styling - trimmed excess height */
+        .graph-container {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            flex: 1;
+        }
+        
+        canvas#safetyChart {
+            max-height: 200px;
+            width: 100%;
+        }
+        
+        .graph-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-badge {
+            background: var(--medical-blue-soft);
+            border-radius: 16px;
+            padding: 6px 10px;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .stat-badge .stat-number {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--medical-blue-dark);
+        }
+        
+        .stat-badge .stat-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+        
+        .trend-up {
+            color: var(--success-green);
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+        
+        .trend-down {
+            color: var(--danger-red);
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+        
+        /* Custom grid: 1.2fr and 1fr layout */
+        .custom-dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            align-items: stretch;
+        }
+        
+        /* ========== HIWALAY NA MGA CARD PARA SA DALAWANG CIRCLE INDICATORS ========== */
+        .circle-cards-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .circle-stat-card-standalone {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 1rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid rgba(71, 88, 103, 0.08);
+            transition: all 0.25s ease;
+        }
+        
+        .circle-stat-card-standalone:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+        
+        /* Circular progress */
+        .circle-progress-md {
+            position: relative;
+            width: 75px;
+            height: 75px;
+            flex-shrink: 0;
+        }
+        
+        .circle-progress-md svg {
+            width: 75px;
+            height: 75px;
+            transform: rotate(-90deg);
+        }
+        
+        .circle-progress-md .circle-bg-md {
+            stroke: #e9ecef;
+            stroke-width: 7;
+            fill: none;
+        }
+        
+        .circle-progress-md .circle-fill-md {
+            stroke-width: 7;
+            fill: none;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.8s ease, stroke-dashoffset 0.8s ease;
+        }
+        
+        .fill-medicine {
+            stroke: #e74a3b;
+        }
+        
+        .fill-lab {
+            stroke: #4e73df;
+        }
+        
+        .circle-percent-md {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--medical-blue-dark);
+        }
+        
+        .circle-stat-info-standalone {
+            flex: 1;
+        }
+        
+        .circle-stat-title-standalone {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--medical-blue-dark);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .circle-stat-title-standalone i {
+            margin-right: 6px;
+        }
+        
+        .circle-stat-value-standalone {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--medical-blue);
+            line-height: 1.2;
+        }
+        
+        .circle-stat-sub-standalone {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        .alert-badge-standalone {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(231, 74, 59, 0.1);
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--danger-red);
+            margin-top: 6px;
+        }
+        
+        .info-badge-standalone {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(78, 115, 223, 0.1);
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #4e73df;
+            margin-top: 6px;
+        }
+        
+        /* RIGHT COLUMN CONTAINER - para sa circle cards + upcoming activity na magkakasunod */
+        .right-column-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0rem;
+            height: 100%;
+        }
+        
+        /* Upcoming activity card - trimmed excess height, bottom aligned with graph via flex */
+        .upcoming-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid rgba(40, 49, 58, 0.05);
+            transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            margin-top: 0;
+        }
+        
+        .upcoming-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .upcoming-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        /* Timeline scroll - nilimitahan ang max-height para maputol ang excess height */
+        .timeline-scroll {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 280px;
+            padding-right: 6px;
+        }
+        
+        .timeline-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .timeline-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .timeline-scroll::-webkit-scrollbar-thumb {
+            background: var(--medical-blue-light);
+            border-radius: 4px;
+        }
+        
+        /* inalis na ang .upcoming-footer dito para tanggalin ang tag name na "5 upcoming tasks this week" */
+        /* Footer element na naglalaman ng text na iyon ay inalis na sa HTML, kaya wala nang excess */
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .custom-dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .circle-cards-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            body {
+                padding: 1.5rem;
+            }
+            .timeline-scroll {
+                max-height: 260px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .stat-card {
+                padding: 15px;
+                gap: 12px;
+            }
+            .stat-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 1.2rem;
+            }
+            .circle-stat-card-standalone {
+                padding: 0.8rem;
+                gap: 0.8rem;
+            }
+            .timeline-scroll {
+                max-height: 280px;
+            }
+            canvas#safetyChart {
+                max-height: 170px;
+            }
+        }
+        
+        .stat-number-animated {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 0;
+            line-height: 1.2;
+        }
+        
+        .stat-card h4 {
+            font-size: 1.8rem;
+        }
+        
+        /* Additional style para pantay ang bottom ng upcoming activity at graph */
+        /* Gamit ang flex alignment at height: 100% sa containers */
+        .overview-section {
+            height: 100%;
+        }
+        
+        /* I-adjust ang graph container para hindi sobra ang height */
+        .overview-section .graph-container {
+            margin-bottom: 8px;
+        }
+        
+        .graph-stats {
+            margin-bottom: 0px;
+        }
+        
+        /* tanggalin ang extra spacing sa ilalim ng overview section para pantay */
+        .overview-section .mt-2 {
+            margin-top: 10px !important;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Stat Cards with animated counters -->
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-patients"><i class="fa-solid fa-hospital-user"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0 counter-number" id="counterPatients" data-target="124">0</h4>
+                    <small class="text-muted">Total Patients</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-appointments"><i class="fa-solid fa-calendar-check"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0 counter-number" id="counterAppointments" data-target="8">0</h4>
+                    <small class="text-muted">Today's Appointments</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-lab"><i class="fa-solid fa-vial-circle-check"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0 counter-number" id="counterLabResults" data-target="12">0</h4>
+                    <small class="text-muted">Lab Results</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-pharmacy"><i class="fa-solid fa-pills"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0 counter-number" id="counterLowStock" data-target="5">0</h4>
+                    <small class="text-muted">Low Stock Meds</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Grid: Graph Section (1.2fr) + Right Column (Circle Cards + Upcoming Activity) -->
+    <div class="custom-dashboard-grid">
+        <!-- LEFT SIDE: GRAPH SECTION - trimmed excess height ng form bandang graph -->
+        <div class="overview-section">
+            <h5 class="section-title">
+                <i class="fa-solid fa-chart-line"></i> Emergency Prevention Impact
+            </h5>
+            <p class="text-muted small mb-2" style="font-size: 0.7rem;">
+                <i class="fa-regular fa-calendar-alt me-1"></i> Quarterly trends: Reduced emergency cases through proactive safety measures
+            </p>
+            <div class="graph-container">
+                <canvas id="safetyChart" width="400" height="200" style="max-width:100%; height:auto;"></canvas>
+            </div>
+            <div class="graph-stats">
+                <div class="stat-badge">
+                    <div class="stat-number">-32%</div>
+                    <div class="stat-label">YoY Emergency Drop</div>
+                    <small class="trend-down"><i class="fa-solid fa-arrow-down"></i> 32% fewer cases</small>
+                </div>
+                <div class="stat-badge">
+                    <div class="stat-number">147</div>
+                    <div class="stat-label">Prevented Incidents</div>
+                    <small class="trend-up"><i class="fa-solid fa-shield-heart"></i> Safety protocols</small>
+                </div>
+                <div class="stat-badge">
+                    <div class="stat-number">94%</div>
+                    <div class="stat-label">Response Readiness</div>
+                    <small class="trend-up"><i class="fa-solid fa-chart-simple"></i> +12% vs last yr</small>
+                </div>
+            </div>
+            <div class="mt-2 text-muted small" style="border-top: 1px solid #edf2f7; padding-top: 10px; font-size: 0.7rem;">
+                <i class="fa-regular fa-circle-check text-success me-1"></i> 
+                <span>Data reflects prevented emergencies due to regular checkups, vaccination drives, and first-aid training.</span>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: Circle Indicator Cards + Upcoming Activity (ibaba, trimmed height, walang tag name) -->
+        <div class="right-column-container">
+            <!-- DALAWANG CIRCLE INDICATOR CARDS (magkahiwalay na card) -->
+            <div class="circle-cards-row">
+                <!-- Medicine Circle Indicator Card -->
+                <div class="circle-stat-card-standalone">
+                    <div class="circle-progress-md">
+                        <svg width="75" height="75" viewBox="0 0 100 100">
+                            <circle class="circle-bg-md" cx="50" cy="50" r="42"></circle>
+                            <circle class="circle-fill-md fill-medicine" id="medicineCircleFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"></circle>
+                        </svg>
+                        <div class="circle-percent-md" id="medicinePercent">0%</div>
+                    </div>
+                    <div class="circle-stat-info-standalone">
+                        <div class="circle-stat-title-standalone">
+                            <i class="fa-solid fa-pills" style="color: #e74a3b;"></i> Medicine Stock
+                        </div>
+                        <div class="circle-stat-value-standalone">124 <span style="font-size: 0.8rem;">units</span></div>
+                        <div class="circle-stat-sub-standalone">Essential meds availability</div>
+                        <div class="alert-badge-standalone">
+                            <i class="fa-solid fa-exclamation-triangle"></i> 5 low stock alerts
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Laboratory Circle Indicator Card -->
+                <div class="circle-stat-card-standalone">
+                    <div class="circle-progress-md">
+                        <svg width="75" height="75" viewBox="0 0 100 100">
+                            <circle class="circle-bg-md" cx="50" cy="50" r="42"></circle>
+                            <circle class="circle-fill-md fill-lab" id="labCircleFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"></circle>
+                        </svg>
+                        <div class="circle-percent-md" id="labPercent">0%</div>
+                    </div>
+                    <div class="circle-stat-info-standalone">
+                        <div class="circle-stat-title-standalone">
+                            <i class="fa-solid fa-microscope" style="color: #4e73df;"></i> Lab Results
+                        </div>
+                        <div class="circle-stat-value-standalone">24<span style="font-size: 0.8rem;"> hrs</span></div>
+                        <div class="circle-stat-sub-standalone">Results within 24hrs</div>
+                        <div class="info-badge-standalone">
+                            <i class="fa-regular fa-clock"></i> 12 pending results
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- UPCOMING ACTIVITY CARD (ibaba, tinanggal na ang footer na may "5 upcoming tasks this week", at pinaikli ang height via max-height sa scroll) -->
+            <div class="upcoming-card">
+                <h5 class="section-title" style="margin-bottom: 1rem;">
+                    <i class="fa-regular fa-clock me-2"></i> Upcoming Activity
+                </h5>
+                
+                <div class="upcoming-content">
+                    <div class="timeline-scroll">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">09:00 AM - Patient Check-up</h6>
+                                <p class="text-muted small">John Smith - Physical Examination for Sports</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">10:30 AM - Laboratory Review</h6>
+                                <p class="text-muted small">Review CBC results for 3 students from Engineering Dept.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">01:00 PM - Faculty Consultation</h6>
+                                <p class="text-muted small">Maria Clara - Follow-up on hypertension meds</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">03:30 PM - Inventory Audit</h6>
+                                <p class="text-muted small">Weekly check of first-aid supplies and paracetamol stock.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">04:45 PM - Emergency Drill Review</h6>
+                                <p class="text-muted small">Post-drill analysis with safety committee.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ITO ANG TINANGGAL: Ang dating footer na naglalaman ng "5 upcoming tasks this week" ay ganap nang inalis, kaya wala nang tag name na ganyan -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Anti-Direct Access Logic (preserved)
+        if (window.self === window.top) {
+            const currentPage = window.location.pathname.split("/").pop();
+            if (!currentPage.includes('nursedashboard.html') && !currentPage.includes('dashboard')) {
+                window.location.href = "nursedashboard.html?page=" + currentPage;
+            }
+        }
+
+        // ==================== ANIMATION FUNCTIONS ====================
+        
+        // 1. Number counter animation for stat cards
+        function animateNumber(element, target) {
+            if (!element) return;
+            let start = 0;
+            const duration = 1500;
+            const stepTime = 16;
+            const steps = duration / stepTime;
+            const increment = target / steps;
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.innerText = target;
+                    clearInterval(timer);
+                } else {
+                    element.innerText = Math.floor(current);
+                }
+            }, stepTime);
+        }
+        
+        // 2. Circle progress indicator animation (line/percentage)
+        function animateCircleProgress(circleId, percentId, targetPercent) {
+            const circle = document.getElementById(circleId);
+            const percentSpan = document.getElementById(percentId);
+            if (!circle || !percentSpan) return;
+            
+            const radius = 42;
+            const circumference = 2 * Math.PI * radius;
+            let startPercent = 0;
+            const duration = 1400;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                let progress = Math.min(1, elapsed / duration);
+                let currentPercent = startPercent + (targetPercent - startPercent) * progress;
+                const offset = circumference - (currentPercent / 100) * circumference;
+                circle.style.strokeDasharray = `${circumference}`;
+                circle.style.strokeDashoffset = `${offset}`;
+                percentSpan.innerText = Math.floor(currentPercent) + '%';
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    circle.style.strokeDashoffset = `${circumference - (targetPercent / 100) * circumference}`;
+                    percentSpan.innerText = targetPercent + '%';
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+        
+        // 3. Initialize chart and all animations after DOM ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Initialize Chart.js Graph with adjusted canvas dimensions for trimmed height ---
+            const ctx = document.getElementById('safetyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025'],
+                    datasets: [
+                        {
+                            label: 'Emergency Cases (Actual)',
+                            data: [28, 22, 17, 12],
+                            borderColor: '#e74a3b',
+                            backgroundColor: 'rgba(231, 74, 59, 0.05)',
+                            borderWidth: 2.5,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#e74a3b',
+                            pointBorderColor: '#fff',
+                            pointHoverRadius: 6,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Prevented Incidents (via Safety Measures)',
+                            data: [18, 24, 31, 39],
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.05)',
+                            borderWidth: 2.5,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#28a745',
+                            pointBorderColor: '#fff',
+                            pointHoverRadius: 6,
+                            tension: 0.3,
+                            fill: true,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        tooltip: {
+                            backgroundColor: '#28313a',
+                            titleColor: '#f4f7f6',
+                            bodyColor: '#e0e0e0',
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    let value = context.raw;
+                                    if (context.dataset.label === 'Emergency Cases (Actual)') {
+                                        return `${label}: ${value} cases (↓ ${28 - value} from Q1)`;
+                                    } else {
+                                        return `${label}: ${value} incidents avoided`;
+                                    }
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: { family: 'Poppins', size: 10 },
+                                boxWidth: 10,
+                                usePointStyle: true
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#e9ecef', drawBorder: false },
+                            title: {
+                                display: true,
+                                text: 'Number of Incidents',
+                                font: { family: 'Poppins', size: 9, weight: '500' },
+                                color: '#5c7285'
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Poppins', size: 10 } }
+                        }
+                    },
+                    elements: {
+                        line: {
+                            borderJoin: 'round'
+                        }
+                    }
+                }
+            });
+            
+            // --- Trigger Number Counters for Stat Cards ---
+            const patientCounter = document.getElementById('counterPatients');
+            const appointmentCounter = document.getElementById('counterAppointments');
+            const labCounter = document.getElementById('counterLabResults');
+            const lowStockCounter = document.getElementById('counterLowStock');
+            
+            if (patientCounter) animateNumber(patientCounter, parseInt(patientCounter.getAttribute('data-target') || 124));
+            if (appointmentCounter) animateNumber(appointmentCounter, parseInt(appointmentCounter.getAttribute('data-target') || 8));
+            if (labCounter) animateNumber(labCounter, parseInt(labCounter.getAttribute('data-target') || 12));
+            if (lowStockCounter) animateNumber(lowStockCounter, parseInt(lowStockCounter.getAttribute('data-target') || 5));
+            
+            // --- Trigger Circle Progress Indicators ---
+            animateCircleProgress('medicineCircleFill', 'medicinePercent', 70);
+            animateCircleProgress('labCircleFill', 'labPercent', 80);
+            
+            // --- Animation for stat badges ---
+            const statBadges = document.querySelectorAll('.stat-badge');
+            statBadges.forEach((badge, idx) => {
+                badge.style.opacity = '0';
+                badge.style.transform = 'translateY(8px)';
+                setTimeout(() => {
+                    badge.style.transition = 'all 0.3s ease';
+                    badge.style.opacity = '1';
+                    badge.style.transform = 'translateY(0)';
+                }, 100 + idx * 80);
+            });
+            
+            // Pantayin ang bottom ng upcoming card at graph section gamit ang flex alignment
+            // Dahil naka-flex column at height:100% na ang .right-column-container at .overview-section, automatic na pantay ang bottom margins.
+            // Idagdag na lang ng subtle adjustment para walang extra space.
+            const graphSection = document.querySelector('.overview-section');
+            const upcomingCard = document.querySelector('.upcoming-card');
+            if (graphSection && upcomingCard) {
+                // Siguraduhin lang na parehong natural ang pag-stretch
+                graphSection.style.display = 'flex';
+                graphSection.style.flexDirection = 'column';
+                upcomingCard.style.display = 'flex';
+                upcomingCard.style.flexDirection = 'column';
+            }
+        });
+        
+        // Micro-interaction: timeline hover
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'translateX(4px)';
+                item.style.transition = '0.2s';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'translateX(0)';
+            });
+        });
+        
+        // Additional safeguard: re-run circle animation if needed
+        window.addEventListener('load', function() {
+            const medicineFill = document.getElementById('medicineCircleFill');
+            const labFill = document.getElementById('labCircleFill');
+            const medicinePercentSpan = document.getElementById('medicinePercent');
+            const labPercentSpan = document.getElementById('labPercent');
+            if (medicineFill && medicinePercentSpan && medicinePercentSpan.innerText === '0%') {
+                const radius = 42;
+                const circumference = 2 * Math.PI * radius;
+                const targetMed = 70;
+                medicineFill.style.strokeDasharray = `${circumference}`;
+                medicineFill.style.strokeDashoffset = `${circumference - (targetMed / 100) * circumference}`;
+                medicinePercentSpan.innerText = targetMed + '%';
+            }
+            if (labFill && labPercentSpan && labPercentSpan.innerText === '0%') {
+                const radius = 42;
+                const circumference = 2 * Math.PI * radius;
+                const targetLab = 80;
+                labFill.style.strokeDasharray = `${circumference}`;
+                labFill.style.strokeDashoffset = `${circumference - (targetLab / 100) * circumference}`;
+                labPercentSpan.innerText = targetLab + '%';
+            }
+        });
+    </script>
+</body>
+</html>

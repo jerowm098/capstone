@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareLink | Kiosk Entrance</title>
+    <title>CareLink | Kiosk Dashboard</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -59,7 +59,7 @@
 
         .brand-side {
             background: linear-gradient(rgba(156, 12, 32, 0.85), rgba(0, 0, 0, 0.4)), 
-                        url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200');
+                        url('https://6151083.fs1.hubspotusercontent-na1.net/hub/6151083/hubfs/smart-kiosk.webp?width=2000&name=smart-kiosk.webp');
             background-size: cover;
             padding: 5rem; 
             display: flex; 
@@ -74,13 +74,16 @@
             line-height: 1.1;
         }
 
+        /* UPDATED: Selection Side Centering */
         .selection-side {
             padding: 4rem 5rem;
             background: rgba(253, 253, 253, 0.95);
             display: flex; 
             flex-direction: column; 
-            justify-content: center;
+            justify-content: center; /* Centers everything vertically */
+            align-items: center;    /* Centers everything horizontally */
             height: 100%;
+            text-align: center;
         }
 
         .welcome-badge {
@@ -96,7 +99,14 @@
             text-transform: uppercase;
         }
 
-        /* FIXED: Role Buttons Size Matching */
+        /* Container for the buttons to ensure they stay centered */
+        #dashboard-actions {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .role-btn {
             background: var(--clay-bg);
             border: none;
@@ -106,19 +116,19 @@
             box-shadow: var(--clay-shadow);
             transition: 0.3s;
             width: 100%;
+            max-width: 500px; /* Limits width so it doesn't look too stretched */
             display: flex;
             align-items: center;
             justify-content: flex-start;
             color: var(--medical-blue);
             text-decoration: none;
-            
-            /* Dito ang trick para mag-match ang size sa mas malaking button */
             min-height: 160px; 
+            text-align: left; /* Keeps text inside button left-aligned for readability */
         }
 
         .role-btn i { 
-            font-size: 3.5rem; /* Ginawang uniform ang laki ng icon */
-            min-width: 80px;  /* Para laging pantay ang simula ng text */
+            font-size: 3.5rem; 
+            min-width: 80px; 
             margin-right: 15px; 
             color: var(--pup-maroon); 
             display: flex;
@@ -127,7 +137,7 @@
 
         .role-btn span.title {
             display: block;
-            font-size: 1.8rem; /* Medyo pinalaki para sa kiosk */
+            font-size: 1.7rem;
             font-weight: 600;
             line-height: 1.2;
         }
@@ -150,7 +160,14 @@
             border: 0;
             height: 1px;
             background: rgba(0,0,0,0.1);
-            margin: 2.5rem 0;
+            margin: 2rem 0;
+            width: 80%; /* Shorter divider for centered look */
+        }
+
+        .return-home {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
         }
 
@@ -166,50 +183,50 @@
 <div class="portal-container">
     <div class="brand-side">
         <p class="text-uppercase mb-2" style="letter-spacing: 3px; font-size: 1.1rem; font-weight: 600;">University Clinic</p>
-        <h1 class="fw-bold">CareLink<br>Kiosk</h1>
-        <p class="lead opacity-75 mt-3" style="font-size: 1.4rem;">Streamlined medical registration and entry for the Biñan Campus.</p>
+        <h1 class="fw-bold">CareLink<br>Dashboard</h1>
+        <p class="lead opacity-75 mt-3" style="font-size: 1.4rem;">Manage your health visits with ease and efficiency.</p>
         
         <div class="mt-5">
             <div class="d-flex align-items-center mb-4">
-                <i class="fa-solid fa-qrcode fa-2x me-3"></i>
-                <span style="font-size: 1.2rem;">Instant QR Scanning</span>
+                <i class="fa-solid fa-calendar-check fa-2x me-3"></i>
+                <span style="font-size: 1.2rem;">Live Queue Updates</span>
             </div>
             <div class="d-flex align-items-center">
-                <i class="fa-solid fa-user-check fa-2x me-3"></i>
-                <span style="font-size: 1.2rem;">Fast Profile Creation</span>
+                <i class="fa-solid fa-clock-rotate-left fa-2x me-3"></i>
+                <span style="font-size: 1.2rem;">Visit History Access</span>
             </div>
         </div>
     </div>
 
     <div class="selection-side">
-        <div class="text-center mb-5">
-            <span class="welcome-badge">Touch to Select</span>
+        <div class="mb-5">
+            <span class="welcome-badge">Carelink Express</span>
             <h2 class="display-5 fw-bold mb-2" style="color: var(--pup-maroon);">Welcome!</h2>
-            <p class="text-muted" style="font-size: 1.1rem;">Choose your access method below</p>
+            <p class="text-muted" style="font-size: 1.1rem;">What would you like to do today?</p>
         </div>
 
-        <div id="role-selector"> 
-            <a href="kiosklogin.html" class="role-btn">
-                <i class="fa-solid fa-expand"></i>
+        <div id="dashboard-actions"> 
+            <a href="kioskappointment-walkin.html" class="role-btn">
+                <i class="fa-solid fa-notes-medical"></i>
                 <div>
-                    <span class="title">Kiosk Login</span>
-                    <span class="desc">Scan your QR Code for instant entry</span>
+                    <span class="title">Walk-in Appointment</span>
+                    <span class="desc">Queue for a consultation now</span>
                 </div>
             </a>
 
-            <a href="kioskregister.html" class="role-btn">
-                <i class="fa-solid fa-id-card"></i>
+            <a href="cancel.html" class="role-btn">
+                <i class="fa-solid fa-calendar-xmark"></i>
                 <div>
-                    <span class="title">New Student</span>
-                    <span class="desc">Create a medical profile for the first time</span>
+                    <span class="title">Cancel Appointment</span>
+                    <span class="desc">Withdraw your current booking</span>
                 </div>
             </a>
         </div>
 
         <hr class="portal-divider">
 
-        <div class="text-center">
-            <a href="kioskhomepage.html" class="text-muted text-decoration-none fw-bold" style="font-size: 1rem; opacity: 0.8;">
+        <div class="return-home">
+            <a href="kioskhomepage.html" class="text-muted text-decoration-none fw-bold" style="font-size: 1rem; opacity: 0.8; letter-spacing: 1px;">
                 <i class="fa-solid fa-arrow-left-long me-2"></i> RETURN TO HOME
             </a>
         </div>

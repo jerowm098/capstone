@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>My Profile | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* --- Main Layout & Dimensions (matching nurseinventory.html) --- */
+            --main-form-width: 1150px;
+            --layout-margin-top: 2rem;
+            --standard-padding: 1.5rem;
+            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
+            
+            /* --- Colors (preserving PUP maroon for student profile) --- */
+            --brand-primary: #9C0C20;      /* PUP Maroon - main brand color */
+            --brand-primary-dark: #7a0a1a;
+            --brand-primary-light: #c0283e;
+            --brand-primary-soft: rgba(156, 12, 32, 0.08);
+            --white: #ffffff;
+            --text-main: #28313a;          
+            --text-muted: #5c7285;     
+            --clay-bg: #f4f7f6;
+            
+            /* --- Form Container (matching nurseinventory.html) --- */
+            --form-bg-color: #ffffff;
+            --form-border-radius: 20px;           
+            --form-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            --form-border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        html {
+            overflow-y: scroll; 
+            scrollbar-gutter: stable;
+        }
+        
+        body {
+            min-height: 101vh;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--clay-bg);
+            margin: 0;
+            padding: var(--layout-margin-top) 0;
+            display: flex;
+            justify-content: center;
+            color: var(--text-main);
+        }
+
+        /* --- MAIN FLOATING FORM LAYOUT (matching nurseinventory.html) --- */
+        .floating-form-container {
+            width: 95%;
+            max-width: var(--main-form-width);
+            background: var(--white);
+            border-radius: var(--form-border-radius);
+            overflow: hidden;
+            box-shadow: var(--form-box-shadow);
+            border: var(--border-subtle);
+        }
+
+        /* ============================================= */
+        /* NAVIGATION TAB HEADER - Matching nurseinventory.html style */
+        /* No icons, clean tab bar with hover effects, no underline */
+        /* ============================================= */
+        .nav-header-tab {
+            background-color: var(--brand-primary);
+            padding: 0 var(--standard-padding);
+            display: flex;
+            align-items: center;
+            height: 60px;
+        }
+
+        /* Tab links styling - directly in navbar header */
+        .nav-header-tab .nav-tabs-inline {
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            align-items: center;
+        }
+
+        .nav-header-tab .nav-link-tab {
+            color: rgba(255, 255, 255, 0.6);
+            border: none;
+            padding: 10px 0;
+            font-weight: 600;
+            background: transparent !important;
+            position: relative;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            font-size: 1rem;
+            display: inline-block;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+        }
+
+        /* Hover effect - becomes brighter white (matching nurseinventory) */
+        .nav-header-tab .nav-link-tab:hover {
+            color: #ffffff !important;
+            background: transparent !important;
+        }
+
+        /* Active tab - full white, no underline (clean look) */
+        .nav-header-tab .nav-link-tab.active {
+            color: #ffffff !important;
+            background: transparent !important;
+            font-weight: 600;
+        }
+
+        /* NO underline/after pseudo-element - matching nurseinventory.html simplicity */
+
+        /* --- Content Area --- */
+        .profile-body {
+            flex-grow: 1;
+            display: block;
+            width: 100%;
+            background: var(--white);
+            padding: 0;
+        }
+
+        #profile-frame {
+            width: 100%;
+            min-height: 550px;
+            border: none;
+            background: transparent;
+            display: block;
+        }
+
+        /* --- Responsive adjustments (matching nurseinventory.html) --- */
+        @media (max-width: 768px) {
+            .nav-header-tab {
+                padding: 0 1rem;
+            }
+            .nav-header-tab .nav-tabs-inline {
+                gap: 1rem;
+            }
+            .nav-header-tab .nav-link-tab {
+                font-size: 0.85rem;
+                padding: 8px 0;
+            }
+        }
+
+        /* For very small screens */
+        @media (max-width: 480px) {
+            .nav-header-tab .nav-tabs-inline {
+                gap: 0.75rem;
+            }
+            .nav-header-tab .nav-link-tab {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-form-container">
+        <!-- NAVIGATION TAB HEADER - Matching nurseinventory.html style (no icons, clean hover, no underline) -->
+        <nav class="nav-header-tab">
+            <div class="nav-tabs-inline" id="profileTabs">
+                <a href="studprofileinfo.html" data-tab="info" class="nav-link-tab active" id="info-tab">
+                    Profile Info
+                </a>
+                <a href="studprofileqrinfo.html" data-tab="qrinfo" class="nav-link-tab" id="qrinfo-tab">
+                    QR Info
+                </a>
+            </div>
+        </nav>
+
+        <div class="profile-body">
+            <iframe src="studprofileinfo.html" name="profile-frame" id="profile-frame"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // PRESERVED ORIGINAL SCRIPT LOGIC (with enhancements to support nurseinventory-style tab handling)
+        // =============================================
+        
+        // SECURITY REDIRECT: If opened alone outside dashboard (PRESERVED from original)
+        if (window.self === window.top) {
+            const currentPage = window.location.pathname.split("/").pop();
+            const urlParams = new URLSearchParams(window.location.search);
+            const sub = urlParams.get('subpage') || 'studprofileinfo.html';
+            
+            // Redirect to dashboard with page and subpage parameters
+            window.location.href = "studdashboard.html?page=" + currentPage + "&subpage=" + sub;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            const subTabs = document.querySelectorAll('.nav-link-tab');
+            const iframe = document.getElementById('profile-frame');
+            
+            // ORIGINAL FUNCTIONALITY: Handle subpage parameter from URL (PRESERVED)
+            function handleSubpageFromUrl() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const subpage = urlParams.get('subpage');
+                
+                if (subpage) {
+                    iframe.src = subpage;
+                    subTabs.forEach(tab => {
+                        tab.classList.remove('active');
+                        if (tab.getAttribute('href') === subpage) {
+                            tab.classList.add('active');
+                        }
+                    });
+                }
+            }
+            
+            // ORIGINAL FUNCTIONALITY: Tab click handlers (PRESERVED and enhanced)
+            subTabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    // If Ctrl+Click or Meta+Click (Cmd+Click on Mac), let the link open normally (PRESERVED behavior)
+                    if (!e.ctrlKey && !e.metaKey) {
+                        e.preventDefault();
+                        const targetPage = this.getAttribute('href');
+                        
+                        // Update iframe source
+                        iframe.src = targetPage;
+                        
+                        // Update active tab style
+                        subTabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Update URL without reloading (PRESERVED original logic)
+                        try {
+                            if (window.parent !== window.self) {
+                                // Update parent dashboard URL
+                                const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                            '?page=studprofile.html&subpage=' + targetPage;
+                                window.parent.history.replaceState({ path: newURL }, '', newURL);
+                            } else {
+                                // Update current window URL
+                                const newURL = window.location.origin + window.location.pathname + '?subpage=' + targetPage;
+                                window.history.replaceState({ path: newURL }, '', newURL);
+                            }
+                        } catch(e) {
+                            console.log('Cannot update URL');
+                        }
+                    }
+                    // If Ctrl+Click, let the default behavior happen (opens in new tab)
+                });
+            });
+            
+            // ORIGINAL FUNCTIONALITY: Handle subpage from URL on load
+            handleSubpageFromUrl();
+            
+            // =============================================
+            // ADDITIONAL ENHANCEMENT: Sync active tab when iframe navigates internally (matching nurseinventory robustness)
+            // This preserves the core experience while adding the nurseinventory-style sync
+            // =============================================
+            iframe.addEventListener('load', function() {
+                try {
+                    const iframeSrc = iframe.contentWindow.location.pathname.split('/').pop();
+                    let activeFound = false;
+                    
+                    // Update active tab based on iframe source
+                    subTabs.forEach(tab => {
+                        const tabHref = tab.getAttribute('href').split('/').pop();
+                        if (tabHref === iframeSrc) {
+                            tab.classList.add('active');
+                            activeFound = true;
+                        } else {
+                            tab.classList.remove('active');
+                        }
+                    });
+                    
+                    // If no tab matches, ensure at least one tab is active (fallback)
+                    if (!activeFound && subTabs.length > 0) {
+                        subTabs[0].classList.add('active');
+                    }
+                    
+                    // Update parent dashboard URL if inside iframe (PRESERVES original URL sync behavior)
+                    try {
+                        if (window.parent !== window.self) {
+                            const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                        '?page=studprofile.html&subpage=' + iframeSrc;
+                            window.parent.history.replaceState({ path: newURL }, '', newURL);
+                        }
+                    } catch(e) {
+                        console.log('Cannot update parent URL from iframe load');
+                    }
+                } catch(e) {
+                    // Cross-origin errors may occur when iframe content is from different domain
+                    console.log('Cannot access iframe location due to cross-origin policy');
+                }
+            });
+            
+            // =============================================
+            // ORIGINAL FUNCTIONALITY: Handle window load for parent URL sync (PRESERVED)
+            // =============================================
+            // Additional check for parent URL subpage parameter (similar to nurseinventory)
+            try {
+                if (window.parent !== window.self) {
+                    const parentParams = new URLSearchParams(window.parent.location.search);
+                    const parentSubpage = parentParams.get('subpage');
+                    
+                    if (parentSubpage && parentSubpage !== iframe.src.split('/').pop()) {
+                        // Sync iframe with parent subpage parameter
+                        iframe.src = parentSubpage;
+                        subTabs.forEach(tab => {
+                            tab.classList.remove('active');
+                            if (tab.getAttribute('href') === parentSubpage) {
+                                tab.classList.add('active');
+                            }
+                        });
+                    }
+                }
+            } catch(e) {
+                console.log('Cannot access parent URL parameters');
+            }
+        });
+    </script>
+</body>
+</html>

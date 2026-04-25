@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Medical History | PUPBC CareLink</title>
+    <title>Nurse Report Summary | PUPBC CareLink | Logs Management</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,454 +14,775 @@
 
     <style>
         :root {
-            /* --- Main Layout & Dimensions (matching studprofile.html) --- */
-            --main-form-width: 1150px;
-            --layout-margin-top: 2rem;
             --standard-padding: 1.5rem;
             --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
-            
-            /* --- Colors (preserving PUP maroon) --- */
-            --brand-primary: #9C0C20;      /* PUP Maroon - main brand color */
-            --brand-primary-dark: #7a0a1a;
-            --brand-primary-light: #c0283e;
-            --brand-primary-soft: rgba(156, 12, 32, 0.08);
+            --brand-primary: #28313a;      
+            --medical-blue: #475867;        
+            --medical-blue-dark: #1a2127; 
+            --medical-blue-light: #667f94;
+            --medical-blue-soft: rgba(71, 88, 103, 0.08); 
             --white: #ffffff;
             --text-main: #28313a;          
             --text-muted: #5c7285;     
             --clay-bg: #f4f7f6;
-            
-            /* --- Form Container (matching studprofile.html) --- */
-            --form-bg-color: #ffffff;
-            --form-border-radius: 20px;           
-            --form-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-            --form-border: 1px solid rgba(0, 0, 0, 0.05);
-            
-            /* --- Card & Content Styles (preserved from original) --- */
-            --card-border-radius: 20px;
-            --subtle-gray: #f8fafb;
-            --medical-blue: #475867;
+            --completed-green: #2c7a47;
+            --completed-bg: #e0f2e9;
+            --view-btn-bg: #eef2ff;
+            --view-btn-color: #1e3a8a;
         }
 
-        html {
-            overflow-y: scroll; 
-            scrollbar-gutter: stable;
-        }
-        
         body {
-            min-height: 101vh;
             font-family: 'Poppins', sans-serif;
-            background-color: var(--clay-bg);
-            margin: 0;
-            padding: var(--layout-margin-top) 0;
-            display: flex;
-            justify-content: center;
+            background-color: transparent;
             color: var(--text-main);
+            margin: 0;
+            padding: 0;
         }
 
-        /* --- MAIN FLOATING FORM LAYOUT (matching studprofile.html) --- */
-        .floating-form-container {
-            width: 95%;
-            max-width: var(--main-form-width);
+        .appointments-wrapper {
+            width: 100%;
+            background: transparent;
+        }
+
+        .form-content {
+            padding: var(--standard-padding);
+        }
+
+        /* Search section */
+        .search-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .search-box {
+            background: var(--clay-bg);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 10px;
+            padding: 8px 15px 8px 38px;
+            width: 300px;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--medical-blue-light);
             background: var(--white);
-            border-radius: var(--form-border-radius);
-            overflow: hidden;
-            box-shadow: var(--form-box-shadow);
-            border: var(--border-subtle);
+            box-shadow: none;
         }
 
-        /* ============================================= */
-        /* HEADER - Matching studprofile.html style */
-        /* No icons in header, clean design with hover effects */
-        /* ============================================= */
-        .nav-header {
-            background-color: var(--brand-primary);
-            padding: 0 var(--standard-padding);
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        /* Counter + Pagination row (fixed position behavior) */
+        .counter-pagination-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 16px;
+        }
+
+        .total-counter {
+            background: var(--medical-blue-soft);
+            color: var(--medical-blue-dark);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        /* added function style for counter update */
+        .total-counter i {
+            color: var(--completed-green);
+            font-size: 1rem;
+        }
+/*         .total-counter span {
+            font-weight: 700;
+            background: rgba(0,0,0,0.05);
+            padding: 0 6px;
+            border-radius: 40px;
+            min-width: 32px;
+            display: inline-block;
+            text-align: center;
+        } */
+
+        .pagination-wrapper {
             display: flex;
             align-items: center;
-            height: 60px;
+            gap: 0.5rem;
+            background: transparent;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
-        /* Header title styling - no icons, clean text */
-        .header-title {
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-            font-size: 1rem;
-            letter-spacing: 0.3px;
-            margin: 0;
-            transition: all 0.25s ease;
-        }
-        
-        .header-title:hover {
-            color: #ffffff;
-        }
-
-        /* --- Content Area (preserved original structure) --- */
-        .content-body {
-            padding: var(--standard-padding);
-            flex-grow: 1;
+        .pagination-btn {
             background: var(--white);
+            border: 1px solid rgba(40, 49, 58, 0.2);
+            color: var(--brand-primary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .history-layout {
+        .pagination-btn i {
+            font-size: 0.7rem;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            background: #f1f2f4;
+        }
+
+        .page-number.active-page {
+            background: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .separator-line {
+            border-bottom: var(--border-subtle);
+            margin-bottom: 16px;
+        }
+
+        /* SORTABLE HEADER */
+        .sortable-header {
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+            position: relative;
+        }
+        .sortable-header:hover {
+            background: rgba(71, 88, 103, 0.05);
+        }
+        .sort-icon {
+            margin-left: 6px;
+            font-size: 0.7rem;
+            opacity: 0.6;
+            display: inline-block;
+        }
+        .sortable-header.asc .sort-icon .fa-sort-up { opacity: 1; color: var(--brand-primary); }
+        .sortable-header.desc .sort-icon .fa-sort-down { opacity: 1; color: var(--brand-primary); }
+        .sort-icon i {
+            vertical-align: middle;
+        }
+
+        /* TABLE STYLES */
+        .table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-bottom: 0;
+            font-size: 0.82rem;
+        }
+
+        .table-custom thead th {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.77rem;
+            text-transform: uppercase;
+            padding: 10px 12px;
+            border: none;
+            background: transparent;
+            letter-spacing: 0.3px;
+            border-bottom: var(--border-subtle);
+        }
+
+        .table-custom tbody tr {
+            background-color: var(--white);
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+
+        .table-custom tbody tr:hover td {
+            background-color: var(--medical-blue-soft) !important;
+        }
+
+        .table-custom td {
+            padding: 12px 12px;
+            vertical-align: middle;
+            border-top: var(--border-subtle);
+            border-bottom: var(--border-subtle);
+            background-color: var(--white);
+            font-size: 0.82rem;
+        }
+
+        .table-custom td:first-child { 
+            border-left: var(--border-subtle); 
+            border-radius: 10px 0 0 10px; 
+        }
+        .table-custom td:last-child { 
+            border-right: var(--border-subtle); 
+            border-radius: 0 10px 10px 0; 
+        }
+
+        /* Smaller font for email and service type columns (reduce ~2%) */
+        .email-cell-reduced {
+            font-size: 0.8rem;  /* approx 2% reduction from 0.82 */
+        }
+        .service-cell-reduced {
+            font-size: 0.8rem;
+        }
+        .completion-time-cell, .status-cell {
+            font-size: 0.82rem;
+        }
+
+        .profile-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
             display: flex;
-            gap: 20px;
-            height: 100%;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            background: var(--medical-blue);
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease;
+        }
+        .profile-avatar:hover {
+            transform: scale(1.05);
         }
 
-        .list-column {
-            flex: 1;
-            max-height: 530px;
-            overflow-y: auto;
-            padding-right: 10px;
+        .student-info-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .detail-column {
-            flex: 1.5;
-            background: var(--subtle-gray);
-            border-radius: var(--card-border-radius);
-            padding: var(--standard-padding);
-            border: var(--border-subtle);
+        .student-text {
             display: flex;
             flex-direction: column;
         }
 
-        .section-title {
+        .patient-name {
+            font-weight: 600;
+            color: var(--brand-primary);
+            display: block;
+            font-size: 0.88rem;
+        }
+
+        .patient-id-text {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .id-label {
+            font-weight: 500;
+            color: var(--medical-blue);
+            margin-right: 4px;
+        }
+
+        /* Status badge completed */
+        .status-badge-completed {
+            background: var(--completed-bg);
+            color: var(--completed-green);
+            padding: 5px 12px;
+            border-radius: 6px;
             font-size: 0.75rem;
-            font-weight: 700;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 15px;
-            display: flex;
+            font-weight: 600;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
 
-        /* --- CARDS (preserved from original) --- */
-        .history-card {
-            padding: 15px;
-            border-radius: var(--card-border-radius);
-            background: var(--white);
-            margin-bottom: 12px;
+        /* View button */
+        .btn-view-details {
+            background: var(--view-btn-bg);
+            color: var(--view-btn-color);
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0,0,0,0.05);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 33px;
+        }
+        .btn-view-details:hover {
+            background: var(--view-btn-color);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(30, 58, 138, 0.2);
         }
 
-        .history-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem;
+            color: var(--text-muted);
         }
 
-        .history-card.active {
-            border-left: 5px solid var(--brand-primary);
-            background: #fffafa;
+        /* Modal top-aligned */
+        .modal.top-aligned-modal .modal-dialog {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0;
+            align-items: flex-start !important;
+        }
+        .modal.top-aligned-modal .modal-content {
+            border-radius: 20px;
+            border: none;
         }
 
-        .card-date { 
-            font-size: 0.7rem; 
-            font-weight: 700; 
-            color: var(--brand-primary); 
-        }
-        
-        .card-reason { 
-            font-size: 0.95rem; 
-            font-weight: 600; 
-            color: var(--medical-blue); 
-        }
-
-        /* --- DETAILS (preserved from original) --- */
-        .detail-header {
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+        @media (max-width: 1200px) {
+            .table-custom td, .table-custom th {
+                padding: 10px 8px;
+            }
+            .profile-avatar {
+                width: 34px;
+                height: 34px;
+                font-size: 0.8rem;
+            }
         }
 
-        .detail-tag {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            background: #e7f9ee;
-            color: #28a745;
-            margin-bottom: 10px;
-        }
-
-        .detail-box {
-            background: var(--white);
-            padding: 18px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            border: var(--border-subtle);
-        }
-
-        .detail-label { 
-            font-size: 0.7rem; 
-            font-weight: 700; 
-            color: #aaa; 
-            text-transform: uppercase; 
-            margin-bottom: 5px; 
-        }
-        
-        .detail-text { 
-            font-size: 0.9rem; 
-            color: #333; 
-            line-height: 1.5; 
-        }
-
-        .list-column::-webkit-scrollbar { 
-            width: 5px; 
-        }
-        
-        .list-column::-webkit-scrollbar-thumb { 
-            background: #ddd; 
-            border-radius: 10px; 
-        }
-
-        /* --- Responsive adjustments (matching studprofile.html) --- */
         @media (max-width: 768px) {
-            .nav-header {
-                padding: 0 1rem;
+            .form-content {
+                padding: 1rem;
             }
-            .content-body {
-                padding: 20px;
-            }
-            .history-layout {
+            .counter-pagination-row {
                 flex-direction: column;
+                align-items: stretch;
             }
-            .list-column {
-                max-height: 300px;
+            .total-counter {
+                justify-content: center;
+                width: fit-content;
+                margin: 0 auto;
             }
-        }
-
-        @media (max-width: 480px) {
-            .header-title {
-                font-size: 0.85rem;
+            .pagination-wrapper {
+                justify-content: center;
             }
-            .section-title {
-                font-size: 0.7rem;
+            .search-section {
+                justify-content: center;
+            }
+            .search-box {
+                width: 100%;
+            }
+            .search-wrapper {
+                width: 100%;
+            }
+            .table-responsive-custom {
+                overflow-x: auto;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="floating-form-container">
-        <!-- HEADER - Matching studprofile.html style (no icons, clean design) -->
-        <header class="nav-header">
-            <div class="header-title">
-                History Records
+<div class="appointments-wrapper">
+    <div class="form-content">
+        <!-- SEARCH SECTION -->
+        <div class="search-section">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-box" id="searchLogsInput" placeholder="Search logs...">
             </div>
-        </header>
+        </div>
 
-        <div class="content-body">
-            <div class="history-layout">
-                
-                <!-- LEFT COLUMN: List of Medical Records (PRESERVED ORIGINAL CONTENT) -->
-                <div class="list-column">
-                    <div class="section-title"><i class="fa-solid fa-list-ul"></i> Select Record</div>
-                    
-                    <div class="history-card active" data-history-id="1" onclick="showDetail('Fever and Chills', 'March 15, 2026', 'Success Consultation', 'Paracetamol 500mg (3x a day), Bed rest for 3 days.', 'Patient presented with high grade fever (38.5C). Lungs are clear.', 'Dr. Jose Rizal')">
-                        <div class="card-date">MAR 15, 2026</div>
-                        <div class="card-reason">Fever and Chills</div>
-                        <small class="text-muted">Dr. Jose Rizal</small>
-                    </div>
+        <!-- COUNTER + PAGINATION ROW (fixed position) -->
+        <div class="counter-pagination-row">
+            <div class="total-counter" id="totalLogsCounter">
+                <i class="fa-solid fa-clipboard-list"></i> 
+                Total Completed Logs: <span id="totalCount">0</span>
+            </div>
+            <div class="pagination-wrapper" id="paginationControlsTop">
+                <!-- pagination injected -->
+            </div>
+        </div>
 
-                    <div class="history-card" data-history-id="2" onclick="showDetail('Severe Toothache', 'Feb 02, 2026', 'Procedure Completed', 'Mefenamic Acid for pain, Chlorhexidine mouthwash.', 'Extraction of upper right molar due to deep caries.', 'Dr. Galicano Apacible')">
-                        <div class="card-date">FEB 02, 2026</div>
-                        <div class="card-reason">Severe Toothache</div>
-                        <small class="text-muted">Dr. Galicano Apacible</small>
-                    </div>
+        <!-- SEPARATOR LINE -->
+        <div class="separator-line"></div>
 
-                    <div class="history-card" data-history-id="3" onclick="showDetail('Allergic Rhinitis', 'Jan 10, 2026', 'Cleared', 'Loratadine 10mg once daily.', 'Sneezing and itchy eyes since the start of the week.', 'Nurse Maria Clara')">
-                        <div class="card-date">JAN 10, 2026</div>
-                        <div class="card-reason">Allergic Rhinitis</div>
-                        <small class="text-muted">Nurse Maria Clara</small>
-                    </div>
-                </div>
-
-                <!-- RIGHT COLUMN: Detail View (PRESERVED ORIGINAL STRUCTURE) -->
-                <div class="detail-column" id="detail-view">
-                    <div class="section-title"><i class="fa-solid fa-circle-info"></i> Medical Assessment</div>
-                    
-                    <div class="detail-header">
-                        <span class="detail-tag" id="det-status">Success Consultation</span>
-                        <h4 class="fw-bold mb-1" id="det-title" style="color: var(--medical-blue);">Fever and Chills</h4>
-                        <p class="text-muted small mb-0" id="det-date">Date of Visit: March 15, 2026</p>
-                    </div>
-
-                    <div class="detail-box">
-                        <div class="detail-label">Doctor's Findings / Results</div>
-                        <div class="detail-text" id="det-findings">Patient presented with high grade fever (38.5C). Lungs are clear. Body aches reported.</div>
-                    </div>
-
-                    <div class="detail-box" style="border-left: 4px solid var(--brand-primary);">
-                        <div class="detail-label" style="color: var(--brand-primary);">Prescription & Recommendation</div>
-                        <div class="detail-text" id="det-prescription">Paracetamol 500mg (3x a day after meals), Bed rest for 3 days.</div>
-                    </div>
-
-                    <div class="mt-auto d-flex justify-content-between align-items-center pt-3" style="border-top: 1px solid rgba(0,0,0,0.05);">
-                        <small class="text-muted">Examined by: <strong id="det-doc">Dr. Jose Rizal</strong></small>
-                        <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="printMedicalRecord()">
-                            <i class="fa-solid fa-print me-1"></i> Print Result
-                        </button>
-                    </div>
-                </div>
-
-            </div> 
+        <!-- TABLE CONTAINER -->
+        <div class="table-responsive-custom">
+            <table class="table table-custom" id="reportTable">
+                <thead>
+                    <tr>
+                        <th class="sortable-header" data-sort="patientName">Patient Details <span class="sort-icon"><i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i></span></th>
+                        <th class="sortable-header" data-sort="email">Patient Email <span class="sort-icon"><i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i></span></th>
+                        <th class="sortable-header" data-sort="courseYear">Course & Year <span class="sort-icon"><i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i></span></th>
+                        <th class="sortable-header" data-sort="serviceType">Service Type <span class="sort-icon"><i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i></span></th>
+                        <th class="sortable-header" data-sort="completionTime">Completion Time <span class="sort-icon"><i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i></span></th>
+                        <th class="sortable-header" data-sort="status">Status <span class="sort-icon"><i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i></span></th>
+                        <th style="width: 100px; text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTableBody">
+                    <!-- dynamic rows, max 4 per page -->
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 
-    <script>
-        // =============================================
-        // PRESERVED ORIGINAL SCRIPT LOGIC
-        // =============================================
-        
-        // ORIGINAL FUNCTION: showDetail - updates the detail view when a history card is clicked (PRESERVED)
-        function showDetail(title, date, status, prescription, findings, doctor) {
-            document.getElementById('det-title').innerText = title;
-            document.getElementById('det-date').innerText = "Date of Visit: " + date;
-            document.getElementById('det-status').innerText = status;
-            document.getElementById('det-prescription').innerText = prescription;
-            document.getElementById('det-findings').innerText = findings;
-            document.getElementById('det-doc').innerText = doctor;
+<!-- VIEW DETAILS MODAL -->
+<div class="modal fade top-aligned-modal" id="viewDetailsModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px;">
+            <div class="modal-header" style="background: var(--brand-primary); color: white; border-radius: 20px 20px 0 0;">
+                <h5 class="modal-title"><i class="fa-solid fa-file-lines me-2"></i>Completed Session Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalDetailsContent" style="padding: 1.5rem;">
+                <!-- dynamic details -->
+            </div>
+            <div class="modal-footer" style="border-top: none;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-            const cards = document.querySelectorAll('.history-card');
-            cards.forEach(card => card.classList.remove('active'));
-            if (event && event.currentTarget) {
-                event.currentTarget.classList.add('active');
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // --------------------------------------------------------------
+    // REPORTS SUMMARY DATA (completed logs)
+    // TOTAL COUNTER NOW HAS FULL FUNCTIONALITY: updates based on search + filter + original total
+    // --------------------------------------------------------------
+    let completedLogsList = [
+        { id: "log1", patientName: "Maria Santos", patientId: "2019-00001-PT-0", email: "maria.santos@example.com", department: "BSIT", courseYear: "3-1", serviceType: "General Consultation", completionTime: "08:30 AM", status: "completed" },
+        { id: "log2", patientName: "John Dela Cruz", patientId: "2019-00002-PT-1", email: "john.dc@example.com", department: "BSCS", courseYear: "2-2", serviceType: "Medication Refill", completionTime: "09:45 AM", status: "completed" },
+        { id: "log3", patientName: "Reyna Lopez", patientId: "2019-00003-PT-2", email: "reyna.lopez@example.com", department: "BSN", courseYear: "4-1", serviceType: "Prescribe Medication", completionTime: "10:15 AM", status: "completed" },
+        { id: "log4", patientName: "Eduardo Gomez", patientId: "2019-00004-PT-3", email: "edu.gomez@example.com", department: "BSCE", courseYear: "3-2", serviceType: "Assist Consultation", completionTime: "11:00 AM", status: "completed" },
+        { id: "log5", patientName: "Francesca Cruz", patientId: "2019-00005-PT-4", email: "frances.cruz@example.com", department: "BSBA", courseYear: "2-1", serviceType: "Assist Appointment", completionTime: "01:20 PM", status: "completed" },
+        { id: "log6", patientName: "Liam Mercado", patientId: "2019-00006-PT-5", email: "liam.merc@example.com", department: "BSIT", courseYear: "1-3", serviceType: "Lab Result Review", completionTime: "02:10 PM", status: "completed" },
+        { id: "log7", patientName: "Sophia Ramirez", patientId: "2019-00007-PT-6", email: "sophia.ram@example.com", department: "BS Psychology", courseYear: "3-1", serviceType: "Follow-up Check", completionTime: "03:00 PM", status: "completed" },
+        { id: "log8", patientName: "Andrei Villanueva", patientId: "2019-00008-PT-7", email: "andrei.v@example.com", department: "BSCS", courseYear: "4-2", serviceType: "General Consultation", completionTime: "03:45 PM", status: "completed" },
+        { id: "log9", patientName: "Gianna Rivera", patientId: "2019-00009-PT-8", email: "gianna.riv@example.com", department: "BSN", courseYear: "2-2", serviceType: "Medication Refill", completionTime: "04:20 PM", status: "completed" },
+        { id: "log10", patientName: "Paolo Mendoza", patientId: "2019-00010-PT-9", email: "paolo.mend@example.com", department: "BSIT", courseYear: "3-3", serviceType: "Prescribe Medication", completionTime: "05:00 PM", status: "completed" },
+        { id: "log11", patientName: "Isabella Flores", patientId: "2019-00011-PT-10", email: "bella.flores@example.com", department: "BSN", courseYear: "4-2", serviceType: "Assist Consultation", completionTime: "08:50 AM", status: "completed" },
+        { id: "log12", patientName: "Carlos Reyes", patientId: "2019-00012-PT-11", email: "carlos.reyes@example.com", department: "BSCE", courseYear: "3-1", serviceType: "Lab Result Review", completionTime: "09:30 AM", status: "completed" },
+        { id: "log13", patientName: "Megan Torres", patientId: "2019-00013-PT-12", email: "megan.torres@example.com", department: "BSIT", courseYear: "2-2", serviceType: "Follow-up Check", completionTime: "10:45 AM", status: "completed" },
+        { id: "log14", patientName: "Justin Bautista", patientId: "2019-00014-PT-13", email: "justin.b@example.com", department: "BSBA", courseYear: "1-4", serviceType: "General Consultation", completionTime: "11:30 AM", status: "completed" }
+    ];
+
+    const ITEMS_PER_PAGE = 4;      // maximum 4 rows per page
+    let currentPage = 1;
+    let currentDisplayList = [...completedLogsList];
+    let currentSort = { field: "completionTime", direction: "asc" };   // default sort by time
+    
+    // Helper functions
+    function getInitials(name) {
+        if (!name) return "?";
+        const parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+        return parts[0].charAt(0).toUpperCase() + parts[parts.length - 1].charAt(0).toUpperCase();
+    }
+    
+    function getAvatarColor(name) {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        const colors = ['#4a6fa5', '#6c5b7b', '#c06c6c', '#2c7a47', '#d97706', '#7c3aed', '#db2777', '#0891b2'];
+        return colors[Math.abs(hash) % colors.length];
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    }
+    
+    // Sorting logic
+    function sortList(list, field, direction) {
+        const sorted = [...list];
+        sorted.sort((a, b) => {
+            let valA = a[field];
+            let valB = b[field];
+            if (field === 'patientName') valA = a.patientName.toLowerCase();
+            if (field === 'patientName') valB = b.patientName.toLowerCase();
+            if (field === 'email') valA = a.email.toLowerCase();
+            if (field === 'email') valB = b.email.toLowerCase();
+            if (field === 'courseYear') valA = a.courseYear;
+            if (field === 'courseYear') valB = b.courseYear;
+            if (field === 'serviceType') valA = a.serviceType;
+            if (field === 'serviceType') valB = b.serviceType;
+            if (field === 'completionTime') {
+                valA = convertTimeToComparable(a.completionTime);
+                valB = convertTimeToComparable(b.completionTime);
             }
-        }
-        
-        // ENHANCED: Additional function to handle active state from any click context
-        function updateActiveCard(clickedCard) {
-            const cards = document.querySelectorAll('.history-card');
-            cards.forEach(card => card.classList.remove('active'));
-            if (clickedCard) {
-                clickedCard.classList.add('active');
-            }
-        }
-        
-        // ORIGINAL: Print functionality (enhanced but preserved)
-        function printMedicalRecord() {
-            const title = document.getElementById('det-title').innerText;
-            const date = document.getElementById('det-date').innerText;
-            const status = document.getElementById('det-status').innerText;
-            const findings = document.getElementById('det-findings').innerText;
-            const prescription = document.getElementById('det-prescription').innerText;
-            const doctor = document.getElementById('det-doc').innerText;
-            
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Medical Record - ${title}</title>
-                    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-                    <style>
-                        body { font-family: 'Poppins', sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
-                        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #9C0C20; padding-bottom: 20px; }
-                        .title { color: #9C0C20; font-size: 24px; margin-bottom: 5px; }
-                        .subtitle { color: #666; font-size: 14px; }
-                        .record-detail { margin: 20px 0; }
-                        .label { font-weight: 600; color: #9C0C20; margin-bottom: 5px; }
-                        .value { margin-bottom: 15px; padding-left: 10px; border-left: 3px solid #9C0C20; }
-                        .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #999; border-top: 1px solid #eee; padding-top: 20px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <div class="title">PUPBC CareLink</div>
-                        <div class="subtitle">Medical Record</div>
-                    </div>
-                    <div class="record-detail">
-                        <div class="label">Diagnosis / Reason</div>
-                        <div class="value">${title}</div>
-                        
-                        <div class="label">Date of Visit</div>
-                        <div class="value">${date.replace('Date of Visit: ', '')}</div>
-                        
-                        <div class="label">Status</div>
-                        <div class="value">${status}</div>
-                        
-                        <div class="label">Doctor's Findings</div>
-                        <div class="value">${findings}</div>
-                        
-                        <div class="label">Prescription & Recommendations</div>
-                        <div class="value">${prescription}</div>
-                        
-                        <div class="label">Attending Personnel</div>
-                        <div class="value">${doctor}</div>
-                    </div>
-                    <div class="footer">
-                        This is an official medical record from PUPBC CareLink Clinic.<br>
-                        Generated on ${new Date().toLocaleDateString()}
-                    </div>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.print();
-        }
-        
-        // =============================================
-        // SECURITY REDIRECT: If opened alone outside dashboard (PRESERVED from studprofile.html pattern)
-        // =============================================
-        if (window.self === window.top) {
-            const currentPage = window.location.pathname.split("/").pop();
-            window.location.href = "studdashboard.html?page=" + currentPage;
-        }
-        
-        // =============================================
-        // ADDITIONAL: Ensure history cards maintain proper active state on load
-        // =============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ensure the first card is properly set as active if none is active
-            const activeCard = document.querySelector('.history-card.active');
-            if (!activeCard) {
-                const firstCard = document.querySelector('.history-card');
-                if (firstCard) {
-                    firstCard.classList.add('active');
-                }
-            }
-            
-            // Add click handlers to history cards to ensure proper active state (preserves original functionality)
-            const historyCards = document.querySelectorAll('.history-card');
-            historyCards.forEach(card => {
-                // Store original onclick if exists
-                const originalOnClick = card.getAttribute('onclick');
-                if (originalOnClick) {
-                    // Wrap to ensure active state is updated
-                    card.addEventListener('click', function(e) {
-                        // The original onclick will handle the detail update
-                        // Just ensure active state is set
-                        updateActiveCard(this);
-                    });
-                }
-            });
-            
-            // Optional: Handle parent URL sync if needed (preserved pattern from studprofile)
-            try {
-                if (window.parent !== window.self) {
-                    const parentParams = new URLSearchParams(window.parent.location.search);
-                    const parentSubpage = parentParams.get('subpage');
-                    // If there's any subpage parameter that might affect medical history view, handle it
-                    if (parentSubpage && parentSubpage.includes('medical')) {
-                        // Additional sync logic if needed - preserved for compatibility
-                        console.log('Medical history loaded from dashboard');
-                    }
-                }
-            } catch(e) {
-                console.log('Cannot access parent URL parameters');
-            }
+            if (field === 'status') valA = a.status;
+            if (field === 'status') valB = b.status;
+            if (valA < valB) return direction === 'asc' ? -1 : 1;
+            if (valA > valB) return direction === 'asc' ? 1 : -1;
+            return 0;
         });
+        return sorted;
+    }
+    
+    function convertTimeToComparable(timeStr) {
+        let match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!match) return 0;
+        let hour = parseInt(match[1]);
+        let minute = parseInt(match[2]);
+        let meridian = match[3].toUpperCase();
+        if (meridian === 'PM' && hour !== 12) hour += 12;
+        if (meridian === 'AM' && hour === 12) hour = 0;
+        return hour * 60 + minute;
+    }
+    
+    // Filter by search term (global search: name, ID, email, service, course, time)
+    function getFilteredList() {
+        const searchTerm = document.getElementById('searchLogsInput')?.value.toLowerCase().trim() || '';
+        let filtered = [...completedLogsList];
+        if (searchTerm) {
+            filtered = filtered.filter(log => {
+                const fullPatientInfo = `${log.patientName} ${log.patientId} ${log.email} ${log.department} ${log.courseYear} ${log.serviceType} ${log.completionTime}`.toLowerCase();
+                return fullPatientInfo.includes(searchTerm);
+            });
+        }
+        // Apply sorting after filter
+        return sortList(filtered, currentSort.field, currentSort.direction);
+    }
+    
+    // ========== ENHANCED FUNCTION: TOTAL COUNTER DYNAMIC UPDATE ==========
+    // This function updates the "Total Completed Logs" counter to show:
+    // - The total number of ALL logs in the database (original master count)
+    // - PLUS an optional secondary context: it can also show filtered count if needed.
+    // But based on requirement: "total logs counter" with function – I will display two useful pieces:
+    // Primary: total original records (master logs). Secondary (optional): showing filtered results count when searching.
+    // To make it functional and dynamic, I'll display:
+    // "Total Completed Logs: [original total]  |  Showing: [filtered total]" on hover or as a tooltip? Actually, to meet clarity,
+    // I will keep the main total counter dynamic: It shows original total always, but also adds a small badge/span to reflect current filtered results
+    // So the user understands the total logs exist, and the visible filtered results count.
+    // However to strictly follow "total logs counter" function: I will make the counter show both Master total and (when filtered) the current visible count in a subtle way.
+    // The best approach: The main number displays the total MASTER logs, and next to it (or as a second line) shows filtered results count.
+    // Given design simplicity, I will extend the total counter with a functional sub-text that updates on search/sort.
+    function updateTotalCounterFunctionality() {
+        const masterTotal = completedLogsList.length;      // permanent total records
+        const filteredTotal = currentDisplayList.length;   // filtered + sorted records
+        const totalSpan = document.getElementById('totalCount');
+        if (totalSpan) {
+            if (filteredTotal !== masterTotal) {
+                totalSpan.innerHTML = `${masterTotal} <span style="font-size:0.7rem; background: rgba(0,0,0,0.08); padding:2px 6px; border-radius:20px;">filtered: ${filteredTotal}</span>`;
+                totalSpan.style.fontWeight = '600';
+            } else {
+                totalSpan.innerHTML = `${masterTotal}`;
+            }
+        }
+        // Additional tooltip to show filtered context
+        const counterContainer = document.getElementById('totalLogsCounter');
+        if (counterContainer) {
+            if (filteredTotal !== masterTotal) {
+                counterContainer.title = `Total master logs: ${masterTotal} | Current filtered results: ${filteredTotal}`;
+            } else {
+                counterContainer.title = `Total completed logs: ${masterTotal}`;
+            }
+        }
+    }
+    
+    function refreshDisplayAndPagination() {
+        currentDisplayList = getFilteredList();
+        const totalItems = currentDisplayList.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+        // update total counter with full functionality (master + filtered info)
+        updateTotalCounterFunctionality();
+        renderTableBody();
+        renderPaginationControls();
+    }
+    
+    function renderTableBody() {
+        const tbody = document.getElementById('reportTableBody');
+        if (!tbody) return;
+        const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+        const pageItems = currentDisplayList.slice(startIdx, startIdx + ITEMS_PER_PAGE);
         
-        // =============================================
-        // PRESERVED: Any additional original functionality
-        // =============================================
-        // The original showDetail function is already defined above and works with onclick attributes
-        // This ensures all original medical history functionality remains intact
-    </script>
+        if (pageItems.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5"><div class="empty-state"><i class="fa-solid fa-chart-simple fa-3x mb-3 opacity-50"></i><p class="mb-0">No completed logs found.</p><small class="text-muted">Try adjusting your search or filters.</small></div></td></tr>`;
+            return;
+        }
+        
+        tbody.innerHTML = pageItems.map(log => {
+            const initials = getInitials(log.patientName);
+            const avatarBg = getAvatarColor(log.patientName);
+            const displayPatientId = `<span class="id-label">ID:</span> ${escapeHtml(log.patientId)}`;
+            const courseDept = `${escapeHtml(log.department)}, ${escapeHtml(log.courseYear)}`;
+            const safeName = escapeHtml(log.patientName).replace(/'/g, "&#39;");
+            
+            return `<tr data-id="${log.id}">
+                <td>
+                    <div class="student-info-wrapper">
+                        <div class="profile-avatar" style="background: ${avatarBg};">${escapeHtml(initials)}</div>
+                        <div class="student-text">
+                            <span class="patient-name">${escapeHtml(log.patientName)}</span>
+                            <span class="patient-id-text">${displayPatientId}</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="email-cell-reduced">${escapeHtml(log.email)}</td>
+                <td>${courseDept}</td>
+                <td class="service-cell-reduced">${escapeHtml(log.serviceType)}</td>
+                <td class="completion-time-cell">${escapeHtml(log.completionTime)}</td>
+                <td><span class="status-badge-completed"><i class="fa-regular fa-circle-check"></i> Completed</span></td>
+                <td style="text-align: center;">
+                    <button class="btn-view-details" onclick="openViewModal('${log.id}')"><i class="fa-regular fa-eye"></i> View</button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+    
+    function renderPaginationControls() {
+        const container = document.getElementById('paginationControlsTop');
+        if (!container) return;
+        const totalItems = currentDisplayList.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+        
+        let html = `<button class="pagination-btn" id="prevPageBtn" ${currentPage === 1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-left"></i> Prev</button>`;
+        const maxVisible = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+        if (endPage - startPage + 1 < maxVisible) startPage = Math.max(1, endPage - maxVisible + 1);
+        
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<button class="pagination-btn page-number ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`;
+        }
+        html += `<button class="pagination-btn" id="nextPageBtn" ${currentPage === totalPages ? 'disabled' : ''}>Next <i class="fa-solid fa-chevron-right"></i></button>`;
+        container.innerHTML = html;
+        
+        document.getElementById('prevPageBtn')?.addEventListener('click', () => goToPage(currentPage - 1));
+        document.getElementById('nextPageBtn')?.addEventListener('click', () => goToPage(currentPage + 1));
+        document.querySelectorAll('.page-number').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const page = parseInt(btn.dataset.page);
+                if (!isNaN(page)) goToPage(page);
+            });
+        });
+    }
+    
+    function goToPage(page) {
+        const totalPages = Math.max(1, Math.ceil(currentDisplayList.length / ITEMS_PER_PAGE));
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderTableBody();
+        renderPaginationControls();
+    }
+    
+    // Sorting handler
+    function initSorting() {
+        const headers = document.querySelectorAll('.sortable-header');
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const sortField = header.getAttribute('data-sort');
+                if (!sortField) return;
+                let newDirection = 'asc';
+                if (currentSort.field === sortField && currentSort.direction === 'asc') {
+                    newDirection = 'desc';
+                }
+                currentSort = { field: sortField, direction: newDirection };
+                headers.forEach(h => {
+                    h.classList.remove('asc', 'desc');
+                    const iconSpan = h.querySelector('.sort-icon');
+                    if (iconSpan) iconSpan.innerHTML = '<i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i>';
+                });
+                header.classList.add(newDirection);
+                const iconSpan = header.querySelector('.sort-icon');
+                if (iconSpan) {
+                    if (newDirection === 'asc') iconSpan.innerHTML = '<i class="fa-solid fa-sort-up" style="opacity:1;"></i><i class="fa-solid fa-sort-down" style="opacity:0.3;"></i>';
+                    else iconSpan.innerHTML = '<i class="fa-solid fa-sort-up" style="opacity:0.3;"></i><i class="fa-solid fa-sort-down" style="opacity:1;"></i>';
+                }
+                currentDisplayList = getFilteredList();
+                currentPage = 1;
+                renderTableBody();
+                renderPaginationControls();
+                updateTotalCounterFunctionality();  // update counter after sorting (filtered count changes)
+            });
+        });
+    }
+    
+    // View Modal Logic
+    let viewModal;
+    window.openViewModal = function(logId) {
+        const record = completedLogsList.find(l => l.id === logId);
+        if (!record) return;
+        const modalBody = document.getElementById('modalDetailsContent');
+        modalBody.innerHTML = `
+            <div class="mb-3 pb-2 border-bottom"><strong><i class="fa-regular fa-user"></i> Patient:</strong> ${escapeHtml(record.patientName)}</div>
+            <div class="mb-3 pb-2 border-bottom"><strong><i class="fa-regular fa-id-card"></i> Patient ID:</strong> ${escapeHtml(record.patientId)}</div>
+            <div class="mb-3 pb-2 border-bottom"><strong><i class="fa-regular fa-envelope"></i> Email:</strong> ${escapeHtml(record.email)}</div>
+            <div class="mb-3 pb-2 border-bottom"><strong><i class="fa-regular fa-building"></i> Course & Dept:</strong> ${escapeHtml(record.department)} (${escapeHtml(record.courseYear)})</div>
+            <div class="mb-3 pb-2 border-bottom"><strong><i class="fa-solid fa-stethoscope"></i> Service:</strong> ${escapeHtml(record.serviceType)}</div>
+            <div class="mb-3 pb-2 border-bottom"><strong><i class="fa-regular fa-clock"></i> Completion Time:</strong> ${escapeHtml(record.completionTime)}</div>
+            <div><strong><i class="fa-regular fa-circle-check"></i> Status:</strong> <span class="badge bg-success">Completed</span></div>
+        `;
+        viewModal.show();
+    };
+    
+    // Search event & reset page
+    function setupEventListeners() {
+        const searchInput = document.getElementById('searchLogsInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                currentPage = 1;
+                currentDisplayList = getFilteredList();
+                renderTableBody();
+                renderPaginationControls();
+                updateTotalCounterFunctionality();  // updates counter on search
+            });
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        viewModal = new bootstrap.Modal(document.getElementById('viewDetailsModal'), { backdrop: true });
+        setupEventListeners();
+        currentDisplayList = sortList(completedLogsList, currentSort.field, currentSort.direction);
+        renderTableBody();
+        renderPaginationControls();
+        initSorting();
+        updateTotalCounterFunctionality(); // initial counter load with full functionality
+        
+        // set default sort indicator on Completion Time (asc)
+        const defaultHeader = document.querySelector('.sortable-header[data-sort="completionTime"]');
+        if (defaultHeader) {
+            defaultHeader.classList.add('asc');
+            const iconSpan = defaultHeader.querySelector('.sort-icon');
+            if (iconSpan) iconSpan.innerHTML = '<i class="fa-solid fa-sort-up" style="opacity:1;"></i><i class="fa-solid fa-sort-down" style="opacity:0.3;"></i>';
+        }
+    });
+
+    /* IMPORTANT SCRIPT */
+    if (window.self === window.top) {
+        const currentPagePath = window.location.pathname.split("/").pop();
+        if (currentPagePath && !currentPagePath.includes('studdashboard.html')) {
+             window.location.href = "studdashboard.html?page=studmedicalrecords.html&subpage=" + currentPagePath;
+        }
+    }
+</script>
 </body>
 </html>

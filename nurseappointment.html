@@ -6,259 +6,259 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Appointments | PUPBC CareLink</title>
+    <title>Nurse Appointments | PUPBC CareLink</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --main-form-width: 1150px;
-            --layout-margin-top: 2rem;
+            --main-form-width: 1200px; 
+            --layout-margin-top: 1rem;
             --standard-padding: 1.5rem;
-            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
             --brand-primary: #28313a;      
             --medical-blue: #475867;        
-            --medical-blue-dark: #323e49;
-            --medical-blue-light: #667f94;
             --medical-blue-soft: rgba(71, 88, 103, 0.08); 
-            --white: #ffffff;
             --text-main: #28313a;          
             --text-muted: #5c7285;     
             --clay-bg: #f4f7f6;
+            --form-bg-color: #ffffff;
+            --form-border-radius: 10px;            
+            --form-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            
+            --app-height-fs: 100vh;
+            --app-height-min: 600px;
+            --app-height-fit: auto;
         }
 
-        html {
-            overflow-y: scroll; 
-            scrollbar-gutter: stable;
-        }
-	    body {
-            min-height: 101vh;
+        html { 
+            overflow-y: auto; 
+            scrollbar-gutter: stable; 
+            height: auto; 
         }
         
         body {
+            min-height: 100vh;
+            height: auto;
             font-family: 'Poppins', sans-serif;
             background-color: var(--clay-bg);
+            margin: 0;
             padding: var(--layout-margin-top) 0;
-            color: var(--text-main);
             display: flex;
             justify-content: center;
+            color: var(--text-main);
         }
 
         .floating-form-container {
             width: 95%;
             max-width: var(--main-form-width);
-            background: var(--white);
-            border-radius: 20px;
+            min-height: var(--app-height-min);
+            height: var(--app-height-fit);
+            background: var(--form-bg-color);
+            border-radius: var(--form-border-radius);
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            border: var(--border-subtle);
+            box-shadow: var(--form-box-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* --- NAVIGATION TAB HEADER --- */
         .nav-header-tab {
             background-color: var(--brand-primary);
             padding: 0 var(--standard-padding);
             display: flex;
             align-items: center;
             height: 60px;
+            flex-shrink: 0;
         }
 
-        .nav-header-tab h5 {
-            color: rgba(255, 255, 255, 0.5);
-            transition: color 0.3s ease;
-            margin: 0;
-            font-weight: 600;
-            font-size: 1.1rem;
-            position: relative;
-            padding: 10px 0;
-            cursor: default;
-        }
-     	.nav-header-tab h5:hover {
-            color: #ffffff;
-        }    
-        .form-content {
-            padding: var(--standard-padding);
-        }
-
-        /* --- SEARCH & ACTIONS (Aligned to Right) --- */
-        .action-row {
+        .nav-tabs-inline {
             display: flex;
-            justify-content: flex-end; /* I-align sa kanan */
+            gap: 1.5rem; 
+            margin: 0;
+            padding: 0;
+            height: 100%;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: var(--border-subtle);
         }
 
-        .search-box {
-            background: var(--clay-bg);
-            border: 1px solid rgba(0,0,0,0.05);
-            border-radius: 10px;
-            padding: 8px 15px;
-            width: 280px;
-            transition: 0.3s;
+        .nav-link-tab {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem; 
+            opacity: 0.6; 
+            transition: 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
         }
 
-        .search-box:focus {
-            outline: none;
-            border-color: var(--medical-blue-light);
-            background: var(--white);
-            box-shadow: 0 0 0 3px var(--medical-blue-soft);
+        .nav-link-tab:hover {
+            opacity: 0.9;
+            color: #ffffff;
         }
 
-        /* --- TABLE STYLING --- */
-        .table-custom {
+        .nav-link-tab.active {
+            opacity: 1; 
+            color: #ffffff !important;
+        }
+
+        .profile-body {
+            flex-grow: 1;
+            display: flex;
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
+            background: var(--form-bg-color);
+            padding: 0;
+            overflow: visible;
         }
 
-        .table-custom thead th {
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            padding: 10px 15px;
+        #appointment-frame {
+            width: 100%;
+            flex-grow: 1;
+            min-height: 500px;
             border: none;
-        }
-
-        .table-custom tbody tr {
-            background: var(--white);
-            transition: 0.2s;
-        }
-
-        .table-custom tbody tr:hover {
-            background: var(--medical-blue-soft);
-        }
-
-        .table-custom td {
-            padding: 15px;
-            vertical-align: middle;
-            border-top: var(--border-subtle);
-            border-bottom: var(--border-subtle);
-        }
-
-        .table-custom td:first-child { border-left: var(--border-subtle); border-radius: 10px 0 0 10px; }
-        .table-custom td:last-child { border-right: var(--border-subtle); border-radius: 0 10px 10px 0; }
-
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .status-pending { background: #fff4e5; color: #b7791f; }
-        .status-completed { background: #e6fffa; color: #234e52; }
-        .status-cancelled { background: #fff5f5; color: #9b2c2c; }
-
-        .patient-name {
-            font-weight: 600;
-            color: var(--medical-blue-dark);
+            background: transparent;
             display: block;
         }
 
-        .action-btn {
-            color: var(--medical-blue);
-            background: var(--clay-bg);
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            transition: 0.2s;
-        }
-
-        .action-btn:hover {
-            background: var(--brand-primary);
-            color: white;
-        }
-
-        .btn-medical {
-            background-color: var(--brand-primary);
-            color: white;
-            border-radius: 8px;
-            padding: 8px 20px;
-            border: none;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .btn-medical:hover {
-            background-color: var(--medical-blue-dark);
-            color: white;
-            transform: translateY(-1px);
+        @media (max-width: 768px) {
+            .nav-tabs-inline { gap: 1rem; }
+            .nav-link-tab { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="floating-form-container">
-        
         <nav class="nav-header-tab">
-            <h5>Daily Appointments</h5>
+            <div class="nav-tabs-inline" id="appointmentTabs">
+                <a href="nurseappointmenturgent.html" data-tab="urgent" class="nav-link-tab active">
+                    <span>Urgent Appointments</span>
+                </a>
+                <a href="nurseappointmentpending.html" data-tab="pending" class="nav-link-tab">
+                    <span>Pending Appointments</span>
+                </a>
+                <a href="nurseappointmentlist.html" data-tab="all" class="nav-link-tab">
+                    <span>Appointment History</span>
+                </a> 
+            </div>
         </nav>
 
-        <div class="form-content">
-            
-            <div class="action-row">
-                <div class="d-flex gap-2">
-                    <input type="text" class="search-box" placeholder="Search patient name...">
-                    <button class="btn-medical shadow-sm">
-                        <i class="fa-solid fa-plus me-2"></i> New Appointment
-                    </button>
-                </div>
-            </div>
-
-            <div class="table-responsive">
-                <table class="table table-custom">
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Patient Details</th>
-                            <th>Service Type</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="fw-bold">08:30 AM</span></td>
-                            <td>
-                                <span class="patient-name">Mark Anthony Sy</span>
-                                <small class="text-muted">ID: STUD-2024-0552</small>
-                            </td>
-                            <td>Regular Check-up</td>
-                            <td><span class="status-badge status-completed">Completed</span></td>
-                            <td>
-                                <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
-                                <button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="fw-bold">10:15 AM</span></td>
-                            <td>
-                                <span class="patient-name">Maria Clara</span>
-                                <small class="text-muted">ID: FAC-2021-0012</small>
-                            </td>
-                            <td>Lab Result Review</td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td>
-                                <button class="action-btn"><i class="fa-solid fa-eye"></i></button>
-                                <button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <div class="profile-body">
+            <iframe src="nurseappointmenturgent.html" name="appointment-frame" id="appointment-frame"></iframe>
+        </div>        
     </div>
 
-<script>
-    if (window.self === window.top) {
-        const currentPage = window.location.pathname.split("/").pop();
-        window.location.href = "nursedashboard.html?page=" + currentPage;
-    }
-</script>
+    <script>
+        /**
+         * FUNCTION #1: SECURITY REDIRECT (LAYOUT PROTECTION)
+         * GINAGAWA: Sinisiguro na ang page ay laging nakabukas sa loob ng Dashboard.
+         */
+        if (window.self === window.top) {
+            const currentPage = window.location.pathname.split("/").pop();
+            const urlParams = new URLSearchParams(window.location.search);
+            const sub = urlParams.get('subpage') || 'nurseappointmenturgent.html';
+            
+            window.location.href = "nursedashboard.html?page=" + currentPage + "&subpage=" + sub;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.nav-link-tab');
+            const iframe = document.getElementById('appointment-frame');
+
+            /**
+             * FUNCTION #2: TAB SWITCHING LOGIC
+             * GINAGAWA: Pinapalitan ang src ng iframe base sa data-tab ID.
+             */
+            function switchTab(tabId) {
+                const mapping = {
+                    'urgent': 'nurseappointmenturgent.html',
+                    'pending': 'nurseappointmentpending.html',
+                    'all': 'nurseappointmentlist.html'
+                };
+
+                const iframeSrc = mapping[tabId] || 'nurseappointmenturgent.html';
+                iframe.src = iframeSrc;
+                
+                tabs.forEach(t => {
+                    t.classList.remove('active');
+                    if (t.getAttribute('data-tab') === tabId) t.classList.add('active');
+                });
+            }
+
+            /**
+             * FUNCTION #3: INITIAL URL STATE CHECKER (DEEP LINKING)
+             * GINAGAWA: Binabasa ang URL ng Dashboard para i-load ang tamang sub-page sa start.
+             */
+            let activeSub = 'urgent';
+            try {
+                if (window.parent !== window.self) {
+                    const parentParams = new URLSearchParams(window.parent.location.search);
+                    const parentSubpage = parentParams.get('subpage');
+                    
+                    if (parentSubpage) {
+                        if (parentSubpage.includes('urgent')) activeSub = 'urgent';
+                        else if (parentSubpage.includes('pending')) activeSub = 'pending';
+                        else if (parentSubpage.includes('list')) activeSub = 'all';
+                    }
+                }
+            } catch(e) { activeSub = 'urgent'; }
+            
+            switchTab(activeSub);
+
+            /**
+             * FUNCTION #4: TAB CLICK EVENT HANDLER
+             * GINAGAWA: Bina-bind ang click event sa tabs para sa seamless navigation.
+             */
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    if (!e.ctrlKey && !e.metaKey) {
+                        e.preventDefault();
+                        const tabId = this.getAttribute('data-tab');
+                        switchTab(tabId);
+                        
+                        try {
+                            if (window.parent !== window.self) {
+                                const subFile = this.getAttribute('href');
+                                const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                               '?page=nurseappointment.html&subpage=' + subFile;
+                                window.parent.history.replaceState({ path: newURL }, '', newURL);
+                            }
+                        } catch(e) { console.log('URL sync failed'); }
+                    }
+                });
+            });
+
+            /**
+             * FUNCTION #5: IFRAME-TO-PARENT SYNC (AUTO-UPDATE)
+             * GINAGAWA: Nag-uupdate ng tabs at URL kapag nag-navigate sa loob ng iframe.
+             */
+            iframe.addEventListener('load', function() {
+                try {
+                    const iframeSrc = iframe.contentWindow.location.pathname.split('/').pop();
+                    let activeTabId = '';
+                    
+                    if (iframeSrc.includes('urgent')) activeTabId = 'urgent';
+                    else if (iframeSrc.includes('pending')) activeTabId = 'pending';
+                    else if (iframeSrc.includes('list')) activeTabId = 'all';
+                    
+                    if (activeTabId) {
+                        tabs.forEach(t => {
+                            t.classList.remove('active');
+                            if (t.getAttribute('data-tab') === activeTabId) t.classList.add('active');
+                        });
+                        
+                        if (window.parent !== window.self) {
+                            const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                           '?page=nurseappointment.html&subpage=' + iframeSrc;
+                            window.parent.history.replaceState({ path: newURL }, '', newURL);
+                        }
+                    }
+                } catch(e) { }
+            });
+        });
+    </script>
 </body>
 </html>

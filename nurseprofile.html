@@ -14,256 +14,242 @@
 
     <style>
         :root {
-            /* --- Main Layout & Dimensions --- */
-            --main-form-width: 1150px;
-            --layout-margin-top: 2rem;
+            --main-form-width: 1200px; 
+            --layout-margin-top: 1rem;
             --standard-padding: 1.5rem;
-            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
-            
-            /* --- Colors --- */
             --brand-primary: #28313a;      
             --medical-blue: #475867;        
-            --medical-blue-dark: #323e49;
-            --medical-blue-light: #667f94;
+            --medical-blue-dark: #1a2127; 
             --medical-blue-soft: rgba(71, 88, 103, 0.08); 
-            --white: #ffffff;
             --text-main: #28313a;          
             --text-muted: #5c7285;     
             --clay-bg: #f4f7f6;
-
-            /* --- Form Container --- */
             --form-bg-color: #ffffff;
-            --form-border-radius: 20px;           
+            --form-border-radius: 10px;            
             --form-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-            --form-border: 1px solid rgba(0, 0, 0, 0.05);
-            
-            /* --- Profile Specific --- */
-            --profile-img-size: 120px;
+
+            --app-height-fs: 100vh;
+            --app-height-min: 1290px; /* 600 */
+            --app-height-fit: auto;
         }
 
-        html {
-            overflow-y: scroll; 
-            scrollbar-gutter: stable;
-        }
+        html { overflow-y: auto; scrollbar-gutter: stable; height: auto; }
         
         body {
-            min-height: 101vh;
+            min-height: 100vh;
             font-family: 'Poppins', sans-serif;
             background-color: var(--clay-bg);
+            margin: 0;
             padding: var(--layout-margin-top) 0;
-            color: var(--text-main);
             display: flex;
             justify-content: center;
-            margin: 0;
+            color: var(--text-main);
         }
 
-        /* --- MAIN FLOATING FORM LAYOUT (Matches nurseappointments.html) --- */
         .floating-form-container {
             width: 95%;
             max-width: var(--main-form-width);
+            min-height: var(--app-height-min);
+            height: var(--app-height-fit);
             background: var(--form-bg-color);
             border-radius: var(--form-border-radius);
             overflow: hidden;
             box-shadow: var(--form-box-shadow);
-            border: var(--form-border);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* ============================================= */
-        /* NAVIGATION HEADER - EXACTLY MATCHES NURSEAPPOINTMENTS.HTML */
-        /* ============================================= */
         .nav-header-tab {
             background-color: var(--brand-primary);
             padding: 0 var(--standard-padding);
             display: flex;
             align-items: center;
             height: 60px;
+            flex-shrink: 0;
         }
 
-        .nav-header-tab h5 {
-            color: rgba(255, 255, 255, 0.5);
-            transition: color 0.3s ease;
+        .nav-tabs-inline {
+            display: flex;
+            gap: 2rem; 
             margin: 0;
-            font-weight: 600;
-            font-size: 1.1rem;
-            position: relative;
-            padding: 10px 0;
-            cursor: default;
+            padding: 0;
+            height: 100%;
+            align-items: center;
         }
-        
-        .nav-header-tab h5:hover {
+
+        .nav-link-tab {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem; 
+            opacity: 0.6; 
+            transition: 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-link-tab:hover {
+            opacity: 0.9;
             color: #ffffff;
         }
 
-        /* --- CONTENT AREA (Matches form-content from appointments) --- */
-        .form-content {
-            padding: var(--standard-padding);
+        .nav-link-tab.active {
+            opacity: 1; 
+            color: #ffffff !important;
         }
 
-        /* --- Profile Specific Styling (Preserved from original but enhanced) --- */
-        .profile-avatar-large {
-            width: var(--profile-img-size);
-            height: var(--profile-img-size);
-            background: var(--medical-blue-soft);
-            border-radius: 50%;
+        .profile-body {
+            flex-grow: 1;
+            background: #ffffff;
+            position: relative;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3.5rem;
-            color: var(--medical-blue);
-            border: 2px solid var(--medical-blue-light);
-            margin: 0 auto 20px;
         }
 
-        /* --- DATA FIELDS (Enhanced to match appointment table styling) --- */
-        .info-group {
-            margin-bottom: 25px;
-        }
-
-        .info-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .info-value {
-            font-size: 1.05rem;
-            font-weight: 500;
-            color: var(--brand-primary);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding-bottom: 5px;
-        }
-
-        .badge-specialty {
-            background: var(--medical-blue-soft);
-            color: var(--medical-blue);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid rgba(71, 88, 103, 0.2);
-        }
-
-        /* --- BUTTON STYLING (Matches btn-medical from appointments) --- */
-        .edit-profile-btn {
-            background-color: var(--brand-primary);
-            color: white;
-            border-radius: 8px;
-            padding: 8px 20px;
+        #profile-frame {
+            width: 100%;
+            flex-grow: 1;
             border: none;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            background: transparent;
+            display: block;
+            min-height: 500px;
         }
 
-        .edit-profile-btn:hover {
-            background-color: var(--medical-blue-dark);
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        .section-title {
-            color: var(--medical-blue-dark);
-            font-weight: 600;
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.2rem;
-        }
-
-        /* --- Responsive adjustments (Matches appointments page) --- */
         @media (max-width: 768px) {
-            .form-content {
-                padding: 1rem;
-            }
-            .edit-profile-btn {
-                justify-content: center;
-                width: 100%;
-            }
-            .profile-avatar-large {
-                margin-bottom: 15px;
-            }
+            .nav-tabs-inline { gap: 1rem; }
+            .nav-link-tab { font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="floating-form-container">
-        
-        <!-- NAVBAR HEADER - EXACTLY MATCHES NURSEAPPOINTMENTS.HTML STRUCTURE -->
         <nav class="nav-header-tab">
-            <h5>Staff Profile</h5>
+            <div class="nav-tabs-inline" id="profileTabs">
+                <a href="nurseprofileview.html" data-tab="view" class="nav-link-tab active">
+                    <span>View Profile</span>
+                </a>
+<!--                 <a href="nurseprofileedit.html" data-tab="edit" class="nav-link-tab">
+                    <span>Edit Details</span>
+                </a>
+                <a href="nurseprofilesettings.html" data-tab="settings" class="nav-link-tab">
+                    <span>Account Settings</span>
+                </a> -->
+            </div>
         </nav>
 
-        <div class="form-content">
-            <div class="row">
-                <div class="col-md-4 text-center border-end">
-                    <div class="profile-avatar-large">
-                        <i class="fa-solid fa-user-nurse"></i>
-                    </div>
-                    <h4 class="fw-bold mb-1">Jane Doe</h4>
-                    <div class="mb-3">
-                        <span class="badge-specialty">Registered Nurse (RN)</span>
-                    </div>
-                    <p class="text-muted small">Member since June 2023</p>
-                    
-                    <button class="edit-profile-btn">
-                        <i class="fa-solid fa-pen-to-square me-2"></i> Edit Profile
-                    </button>
-                </div>
-
-                <div class="col-md-8 ps-md-5">
-                    <h5 class="section-title">Professional Information</h5>
-                    <div class="row">
-                        <div class="col-md-6 info-group">
-                            <span class="info-label">Employee ID</span>
-                            <div class="info-value">NURSE-2026-001</div>
-                        </div>
-                        <div class="col-md-6 info-group">
-                            <span class="info-label">Full Name</span>
-                            <div class="info-value">Jane Smith Doe</div>
-                        </div>
-                        <div class="col-md-6 info-group">
-                            <span class="info-label">Email Address</span>
-                            <div class="info-value">j.doe@pup.edu.ph</div>
-                        </div>
-                        <div class="col-md-6 info-group">
-                            <span class="info-label">Phone Number</span>
-                            <div class="info-value">+63 912 345 6789</div>
-                        </div>
-                        <div class="col-md-12 info-group">
-                            <span class="info-label">Department</span>
-                            <div class="info-value">University Health Services Office</div>
-                        </div>
-                        <div class="col-md-6 info-group">
-                            <span class="info-label">Shift Schedule</span>
-                            <div class="info-value">Morning (7:00 AM - 4:00 PM)</div>
-                        </div>
-                        <div class="col-md-6 info-group">
-                            <span class="info-label">License No.</span>
-                            <div class="info-value">PRC-0987654321</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="profile-body">
+            <iframe src="nurseprofileview.html" name="profile-frame" id="profile-frame"></iframe>
+        </div>        
     </div>
 
     <script>
-        // =============================================
-        // ORIGINAL REDIRECT LOGIC - PRESERVED FOR IFRAME INTEGRATION
-        // =============================================
+        /**
+         * FUNCTION #1: SECURITY REDIRECT (LAYOUT PROTECTION)
+         */
         if (window.self === window.top) {
             const currentPage = window.location.pathname.split("/").pop();
-            window.location.href = "nursedashboard.html?page=" + currentPage;
+            const urlParams = new URLSearchParams(window.location.search);
+            const sub = urlParams.get('subpage') || 'nurseprofileview.html';
+            window.location.href = "nursedashboard.html?page=" + currentPage + "&subpage=" + sub;
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.nav-link-tab');
+            const iframe = document.getElementById('profile-frame');
+
+            /**
+             * FUNCTION #2: TAB SWITCHING LOGIC (Profile Tabs)
+             */
+            function switchTab(tabId) {
+                const mapping = {
+                    'view': 'nurseprofileview.html',
+                    'edit': 'nurseprofileedit.html',
+                    'settings': 'nurseprofilesettings.html'
+                };
+
+                const iframeSrc = mapping[tabId] || 'nurseprofileview.html';
+                iframe.src = iframeSrc;
+                
+                tabs.forEach(t => {
+                    t.classList.remove('active');
+                    if (t.getAttribute('data-tab') === tabId) t.classList.add('active');
+                });
+            }
+
+            /**
+             * FUNCTION #3: INITIAL URL STATE CHECKER (DEEP LINKING)
+             */
+            let activeSub = 'view';
+            try {
+                if (window.parent !== window.self) {
+                    const parentParams = new URLSearchParams(window.parent.location.search);
+                    const parentSubpage = parentParams.get('subpage');
+                    
+                    if (parentSubpage) {
+                        if (parentSubpage.includes('view')) activeSub = 'view';
+                        else if (parentSubpage.includes('edit')) activeSub = 'edit';
+                        else if (parentSubpage.includes('settings')) activeSub = 'settings';
+                    }
+                }
+            } catch(e) { 
+                console.log('Using default tab');
+                activeSub = 'view'; 
+            } 
+            
+            switchTab(activeSub);
+
+            /**
+             * FUNCTION #4: TAB CLICK EVENT HANDLER
+             */
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    if (!e.ctrlKey && !e.metaKey) {
+                        e.preventDefault();
+                        const tabId = this.getAttribute('data-tab');
+                        switchTab(tabId);
+                        
+                        try {
+                            if (window.parent !== window.self) {
+                                const subFile = this.getAttribute('href');
+                                const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                               '?page=nurseprofile.html&subpage=' + subFile;
+                                window.parent.history.replaceState({ path: newURL }, '', newURL);
+                            }
+                        } catch(e) { console.warn('URL sync failed'); }
+                    }
+                });
+            });
+
+            /**
+             * FUNCTION #5: IFRAME-TO-PARENT SYNC (AUTO-UPDATE)
+             */
+            iframe.addEventListener('load', function() {
+                try {
+                    const iframeSrc = iframe.contentWindow.location.pathname.split('/').pop();
+                    let activeTabId = '';
+                    
+                    if (iframeSrc.includes('view')) activeTabId = 'view';
+                    else if (iframeSrc.includes('edit')) activeTabId = 'edit';
+                    else if (iframeSrc.includes('settings')) activeTabId = 'settings';
+                    
+                    if (activeTabId) {
+                        tabs.forEach(t => {
+                            t.classList.remove('active');
+                            if (t.getAttribute('data-tab') === activeTabId) t.classList.add('active');
+                        });
+                        
+                        if (window.parent !== window.self) {
+                            const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                           '?page=nurseprofile.html&subpage=' + iframeSrc;
+                            window.parent.history.replaceState({ path: newURL }, '', newURL);
+                        }
+                    }
+                } catch(e) { }
+            });
+        });
     </script>
 </body>
 </html>

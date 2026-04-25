@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Dashboard Overview | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN for the graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --medical-blue: #475867;
+            --medical-blue-dark: #1a2127;
+            --medical-blue-light: #667f94;
+            --medical-blue-soft: rgba(71, 88, 103, 0.08);
+            --clay-bg: #f4f7f6;
+            --white: #ffffff;
+            --text-main: #28313a;
+            --text-muted: #5c7285;
+            --success-green: #28a745;
+            --warning-orange: #f39c12;
+            --danger-red: #e74a3b;
+            
+            /* HEIGHT LOGIC VARIABLES */
+            --app-height-fs: 100vh;
+            --app-height-min: 600px;
+            --app-height-fit: auto;
+        }
+
+        html {
+            overflow-x: hidden;
+            scrollbar-gutter: stable;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--clay-bg);
+            padding: 2rem;
+            color: var(--text-main);
+            min-height: var(--app-height-min);
+            height: var(--app-height-fit);
+        }
+
+        /* --- STAT CARDS (same as original) --- */
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: none;
+            transition: transform 0.3s ease;
+            padding: 35px 20px !important;
+            min-height: 140px !important;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .bg-patients { background: #4e73df; }
+        .bg-appointments { background: #1cc88a; }
+        .bg-lab { background: #f6c23e; }
+        .bg-pharmacy { background: #e74a3b; }
+
+        /* --- CONTENT CARDS --- */
+        .overview-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid rgba(40, 49, 58, 0.05);
+            height: 100%;
+            transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .overview-section:hover {
+            transform: translateY(-3px);
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--medical-blue);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            letter-spacing: -0.2px;
+        }
+        
+        .section-title i {
+            color: var(--pup-maroon);
+            margin-right: 8px;
+        }
+
+        /* --- TIMELINE --- */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: #e9ecef;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 16px;
+        }
+        
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--pup-maroon);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px rgba(156, 12, 32, 0.2);
+        }
+        
+        .timeline-item h6 {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--medical-blue-dark);
+            margin-bottom: 2px;
+        }
+        
+        .timeline-item p {
+            font-size: 0.75rem;
+            margin-bottom: 0;
+            color: var(--text-muted);
+        }
+
+        /* Graph container styling */
+        .graph-container {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        canvas#safetyChart {
+            max-height: 240px;
+            width: 100%;
+        }
+        
+        .graph-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-badge {
+            background: var(--medical-blue-soft);
+            border-radius: 16px;
+            padding: 6px 10px;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .stat-badge .stat-number {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--medical-blue-dark);
+        }
+        
+        .stat-badge .stat-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+        
+        .trend-up {
+            color: var(--success-green);
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+        
+        .trend-down {
+            color: var(--danger-red);
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+        
+        /* Custom grid: 1.2fr and 1fr layout */
+        .custom-dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        /* ========== HIWALAY NA MGA CARD PARA SA DALAWANG CIRCLE INDICATORS ========== */
+        /* Ito yung dalawang magkatabing card sa itaas ng upcoming activity - may sariling form */
+        .circle-cards-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Indibidwal na card ng bawat circle indicator - standalone design */
+        .circle-stat-card-standalone {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 1rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid rgba(71, 88, 103, 0.08);
+            transition: all 0.25s ease;
+        }
+        
+        .circle-stat-card-standalone:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+        
+        /* Circular progress */
+        .circle-progress-md {
+            position: relative;
+            width: 75px;
+            height: 75px;
+            flex-shrink: 0;
+        }
+        
+        .circle-progress-md svg {
+            width: 75px;
+            height: 75px;
+            transform: rotate(-90deg);
+        }
+        
+        .circle-progress-md .circle-bg-md {
+            stroke: #e9ecef;
+            stroke-width: 7;
+            fill: none;
+        }
+        
+        .circle-progress-md .circle-fill-md {
+            stroke-width: 7;
+            fill: none;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.8s ease;
+        }
+        
+        .fill-medicine {
+            stroke: #e74a3b;
+        }
+        
+        .fill-lab {
+            stroke: #4e73df;
+        }
+        
+        .circle-percent-md {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--medical-blue-dark);
+        }
+        
+        /* Right side text content */
+        .circle-stat-info-standalone {
+            flex: 1;
+        }
+        
+        .circle-stat-title-standalone {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--medical-blue-dark);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .circle-stat-title-standalone i {
+            margin-right: 6px;
+        }
+        
+        .circle-stat-value-standalone {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--medical-blue);
+            line-height: 1.2;
+        }
+        
+        .circle-stat-sub-standalone {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        .alert-badge-standalone {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(231, 74, 59, 0.1);
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--danger-red);
+            margin-top: 6px;
+        }
+        
+        .info-badge-standalone {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(78, 115, 223, 0.1);
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #4e73df;
+            margin-top: 6px;
+        }
+        
+        /* RIGHT COLUMN CONTAINER - para sa circle cards + upcoming activity na magkakasunod */
+        .right-column-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0rem;
+        }
+        
+        /* Upcoming activity container */
+        .upcoming-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid rgba(40, 49, 58, 0.05);
+            transition: transform 0.2s ease;
+        }
+        
+        .upcoming-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .upcoming-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .timeline-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .timeline-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .timeline-scroll::-webkit-scrollbar-thumb {
+            background: var(--medical-blue-light);
+            border-radius: 4px;
+        }
+        
+        .upcoming-footer {
+            margin-top: 0.8rem;
+            text-align: center;
+            border-top: 1px solid #edf2f7;
+            padding-top: 10px;
+        }
+        
+        .upcoming-footer small {
+            font-size: 0.7rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .custom-dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .circle-cards-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            body {
+                padding: 1.5rem;
+            }
+            .circle-progress-md {
+                width: 65px;
+                height: 65px;
+            }
+            .circle-progress-md svg {
+                width: 65px;
+                height: 65px;
+            }
+            .circle-stat-value-standalone {
+                font-size: 1.2rem;
+            }
+            .timeline-scroll {
+                max-height: 260px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .stat-card {
+                padding: 15px;
+                gap: 12px;
+            }
+            .stat-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 1.2rem;
+            }
+            .circle-stat-card-standalone {
+                padding: 0.8rem;
+                gap: 0.8rem;
+            }
+            .circle-progress-md {
+                width: 55px;
+                height: 55px;
+            }
+            .circle-progress-md svg {
+                width: 55px;
+                height: 55px;
+            }
+            .circle-percent-md {
+                font-size: 0.85rem;
+            }
+            .circle-stat-value-standalone {
+                font-size: 1rem;
+            }
+            .timeline-scroll {
+                max-height: 280px;
+            }
+        }
+        
+        .overview-section .section-title:first-child {
+            margin-top: 0;
+        }
+        
+        /* Live counter emphasis - subtle pulsing for numbers */
+        @keyframes subtlePulse {
+            0% { opacity: 0.9; transform: scale(1);}
+            100% { opacity: 1; transform: scale(1.02);}
+        }
+        .live-number {
+            transition: all 0.2s ease;
+        }
+        .live-number-updated {
+            animation: subtlePulse 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Stat Cards (LIVE COUNTERS added) -->
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-patients"><i class="fa-solid fa-hospital-user"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0"><span id="totalPatientsCounter" class="live-number">124</span></h4>
+                    <small class="text-muted">Total Patients</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-appointments"><i class="fa-solid fa-calendar-check"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0"><span id="todayApptsCounter" class="live-number">08</span></h4>
+                    <small class="text-muted">Today's Appts</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-lab"><i class="fa-solid fa-vial-circle-check"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0"><span id="labResultsCounter" class="live-number">12</span></h4>
+                    <small class="text-muted">Lab Results</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon bg-pharmacy"><i class="fa-solid fa-pills"></i></div>
+                <div>
+                    <h4 class="fw-bold mb-0"><span id="lowStockCounter" class="live-number">05</span></h4>
+                    <small class="text-muted">Low Stock Meds</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Grid: Graph Section (1.2fr) + Right Column (Circle Cards + Upcoming Activity) -->
+    <div class="custom-dashboard-grid">
+        <!-- LEFT SIDE: GRAPH SECTION - Safety Measures & Prevented Emergencies (nakatayo lang) -->
+        <div class="overview-section">
+            <h5 class="section-title">
+                <i class="fa-solid fa-chart-line"></i> Emergency Prevention Impact
+            </h5>
+            <p class="text-muted small mb-2" style="font-size: 0.7rem;">
+                <i class="fa-regular fa-calendar-alt me-1"></i> Quarterly trends: Reduced emergency cases through proactive safety measures
+            </p>
+            <div class="graph-container">
+                <canvas id="safetyChart" width="400" height="220" style="max-width:100%; height:auto;"></canvas>
+            </div>
+            <div class="graph-stats">
+                <div class="stat-badge">
+                    <div class="stat-number">-32%</div>
+                    <div class="stat-label">YoY Emergency Drop</div>
+                    <small class="trend-down"><i class="fa-solid fa-arrow-down"></i> 32% fewer cases</small>
+                </div>
+                <div class="stat-badge">
+                    <div class="stat-number">147</div>
+                    <div class="stat-label">Prevented Incidents</div>
+                    <small class="trend-up"><i class="fa-solid fa-shield-heart"></i> Safety protocols</small>
+                </div>
+                <div class="stat-badge">
+                    <div class="stat-number">94%</div>
+                    <div class="stat-label">Response Readiness</div>
+                    <small class="trend-up"><i class="fa-solid fa-chart-simple"></i> +12% vs last yr</small>
+                </div>
+            </div>
+            <div class="mt-2 text-muted small" style="border-top: 1px solid #edf2f7; padding-top: 10px; font-size: 0.7rem;">
+                <i class="fa-regular fa-circle-check text-success me-1"></i> 
+                <span>Data reflects prevented emergencies due to regular checkups, vaccination drives, and first-aid training.</span>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: Circle Indicator Cards (may LIVE percentage/line movement) + Upcoming Activity Card -->
+        <div class="right-column-container">
+            <!-- DALAWANG CIRCLE INDICATOR CARDS (may dynamic percentage update at line animation) -->
+            <div class="circle-cards-row">
+                <!-- Medicine Circle Indicator Card -->
+                <div class="circle-stat-card-standalone">
+                    <div class="circle-progress-md">
+                        <svg width="75" height="75" viewBox="0 0 100 100">
+                            <circle class="circle-bg-md" cx="50" cy="50" r="42"></circle>
+                            <circle class="circle-fill-md fill-medicine" id="medicineCircleFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="79.16"></circle>
+                        </svg>
+                        <div class="circle-percent-md" id="medicinePercentText">70%</div>
+                    </div>
+                    <div class="circle-stat-info-standalone">
+                        <div class="circle-stat-title-standalone">
+                            <i class="fa-solid fa-pills" style="color: #e74a3b;"></i> Medicine Stock
+                        </div>
+                        <div class="circle-stat-value-standalone"><span id="medicineStockUnits">124</span> <span style="font-size: 0.8rem;">units</span></div>
+                        <div class="circle-stat-sub-standalone">Essential meds availability</div>
+                        <div class="alert-badge-standalone" id="medicineAlertBadge">
+                            <i class="fa-solid fa-exclamation-triangle"></i> <span id="lowStockAlertCount">5</span> low stock alerts
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Laboratory Circle Indicator Card -->
+                <div class="circle-stat-card-standalone">
+                    <div class="circle-progress-md">
+                        <svg width="75" height="75" viewBox="0 0 100 100">
+                            <circle class="circle-bg-md" cx="50" cy="50" r="42"></circle>
+                            <circle class="circle-fill-md fill-lab" id="labCircleFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="52.77"></circle>
+                        </svg>
+                        <div class="circle-percent-md" id="labPercentText">80%</div>
+                    </div>
+                    <div class="circle-stat-info-standalone">
+                        <div class="circle-stat-title-standalone">
+                            <i class="fa-solid fa-microscope" style="color: #4e73df;"></i> Lab Turnaround
+                        </div>
+                        <div class="circle-stat-value-standalone"><span id="labTurnaroundHours">24</span><span style="font-size: 0.8rem;"> hrs</span></div>
+                        <div class="circle-stat-sub-standalone">Results within 24hrs</div>
+                        <div class="info-badge-standalone" id="labPendingBadge">
+                            <i class="fa-regular fa-clock"></i> <span id="pendingResultsCount">12</span> pending results
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- UPCOMING ACTIVITY CARD (unchanged) -->
+            <div class="upcoming-card">
+                <h5 class="section-title" style="margin-bottom: 1rem;">
+                    <i class="fa-regular fa-clock me-2"></i> Upcoming Activity
+                </h5>
+                
+                <div class="upcoming-content">
+                    <div class="timeline-scroll">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">09:00 AM - Patient Check-up</h6>
+                                <p class="text-muted small">John Smith - Physical Examination for Sports</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">10:30 AM - Laboratory Review</h6>
+                                <p class="text-muted small">Review CBC results for 3 students from Engineering Dept.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">01:00 PM - Faculty Consultation</h6>
+                                <p class="text-muted small">Maria Clara - Follow-up on hypertension meds</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">03:30 PM - Inventory Audit</h6>
+                                <p class="text-muted small">Weekly check of first-aid supplies and paracetamol stock.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h6 class="fw-bold mb-1">04:45 PM - Emergency Drill Review</h6>
+                                <p class="text-muted small">Post-drill analysis with safety committee.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="upcoming-footer">
+                        <small class="text-muted"><i class="fa-regular fa-bell"></i> 5 upcoming tasks this week</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ======================== LIVE COUNTERS & CIRCLE INDICATOR ANIMATION ========================
+        // Preserve original anti-direct access logic
+        if (window.self === window.top) {
+            const currentPage = window.location.pathname.split("/").pop();
+            if (!currentPage.includes('nursedashboard.html') && !currentPage.includes('dashboard')) {
+                window.location.href = "nursedashboard.html?page=" + currentPage;
+            }
+        }
+        
+        // Helper: animate number changes (smooth counter and visual pulse)
+        function animateNumber(element, start, end, duration = 500) {
+            if (!element) return;
+            let startTime = null;
+            const updateNumber = (currentTime) => {
+                if (!startTime) startTime = currentTime;
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(1, elapsed / duration);
+                const eased = 1 - Math.pow(1 - progress, 2);
+                const current = Math.floor(start + (end - start) * eased);
+                element.innerText = current;
+                if (progress < 1) {
+                    requestAnimationFrame(updateNumber);
+                } else {
+                    element.innerText = end;
+                    // Add pulse effect
+                    element.classList.add('live-number-updated');
+                    setTimeout(() => element.classList.remove('live-number-updated'), 300);
+                }
+            };
+            requestAnimationFrame(updateNumber);
+        }
+        
+        // Update Circle Progress dynamically (both line stroke and percentage text)
+        function updateCircleProgress(circleElementId, percentTextId, newPercent) {
+            const circle = document.getElementById(circleElementId);
+            const percentSpan = document.getElementById(percentTextId);
+            if (!circle || !percentSpan) return;
+            const radius = 42;
+            const circumference = 2 * Math.PI * radius; // 263.89
+            const offset = circumference - (newPercent / 100) * circumference;
+            circle.style.transition = "stroke-dashoffset 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1)";
+            circle.style.strokeDashoffset = offset;
+            // Animate percentage text
+            let currentPercent = parseInt(percentSpan.innerText);
+            if (isNaN(currentPercent)) currentPercent = 0;
+            const step = (newPercent - currentPercent) / 20;
+            let count = 0;
+            const interval = setInterval(() => {
+                count++;
+                let nextVal = currentPercent + (step * count);
+                if (count >= 20) {
+                    percentSpan.innerText = newPercent + "%";
+                    clearInterval(interval);
+                } else {
+                    percentSpan.innerText = Math.round(nextVal) + "%";
+                }
+            }, 20);
+        }
+        
+        // Simulate live data changes: each interval updates stat cards and circle indicators with random realistic increments/decrements
+        function startLiveUpdates() {
+            // Get DOM elements for stat cards
+            const totalPatientsSpan = document.getElementById('totalPatientsCounter');
+            const todayApptsSpan = document.getElementById('todayApptsCounter');
+            const labResultsSpan = document.getElementById('labResultsCounter');
+            const lowStockSpan = document.getElementById('lowStockCounter');
+            
+            // Medicine circle elements
+            const medicineUnitsSpan = document.getElementById('medicineStockUnits');
+            const lowStockAlertSpan = document.getElementById('lowStockAlertCount');
+            // Lab circle elements
+            const labHoursSpan = document.getElementById('labTurnaroundHours');
+            const pendingResultsSpan = document.getElementById('pendingResultsCount');
+            
+            // Initial values
+            let totalPatients = 124;
+            let todayAppts = 8;
+            let labResults = 12;
+            let lowStockMeds = 5;
+            
+            let medicineUnits = 124;
+            let lowStockAlerts = 5;
+            let labTurnaroundHours = 24;
+            let pendingResults = 12;
+            
+            // Helper to compute medicine percentage based on units (max capacity 200 units, 70% baseline 124/200=62%? but we want dynamic: percent = min(100, (medicineUnits/200)*100) )
+            function computeMedicinePercent(units) {
+                let percent = (units / 200) * 100;
+                percent = Math.min(100, Math.max(0, percent));
+                return Math.round(percent);
+            }
+            
+            // Helper compute lab percent: based on average turnaround efficiency: 24hrs baseline = 80%, faster hours = higher percent, slower = lower. For demo: ideal 12hrs = 100%, 36hrs = 40%
+            function computeLabPercent(hours) {
+                let percent = 100 - ((hours - 12) / 24) * 60;
+                percent = Math.min(98, Math.max(30, percent));
+                return Math.round(percent);
+            }
+            
+            // Initialize circle values
+            let currentMedicinePercent = computeMedicinePercent(medicineUnits);
+            let currentLabPercent = computeLabPercent(labTurnaroundHours);
+            
+            // Set initial circles
+            updateCircleProgress('medicineCircleFill', 'medicinePercentText', currentMedicinePercent);
+            updateCircleProgress('labCircleFill', 'labPercentText', currentLabPercent);
+            
+            // Set intervals every 4 seconds for stat cards, every 5 seconds for circle indicators (staggered)
+            setInterval(() => {
+                // STAT CARDS: simulate realistic changes (+/- small fluctuations)
+                let newTotal = totalPatients + (Math.floor(Math.random() * 5) - 1); // -1 to +3
+                newTotal = Math.max(110, Math.min(145, newTotal));
+                animateNumber(totalPatientsSpan, totalPatients, newTotal, 400);
+                totalPatients = newTotal;
+                
+                let newAppts = todayAppts + (Math.floor(Math.random() * 3) - 1);
+                newAppts = Math.max(3, Math.min(14, newAppts));
+                animateNumber(todayApptsSpan, todayAppts, newAppts, 400);
+                todayAppts = newAppts;
+                
+                let newLabRes = labResults + (Math.floor(Math.random() * 4) - 1);
+                newLabRes = Math.max(5, Math.min(22, newLabRes));
+                animateNumber(labResultsSpan, labResults, newLabRes, 400);
+                labResults = newLabRes;
+                
+                let newLowStock = lowStockMeds + (Math.floor(Math.random() * 2) - 1);
+                newLowStock = Math.max(1, Math.min(9, newLowStock));
+                animateNumber(lowStockSpan, lowStockMeds, newLowStock, 400);
+                lowStockMeds = newLowStock;
+            }, 3800);
+            
+            // Circle indicators live updates (every 4.5 seconds) changing medicine units & lab hours
+            setInterval(() => {
+                // Medicine stock update: units change by -3 to +5, alerts correlate
+                let newUnits = medicineUnits + (Math.floor(Math.random() * 9) - 3);
+                newUnits = Math.max(45, Math.min(195, newUnits));
+                animateNumber(medicineUnitsSpan, medicineUnits, newUnits, 500);
+                medicineUnits = newUnits;
+                
+                // low stock alerts: based on units (if low stock threshold < 60 units then alerts increase)
+                let newAlerts = Math.max(1, Math.min(12, Math.floor((200 - medicineUnits) / 15) + 1));
+                newAlerts = Math.min(12, newAlerts);
+                animateNumber(lowStockAlertSpan, lowStockAlerts, newAlerts, 400);
+                lowStockAlerts = newAlerts;
+                
+                const newMedPercent = computeMedicinePercent(medicineUnits);
+                updateCircleProgress('medicineCircleFill', 'medicinePercentText', newMedPercent);
+                
+                // Lab Turnaround update: hours change between 12 to 36
+                let newHours = labTurnaroundHours + (Math.floor(Math.random() * 5) - 2);
+                newHours = Math.max(12, Math.min(38, newHours));
+                animateNumber(labHoursSpan, labTurnaroundHours, newHours, 500);
+                labTurnaroundHours = newHours;
+                
+                // pending results changes inversely with efficiency
+                let newPending = Math.max(3, Math.min(28, Math.floor(28 - (labTurnaroundHours - 12) * 0.8) + (Math.floor(Math.random() * 4) - 2)));
+                newPending = Math.max(4, Math.min(30, newPending));
+                animateNumber(pendingResultsSpan, pendingResults, newPending, 450);
+                pendingResults = newPending;
+                
+                const newLabPercent = computeLabPercent(labTurnaroundHours);
+                updateCircleProgress('labCircleFill', 'labPercentText', newLabPercent);
+            }, 4700);
+        }
+        
+        // Initialize Chart.js graph (same as original, unchanged)
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('safetyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025'],
+                    datasets: [
+                        {
+                            label: 'Emergency Cases (Actual)',
+                            data: [28, 22, 17, 12],
+                            borderColor: '#e74a3b',
+                            backgroundColor: 'rgba(231, 74, 59, 0.05)',
+                            borderWidth: 2.5,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#e74a3b',
+                            pointBorderColor: '#fff',
+                            pointHoverRadius: 6,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Prevented Incidents (via Safety Measures)',
+                            data: [18, 24, 31, 39],
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.05)',
+                            borderWidth: 2.5,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#28a745',
+                            pointBorderColor: '#fff',
+                            pointHoverRadius: 6,
+                            tension: 0.3,
+                            fill: true,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        tooltip: {
+                            backgroundColor: '#28313a',
+                            titleColor: '#f4f7f6',
+                            bodyColor: '#e0e0e0',
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    let value = context.raw;
+                                    if (context.dataset.label === 'Emergency Cases (Actual)') {
+                                        return `${label}: ${value} cases (↓ ${28 - value} from Q1)`;
+                                    } else {
+                                        return `${label}: ${value} incidents avoided`;
+                                    }
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: { family: 'Poppins', size: 10 },
+                                boxWidth: 10,
+                                usePointStyle: true
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#e9ecef', drawBorder: false },
+                            title: {
+                                display: true,
+                                text: 'Number of Incidents',
+                                font: { family: 'Poppins', size: 9, weight: '500' },
+                                color: '#5c7285'
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Poppins', size: 10 } }
+                        }
+                    },
+                    elements: {
+                        line: {
+                            borderJoin: 'round'
+                        }
+                    }
+                }
+            });
+            
+            // Animate initial circles to correct positions (just in case)
+            function setInitialCircleFill(elementId, percent) {
+                const circle = document.getElementById(elementId);
+                if (!circle) return;
+                const radius = 42;
+                const circumference = 2 * Math.PI * radius;
+                const offset = circumference - (percent / 100) * circumference;
+                circle.style.strokeDasharray = `${circumference}`;
+                circle.style.strokeDashoffset = `${offset}`;
+            }
+            setInitialCircleFill('medicineCircleFill', 70);
+            setInitialCircleFill('labCircleFill', 80);
+            
+            // Start live updates for stat cards + circle indicators
+            startLiveUpdates();
+            
+            // Animation for stat badges (unchanged)
+            const statBadges = document.querySelectorAll('.stat-badge');
+            statBadges.forEach((badge, idx) => {
+                badge.style.opacity = '0';
+                badge.style.transform = 'translateY(8px)';
+                setTimeout(() => {
+                    badge.style.transition = 'all 0.3s ease';
+                    badge.style.opacity = '1';
+                    badge.style.transform = 'translateY(0)';
+                }, 100 + idx * 80);
+            });
+        });
+        
+        // Micro-interaction: timeline hover (unchanged)
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'translateX(4px)';
+                item.style.transition = '0.2s';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'translateX(0)';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Kiosk Walk-in Appointment | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pup-maroon: #9C0C20;
+            --medical-blue: #2C3E50;
+            --clay-bg: #f4f7fc;
+            --clay-shadow: 12px 12px 24px #d5dce3, -8px -8px 20px #ffffff;
+            --clay-soft-shadow: 6px 6px 12px #d1d9e6, -4px -4px 10px #ffffff;
+            --clay-inset: inset 5px 5px 12px #d1d9e6, inset -5px -5px 12px #ffffff;
+            --triage-green-bg: #d4edda;
+            --triage-green-text: #155724;
+            --triage-yellow-bg: #fff3cd;
+            --triage-yellow-text: #856404;
+            --triage-red-bg: #f8d7da;
+            --triage-red-text: #721c24;
+            --signal-red: #dc3545;
+            --signal-green: #28a745;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, rgba(156, 12, 32, 0.88), rgba(28, 38, 48, 0.94)), 
+                        url('https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1920');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .kiosk-master-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(8px);
+            border-radius: 42px;
+            padding: 1.8rem 2.5rem 1.8rem 2.5rem;
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.5);
+            width: 1300px;
+            height: 800px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-header {
+            flex-shrink: 0;
+            margin-bottom: 0.25rem;
+        }
+        
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .qr-logo-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, var(--pup-maroon) 0%, #7a0a1a 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 14px rgba(156,12,32,0.3);
+        }
+        
+        .qr-logo-icon i {
+            font-size: 28px;
+            color: white;
+        }
+        
+        .brand-text h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--pup-maroon);
+            margin-bottom: 0;
+            letter-spacing: -0.5px;
+        }
+        .brand-text p {
+            color: var(--medical-blue);
+            font-weight: 500;
+            font-size: 0.8rem;
+            margin-bottom: 0;
+        }
+
+        .step-breadcrumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.8rem;
+            margin: 1.2rem 0 0.6rem 0;
+            padding: 0.2rem 0;
+            flex-shrink: 0;
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #6c757d;
+        }
+        .step-badge {
+            width: 38px;
+            height: 38px;
+            background: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #5a626e;
+            transition: all 0.2s ease;
+        }
+        .step-item.active .step-badge {
+            background: var(--pup-maroon);
+            color: white;
+            box-shadow: 0 4px 10px rgba(156,12,32,0.3);
+        }
+        .step-item.active .step-text {
+            color: var(--pup-maroon);
+            font-weight: 700;
+        }
+        .step-item.completed .step-badge {
+            background: var(--signal-green);
+            color: white;
+        }
+        .step-item.completed .step-text {
+            color: var(--signal-green);
+        }
+        .step-item.signal-red .step-badge {
+            background: var(--signal-red);
+            color: white;
+            animation: pulseRed 1s ease-in-out infinite;
+        }
+        @keyframes pulseRed {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); box-shadow: 0 0 0 3px rgba(220,53,69,0.3); }
+        }
+        .step-text {
+            font-size: 0.9rem;
+        }
+        .step-connector {
+            font-size: 1rem;
+            color: #adb5bd;
+        }
+        
+        .separator-line-upper {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(156,12,32,0.25), rgba(44,62,80,0.4), rgba(156,12,32,0.25), transparent);
+            border-radius: 4px;
+            margin: 0.3rem 0 0.4rem 0;
+            flex-shrink: 0;
+        }
+        
+        .separator-line-bottom {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(156,12,32,0.25), rgba(44,62,80,0.4), rgba(156,12,32,0.25), transparent);
+            border-radius: 4px;
+            margin: 0.2rem 0 0.1rem 0;
+            flex-shrink: 0;
+        }
+        
+        .main-content-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            overflow: visible;
+        }
+
+        .toast-position-wrapper {
+            position: relative;
+            height: 0;
+            width: 100%;
+        }
+        
+        .toast-popup {
+            position: absolute;
+            top: 6px;
+            right: 20px;
+            width: 380px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out;
+            border-left: 5px solid var(--pup-maroon);
+        }
+        .toast-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .toast-popup.hide-toast {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .toast-header-custom {
+            background: var(--pup-maroon);
+            color: white;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+        .toast-header-custom strong {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toast-close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .toast-close-btn:hover {
+            opacity: 1;
+        }
+        .toast-body-custom {
+            padding: 14px 18px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--medical-blue);
+            background: #fff;
+        }
+
+        .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .custom-modal.show-modal {
+            display: flex;
+        }
+        .modal-content-custom {
+            background: white;
+            border-radius: 28px;
+            width: 380px;
+            max-width: 90%;
+            overflow: hidden;
+            animation: modalFadeIn 0.2s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-header-custom {
+            background: var(--pup-maroon);
+            color: white;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-body-custom {
+            padding: 20px;
+            font-size: 0.9rem;
+            color: var(--medical-blue);
+        }
+        .modal-footer-custom {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: center;
+            border-top: 1px solid #eef2f7;
+        }
+        .modal-btn {
+            background: var(--pup-maroon);
+            border: none;
+            border-radius: 40px;
+            padding: 8px 28px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .single-column-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+        }
+
+        .fixed-step-container {
+            width: 608px;
+            max-width: 100%;
+            background: var(--clay-bg);
+            border-radius: 36px;
+            box-shadow: var(--clay-shadow);
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+            min-height: 504px;
+            height: auto;
+            transition: all 0.2s ease;
+        }
+
+        .step-inner-content {
+            padding: 24px 30px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 14px;
+            flex: 1;
+            justify-content: space-between;
+            min-height: 504px;
+            box-sizing: border-box;
+        }
+
+        #step3Result .step-inner-content {
+            gap: 6px;
+            padding: 18px 30px 22px 30px;
+            min-height: 504px;
+        }
+        
+        .step-content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* ===== ENLARGED STEP 3 CONTENT (approx 5% bigger) ===== */
+        #step3Result .step-content-area {
+            justify-content: flex-start;
+            gap: 12px;
+        }
+        
+        #step3Result .qr-wrapper {
+            transform: scale(1.02);
+            margin: 2px 0 4px 0;
+        }
+        
+        #step3Result .qr-box {
+            width: 163px;
+            height: 163px;
+            padding: 12px;
+            margin: 0 auto;
+            transition: all 0.2s ease;
+        }
+        
+        #step3Result .qr-box canvas,
+        #step3Result .qr-box img {
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 18px;
+        }
+        
+        #step3Result .ticket-details {
+            padding: 12px 22px;
+            margin-top: 4px;
+            width: 100%;
+            border-radius: 28px;
+        }
+        
+        #step3Result .ticket-detail-item {
+            font-size: 0.85rem;
+            padding: 6px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        #step3Result .ticket-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        #step3Result .ticket-value {
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+        
+        #step3Result .ticket-value {
+            background: rgba(156,12,32,0.05);
+            padding: 2px 8px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        
+        #step3Result .step-inner-content {
+            overflow: visible;
+        }
+        
+        #step3Result .step-heading h5 {
+            font-size: 1.08rem;
+            margin-bottom: 4px;
+        }
+        
+        .step3-button-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .compact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+        }
+        
+        .form-field {
+            width: 100%;
+        }
+        
+        /* ===== FIXED: ENHANCED DROPDOWN ARROW SPACING ===== */
+        .kiosk-select, .kiosk-input {
+            background: white;
+            border: none;
+            border-radius: 24px;
+            padding: 11px 28px 11px 20px;  /* Increased right padding for better arrow spacing */
+            width: 100%;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: var(--clay-inset);
+            outline: none;
+            color: var(--medical-blue);
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            appearance: none; /* Removes default arrow to allow custom styling */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239C0C20' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 16px center; /* Proper spacing from right edge */
+            background-size: 18px;
+            transition: all 0.2s ease;
+        }
+        
+        /* Adjust input fields to match the same visual padding but without arrow */
+        .kiosk-input {
+            cursor: default;
+            background-color: #f8f9fa;
+            background-image: none;
+            padding-right: 20px;
+        }
+        
+        /* Ensure select dropdown maintains consistent appearance */
+        .kiosk-select:hover {
+            background-color: #fff;
+        }
+        
+        /* For step 2 select dropdown also gets same treatment */
+        #medicalService, #serviceSpec {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239C0C20' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 18px;
+            padding-right: 36px;
+        }
+        
+        /* Add slight custom arrow offset for better visual alignment */
+        .kiosk-select option {
+            padding: 10px;
+        }
+        
+        /* Keep the original clay inset look but ensure dropdown indicator is well-spaced */
+        .field-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            margin-left: 8px;
+            color: var(--medical-blue);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
+        
+        .hint-message {
+            font-size: 0.65rem;
+            margin-top: 4px;
+            margin-left: 10px;
+            color: #5a6e7c;
+        }
+
+        .auto-triage-container {
+            background: rgba(0,0,0,0.02);
+            border-radius: 20px;
+            padding: 6px 12px;
+            text-align: center;
+            margin-top: 2px;
+        }
+
+        .triage-badge-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            justify-content: center;
+        }
+        .triage-green { background: var(--triage-green-bg); color: var(--triage-green-text); }
+        .triage-yellow { background: var(--triage-yellow-bg); color: var(--triage-yellow-text); }
+        .triage-red { background: var(--triage-red-bg); color: var(--triage-red-text); }
+
+        .qr-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 0;
+        }
+        .qr-box {
+            background: white;
+            border-radius: 28px;
+            padding: 10px;
+            box-shadow: var(--clay-inset);
+            width: 155px;
+            height: 155px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .qr-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: var(--signal-red);
+            text-align: center;
+        }
+        .qr-placeholder i {
+            font-size: 34px;
+            margin-bottom: 2px;
+        }
+        .qr-placeholder span {
+            font-size: 0.68rem;
+            font-weight: 500;
+        }
+        #qrcodeContainer canvas, #qrcodeContainer img {
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 16px;
+        }
+        .ticket-details {
+            background: white;
+            border-radius: 24px;
+            padding: 8px 18px;
+            width: 100%;
+            box-shadow: var(--clay-soft-shadow);
+            margin-top: 0;
+        }
+        .ticket-detail-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            padding: 4px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .ticket-detail-item:last-child {
+            border-bottom: none;
+        }
+        .ticket-label {
+            font-weight: 500;
+            color: #5a6e7c;
+        }
+        .ticket-value {
+            font-weight: 700;
+            color: var(--pup-maroon);
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .btn-kiosk-base {
+            border: none;
+            border-radius: 40px;
+            padding: 10px 24px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            white-space: nowrap;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .btn-kiosk-primary {
+            background: var(--pup-maroon);
+            color: white;
+            box-shadow: 0 6px 14px rgba(156,12,32,0.25);
+        }
+        .btn-kiosk-primary:hover {
+            background: #7e0a1a;
+            box-shadow: 0 8px 18px rgba(156,12,32,0.3);
+        }
+        
+        .btn-kiosk-secondary {
+            background: #e2e8f0;
+            color: var(--medical-blue);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .btn-kiosk-secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        .btn-kiosk-generate {
+            background: var(--signal-green);
+            box-shadow: 0 4px 14px rgba(40,167,69,0.3);
+        }
+        .btn-kiosk-generate:hover {
+            background: #218838;
+        }
+        
+        .btn-kiosk-new-walkin {
+            background: #2C3E50;
+            box-shadow: 0 4px 14px rgba(44,62,80,0.3);
+        }
+        .btn-kiosk-new-walkin:hover {
+            background: #1e2b38;
+        }
+        
+        .action-buttons-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            margin-top: 4px;
+        }
+        
+        .step1-button-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 6px;
+            width: 100%;
+        }
+        
+        .step-heading h5 {
+            font-size: 1.05rem;
+            margin: 0 0 2px 0;
+            font-weight: 700;
+            color: var(--medical-blue);
+        }
+        
+        #step3Result .step-heading h5 {
+            margin-bottom: 0;
+        }
+        
+        .footer-link-area {
+            text-align: center;
+            margin-top: 0.5rem;
+            margin-bottom: 0.2rem;
+            flex-shrink: 0;
+        }
+        .back-link {
+            text-decoration: none;
+            font-weight: 600;
+            color: var(--medical-blue);
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.5);
+            padding: 4px 14px;
+            border-radius: 40px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: rgba(255,255,255,0.8);
+            color: var(--pup-maroon);
+        }
+        
+        @media (max-width: 700px) {
+            .kiosk-master-card { padding: 1rem 1.2rem; width: 95vw; height: 90vh; }
+            .fixed-step-container { width: 95%; min-height: 460px; }
+            .step-inner-content { padding: 16px 18px; min-height: 460px; }
+            #step3Result .step-inner-content { padding: 14px 18px; gap: 5px; }
+            .toast-popup { width: 280px; right: 10px; top: 5px; }
+            .step3-button-row { gap: 12px; flex-wrap: wrap; }
+            .btn-kiosk-base, .step1-button-wrapper .btn-kiosk-primary,
+            .action-buttons-row .btn-kiosk-primary,
+            .action-buttons-row .btn-kiosk-secondary,
+            .step3-button-row .btn-kiosk-primary {
+                min-width: 130px;
+                padding: 8px 12px;
+                font-size: 0.7rem;
+                white-space: normal;
+            }
+            #step3Result .qr-box { width: 140px; height: 140px; }
+            #step3Result .ticket-details { padding: 8px 14px; }
+            #step3Result .ticket-detail-item { font-size: 0.72rem; }
+            .brand-text h1 { font-size: 1.4rem; }
+            .ticket-details { padding: 6px 12px; }
+            .ticket-detail-item { font-size: 0.68rem; padding: 3px 0; }
+            .kiosk-select, .kiosk-input {
+                padding: 10px 28px 10px 16px;
+                background-position: right 12px center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="kiosk-master-card">
+    <div class="brand-header d-flex justify-content-between align-items-center">
+        <div class="logo-wrapper">
+            <div class="qr-logo-icon"><i class="fas fa-qrcode"></i></div>
+            <div class="brand-text">
+                <h1>PUPBC CareLink</h1>
+                <p>Kiosk Walk-in Appointment • Instant Queue Ticket</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="step-breadcrumb">
+        <div class="step-item" id="step1Item"><div class="step-badge" id="step1Badge">1</div><span class="step-text">Nurse & Info</span></div>
+        <div class="step-connector"><i class="fa-solid fa-chevron-right"></i></div>
+        <div class="step-item" id="step2Item"><div class="step-badge" id="step2Badge">2</div><span class="step-text">Service & Triage</span></div>
+        <div class="step-connector"><i class="fa-solid fa-chevron-right"></i></div>
+        <div class="step-item" id="step3Item"><div class="step-badge" id="step3Badge">3</div><span class="step-text">QR & Ticket</span></div>
+    </div>
+    
+    <div class="separator-line-upper"></div>
+
+    <div id="successToast" class="toast-popup">
+        <div class="toast-header-custom">
+            <strong><i class="fa-regular fa-circle-check"></i> Walk-in Confirmed!</strong>
+            <button class="toast-close-btn" onclick="hideToast()">&times;</button>
+        </div>
+        <div class="toast-body-custom" id="toastMessage"></div>
+    </div>
+
+    <div id="customModal" class="custom-modal">
+        <div class="modal-content-custom">
+            <div class="modal-header-custom"><i class="fa-solid fa-circle-exclamation"></i><h3>Notice</h3></div>
+            <div class="modal-body-custom" id="modalMessage"></div>
+            <div class="modal-footer-custom"><button class="modal-btn" onclick="closeModal()">OK</button></div>
+        </div>
+    </div>
+
+    <div class="main-content-wrapper">
+        <div class="single-column-content">
+            <div class="fixed-step-container">
+                <!-- STEP 1 -->
+                <div id="step1Form" class="step-inner-content">
+                    <div class="step-heading"><h5><i class="fa-solid fa-user-nurse me-2"></i> Step 1: Select Nurse</h5></div>
+                    <div class="step-content-area">
+                        <div class="compact-form">
+                            <div class="form-field">
+                                <div class="field-label"><i class="fa-solid fa-stethoscope"></i> Available Doctor / Nurse</div>
+                                <select id="availableNurse" class="kiosk-select">
+                                    <option value="Dr. Maria Santiago (Physician)">Dr. Maria Santiago (Physician)</option>
+                                    <option value="Nurse Emily Rodriguez (NP)">Nurse Emily Rodriguez (NP)</option>
+                                    <option value="Dr. James Cruz (General Doctor)">Dr. James Cruz (General Doctor)</option>
+                                    <option value="Nurse Michael Tan (Staff Nurse)">Nurse Michael Tan (Staff Nurse)</option>
+                                    <option value="Dr. Patricia Lim (Clinic Head)">Dr. Patricia Lim (Clinic Head)</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-label"><i class="fa-regular fa-calendar-alt"></i> Nurse Shift</div>
+                                <input type="text" id="nurseShift" class="kiosk-input" readonly placeholder="Shift will appear here">
+                            </div>
+                            <div class="form-field">
+                                <div class="field-label"><i class="fa-solid fa-clipboard-list"></i> Nurse Duty Status</div>
+                                <input type="text" id="nurseDuty" class="kiosk-input" readonly placeholder="Duty status will appear here">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step1-button-wrapper">
+                        <button class="btn-kiosk-base btn-kiosk-primary" id="nextToStep2Btn"><i class="fa-solid fa-arrow-right"></i> Next: Service Type</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2 -->
+                <div id="step2Form" class="step-inner-content" style="display: none;">
+                    <div class="step-heading"><h5><i class="fa-solid fa-briefcase-medical"></i> Step 2: Service & Appointment Details</h5></div>
+                    <div class="step-content-area">
+                        <div class="compact-form">
+                            <div class="form-field">
+                                <div class="field-label"><i class="fa-solid fa-notes-medical"></i> Medical Service</div>
+                                <select id="medicalService" class="kiosk-select">
+                                    <option value="Medical Certificate">Medical Certificate</option>
+                                    <option value="OJT Requirement">OJT Requirement</option>
+                                    <option value="Consultation">Consultation</option>
+                                    <option value="Vaccination">Vaccination</option>
+                                    <option value="Emergency Care">Emergency Care</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-label"><i class="fa-regular fa-file-lines"></i> Specific Requirement / Reason</div>
+                                <select id="serviceSpec" class="kiosk-select"></select>
+                            </div>
+                            <div class="auto-triage-container">
+                                <div class="field-label justify-content-center"><i class="fa-solid fa-shield-haltered"></i> Auto Triage Level</div>
+                                <div id="triageDisplayBadge" class="triage-badge-display triage-green"><i class="fa-regular fa-circle-check"></i> Green (Non-urgent)</div>
+                                <div class="hint-message text-center" id="triageDescText">Medical certificate / OJT documents are low priority.</div>
+                                <input type="hidden" id="triageLevel" value="green">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-buttons-row">
+                        <button class="btn-kiosk-base btn-kiosk-secondary" id="backToStep1Btn"><i class="fa-solid fa-chevron-left"></i> Back</button>
+                        <button class="btn-kiosk-base btn-kiosk-primary" id="nextToStep3Btn">Proceed to Ticket <i class="fa-solid fa-ticket-alt"></i></button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: ENLARGED QR & DETAILS -->
+                <div id="step3Result" class="step-inner-content" style="display: none;">
+                    <div class="step-heading"><h5><i class="fa-solid fa-qrcode me-2"></i> Step 3: Your QR Code & Walk-in Ticket</h5></div>
+                    <div class="step-content-area">
+                        <div class="qr-wrapper">
+                            <div class="qr-box" id="qrcodeContainer">
+                                <div class="qr-placeholder">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    <span>No QR Code Generated Yet</span>
+                                    <span style="font-size: 0.6rem; color: var(--signal-red);">⚠️ Please generate ticket</span>
+                                </div>
+                            </div>
+                            <div class="ticket-details">
+                                <div class="ticket-detail-item"><span class="ticket-label"><i class="fa-regular fa-hashtag"></i> Appointment ID:</span><span id="appointmentId" class="ticket-value">---</span></div>
+                                <div class="ticket-detail-item"><span class="ticket-label"><i class="fa-solid fa-chart-line"></i> Queue Number:</span><span id="queueNumber" class="ticket-value">---</span></div>
+                                <div class="ticket-detail-item"><span class="ticket-label"><i class="fa-solid fa-gauge-high"></i> Triage:</span><span id="ticketTriage" class="ticket-value">---</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step3-button-row">
+                        <button id="newWalkinBtn" class="btn-kiosk-base btn-kiosk-primary btn-kiosk-new-walkin"><i class="fa-solid fa-rotate-left me-1"></i> Make New Appointment</button>
+                        <button id="generateTicketBtn" class="btn-kiosk-base btn-kiosk-primary btn-kiosk-generate"><i class="fa-solid fa-qrcode me-1"></i> Generate QR & Ticket</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="separator-line-bottom"></div>
+    <div class="footer-link-area"><a href="kioskdashboard.html" class="back-link"><i class="fa-solid fa-arrow-left-long me-1"></i> Back to Dashboard</a></div>
+</div>
+
+<script>
+    const nurseDataMap = {
+        "Dr. Maria Santiago (Physician)": { shift: "Morning (7:00 AM - 3:00 PM)", duty: "On Duty" },
+        "Nurse Emily Rodriguez (NP)": { shift: "Evening (3:00 PM - 11:00 PM)", duty: "On Duty" },
+        "Dr. James Cruz (General Doctor)": { shift: "Morning (7:00 AM - 3:00 PM)", duty: "On Duty" },
+        "Nurse Michael Tan (Staff Nurse)": { shift: "Night (11:00 PM - 7:00 AM)", duty: "Off Duty" },
+        "Dr. Patricia Lim (Clinic Head)": { shift: "Flexible / Administration", duty: "On Duty" }
+    };
+
+    const step1Div = document.getElementById('step1Form');
+    const step2Div = document.getElementById('step2Form');
+    const step3Div = document.getElementById('step3Result');
+    const nextToStep2 = document.getElementById('nextToStep2Btn');
+    const backToStep1 = document.getElementById('backToStep1Btn');
+    const nextToStep3 = document.getElementById('nextToStep3Btn');
+    const newWalkinBtn = document.getElementById('newWalkinBtn');
+    const generateTicketBtn = document.getElementById('generateTicketBtn');
+    
+    const availableNurse = document.getElementById('availableNurse');
+    const nurseShiftInput = document.getElementById('nurseShift');
+    const nurseDutyInput = document.getElementById('nurseDuty');
+    const medicalService = document.getElementById('medicalService');
+    const serviceSpec = document.getElementById('serviceSpec');
+    const triageDisplayBadge = document.getElementById('triageDisplayBadge');
+    const triageDescText = document.getElementById('triageDescText');
+    const triageLevelHidden = document.getElementById('triageLevel');
+    
+    const appointmentIdSpan = document.getElementById('appointmentId');
+    const queueNumberSpan = document.getElementById('queueNumber');
+    const ticketTriageSpan = document.getElementById('ticketTriage');
+    const qrcodeContainer = document.getElementById('qrcodeContainer');
+    
+    const toastDiv = document.getElementById('successToast');
+    const toastMsgSpan = document.getElementById('toastMessage');
+    const modalDiv = document.getElementById('customModal');
+    const modalMsg = document.getElementById('modalMessage');
+    
+    let currentStep = 1;
+    let toastTimeout = null;
+    let currentQueue = Math.floor(Math.random() * 80) + 101;
+    let qrGenerated = false;
+
+    function updateNurseShiftAndDuty() {
+        const selectedNurse = availableNurse.value;
+        const nurseInfo = nurseDataMap[selectedNurse];
+        if (nurseInfo) {
+            nurseShiftInput.value = nurseInfo.shift;
+            nurseDutyInput.value = nurseInfo.duty;
+            nurseDutyInput.style.color = nurseInfo.duty === "Off Duty" ? "#b33c1f" : "var(--medical-blue)";
+        }
+    }
+
+    function showModal(msg) { modalMsg.innerHTML = msg; modalDiv.classList.add('show-modal'); }
+    function closeModal() { modalDiv.classList.remove('show-modal'); }
+    
+    function hideToast() { 
+        if(toastTimeout) clearTimeout(toastTimeout); 
+        toastDiv.classList.add('hide-toast');
+        setTimeout(() => toastDiv.classList.remove('show', 'hide-toast'), 300);
+    }
+    
+    function showToast(msg) { 
+        toastMsgSpan.innerHTML = msg; 
+        toastDiv.classList.remove('hide-toast', 'show');
+        void toastDiv.offsetWidth;
+        toastDiv.classList.add('show'); 
+        if(toastTimeout) clearTimeout(toastTimeout); 
+        toastTimeout = setTimeout(() => hideToast(), 4500); 
+    }
+
+    function updateBreadcrumb() {
+        const step1Item = document.getElementById('step1Item'), step2Item = document.getElementById('step2Item'), step3Item = document.getElementById('step3Item');
+        const step1Badge = document.getElementById('step1Badge'), step2Badge = document.getElementById('step2Badge'), step3Badge = document.getElementById('step3Badge');
+        step1Item.classList.remove('active', 'completed', 'signal-red');
+        step2Item.classList.remove('active', 'completed', 'signal-red');
+        step3Item.classList.remove('active', 'completed', 'signal-red');
+        if(currentStep === 1) { step1Item.classList.add('active'); step1Badge.innerHTML = '1'; step2Badge.innerHTML = '2'; step3Badge.innerHTML = '3'; } 
+        else if(currentStep === 2) { step1Item.classList.add('completed'); step2Item.classList.add('active'); step1Badge.innerHTML = '<i class="fa-solid fa-check"></i>'; step2Badge.innerHTML = '2'; step3Badge.innerHTML = '3'; } 
+        else if(currentStep === 3) { step1Item.classList.add('completed'); step2Item.classList.add('completed'); step1Badge.innerHTML = '<i class="fa-solid fa-check"></i>'; step2Badge.innerHTML = '<i class="fa-solid fa-check"></i>';
+            if (!qrGenerated) { step3Item.classList.add('signal-red'); step3Badge.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>'; } 
+            else { step3Item.classList.add('completed'); step3Badge.innerHTML = '<i class="fa-solid fa-check"></i>'; }
+        }
+    }
+
+    function renderUI() {
+        step1Div.style.display = currentStep === 1 ? 'flex' : 'none';
+        step2Div.style.display = currentStep === 2 ? 'flex' : 'none';
+        step3Div.style.display = currentStep === 3 ? 'flex' : 'none';
+        updateBreadcrumb();
+    }
+
+    function updateTriageByService() {
+        const service = medicalService.value;
+        let triageLevel = 'green', triageLabel = 'Green (Non-urgent)', desc = 'Routine documentation or OJT requirement.';
+        if(service === 'Emergency Care') { triageLevel = 'red'; triageLabel = 'Red (Urgent)'; desc = 'Immediate medical priority required.'; }
+        else if(service === 'Consultation' || service === 'Vaccination') { triageLevel = 'yellow'; triageLabel = 'Yellow (Medium Urgent)'; desc = 'Routine but timely medical attention.'; }
+        triageLevelHidden.value = triageLevel;
+        triageDisplayBadge.classList.remove('triage-green','triage-yellow','triage-red');
+        if(triageLevel === 'green') { triageDisplayBadge.classList.add('triage-green'); triageDisplayBadge.innerHTML = `<i class="fa-regular fa-circle-check"></i> ${triageLabel}`; }
+        else if(triageLevel === 'yellow') { triageDisplayBadge.classList.add('triage-yellow'); triageDisplayBadge.innerHTML = `<i class="fa-solid fa-clock"></i> ${triageLabel}`; }
+        else { triageDisplayBadge.classList.add('triage-red'); triageDisplayBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${triageLabel}`; }
+        triageDescText.innerText = desc;
+    }
+    
+    function updateServiceSpecOptions() {
+        const service = medicalService.value;
+        let options = [];
+        if(service === 'Medical Certificate') options = ['Fit to School', 'Medical Clearance', 'Absence Justification'];
+        else if(service === 'OJT Requirement') options = ['OJT Health Clearance', 'Pre-employment Medical', 'Company Requirement'];
+        else if(service === 'Consultation') options = ['General Consultation', 'Follow-up Check', 'Prescription Refill'];
+        else if(service === 'Vaccination') options = ['Flu Shot', 'HPV Vaccine', 'COVID-19 Booster'];
+        else if(service === 'Emergency Care') options = ['Chest Pain', 'Severe Allergy', 'Injury'];
+        else options = ['General Request'];
+        serviceSpec.innerHTML = '';
+        options.forEach(opt => { const op = document.createElement('option'); op.value = opt; op.textContent = opt; serviceSpec.appendChild(op); });
+        updateTriageByService();
+    }
+    
+    function generateAppointmentId() { const d = new Date(); return `WALK-${d.getFullYear().toString().slice(-2)}${(d.getMonth()+1).toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}-${Math.floor(Math.random()*900+100)}`; }
+    function generateQueueNumber() { currentQueue = (currentQueue % 199) + 101; return `Q-${currentQueue}`; }
+    
+    function generateFinalTicketAndQR() {
+        const aptId = generateAppointmentId();
+        const queue = generateQueueNumber();
+        const nurseVal = availableNurse.value;
+        const nurseShiftVal = nurseShiftInput.value;
+        const nurseDutyVal = nurseDutyInput.value;
+        const serviceVal = medicalService.value;
+        const specVal = serviceSpec.value;
+        const triageVal = triageLevelHidden.value.toUpperCase();
+        
+        appointmentIdSpan.innerText = aptId;
+        queueNumberSpan.innerText = queue;
+        let triageShow = triageVal === 'GREEN' ? 'Green (Non-urgent)' : (triageVal === 'YELLOW' ? 'Yellow (Medium)' : 'Red (Urgent)');
+        ticketTriageSpan.innerText = triageShow;
+        
+        const qrText = `Walk-in | ID: ${aptId} | Nurse: ${nurseVal} | Shift: ${nurseShiftVal} | Duty: ${nurseDutyVal} | Service: ${serviceVal} (${specVal}) | Triage: ${triageVal} | Queue: ${queue}`;
+        
+        qrcodeContainer.innerHTML = '';
+        new QRCode(qrcodeContainer, { text: qrText, width: 150, height: 150, colorDark: "#9C0C20", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.M });
+        
+        let walkins = JSON.parse(localStorage.getItem('pupbc_walkin_appointments') || '[]');
+        walkins.push({ aptId, queue, nurse: nurseVal, shift: nurseShiftVal, duty: nurseDutyVal, service: serviceVal, spec: specVal, triage: triageVal, timestamp: new Date().toISOString() });
+        localStorage.setItem('pupbc_walkin_appointments', JSON.stringify(walkins));
+        
+        qrGenerated = true;
+        updateBreadcrumb();
+        showToast(`✅ Walk-in ticket #${aptId} generated! Queue: ${queue} | Triage: ${triageShow}. Please present QR code.`);
+    }
+    
+    function goToStep2() { 
+        if (nurseDutyInput.value === "Off Duty") showModal("Note: Selected nurse is currently Off Duty. Appointment will still be recorded.");
+        currentStep = 2; renderUI(); 
+    }
+    function goToStep1() { currentStep = 1; renderUI(); hideToast(); qrGenerated = false; }
+    function goToStep3() { 
+        if(medicalService.value) { 
+            currentStep = 3; qrGenerated = false; renderUI(); 
+            qrcodeContainer.innerHTML = `<div class="qr-placeholder"><i class="fa-solid fa-circle-exclamation"></i><span>No QR Code Generated Yet</span><span style="font-size: 0.6rem; color: var(--signal-red);">⚠️ Please generate ticket</span></div>`;
+            appointmentIdSpan.innerText = '---'; queueNumberSpan.innerText = '---'; ticketTriageSpan.innerText = '---';
+        } else showModal("Please select a medical service."); 
+    }
+    function resetWalkin() { currentStep = 1; qrGenerated = false; renderUI(); hideToast(); }
+    
+    nextToStep2.addEventListener('click', goToStep2);
+    backToStep1.addEventListener('click', goToStep1);
+    nextToStep3.addEventListener('click', goToStep3);
+    newWalkinBtn.addEventListener('click', resetWalkin);
+    generateTicketBtn.addEventListener('click', generateFinalTicketAndQR);
+    medicalService.addEventListener('change', () => { updateServiceSpecOptions(); updateTriageByService(); });
+    availableNurse.addEventListener('change', updateNurseShiftAndDuty);
+    
+    updateNurseShiftAndDuty();
+    updateServiceSpecOptions();
+    renderUI();
+    
+    window.closeModal = closeModal;
+    window.hideToast = hideToast;
+</script>
+</body>
+</html>

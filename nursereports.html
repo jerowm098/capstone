@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Nurse Reports | PUPBC CareLink</title>
+    <title>Reports and Analytics | PUPBC CareLink</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,37 +14,29 @@
 
     <style>
         :root {
-            /* --- Main Layout & Dimensions --- */
-            --main-form-width: 1150px;
-            --layout-margin-top: 2rem;
+            --main-form-width: 1200px; 
+            --layout-margin-top: 1rem;
             --standard-padding: 1.5rem;
-            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
-            
-            /* --- Colors --- */
             --brand-primary: #28313a;      
             --medical-blue: #475867;        
-            --medical-blue-dark: #323e49;
-            --medical-blue-light: #667f94;
+            --medical-blue-dark: #1a2127; 
             --medical-blue-soft: rgba(71, 88, 103, 0.08); 
-            --white: #ffffff;
             --text-main: #28313a;          
             --text-muted: #5c7285;     
             --clay-bg: #f4f7f6;
-            
-            /* --- Form Container --- */
             --form-bg-color: #ffffff;
-            --form-border-radius: 20px;           
+            --form-border-radius: 10px;            
             --form-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-            --form-border: 1px solid rgba(0, 0, 0, 0.05);
+
+            --app-height-fs: 100vh;
+            --app-height-min: 600px;
+            --app-height-fit: auto;
         }
 
-        html {
-            overflow-y: scroll; 
-            scrollbar-gutter: stable;
-        }
+        html { overflow-y: auto; scrollbar-gutter: stable; height: auto; }
         
         body {
-            min-height: 101vh;
+            min-height: 100vh;
             font-family: 'Poppins', sans-serif;
             background-color: var(--clay-bg);
             margin: 0;
@@ -54,535 +46,210 @@
             color: var(--text-main);
         }
 
-        /* --- MAIN FLOATING FORM LAYOUT --- */
-        .floating-report-container {
+        .floating-form-container {
             width: 95%;
             max-width: var(--main-form-width);
-            background: var(--white);
-            border-radius: 20px;
+            min-height: var(--app-height-min);
+            height: var(--app-height-fit);
+            background: var(--form-bg-color);
+            border-radius: var(--form-border-radius);
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            border: var(--border-subtle);
+            box-shadow: var(--form-box-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* ============================================= */
-        /* NAVIGATION TAB HEADER - MATCHING nurseappointment.html STYLE */
-        /* ============================================= */
         .nav-header-tab {
             background-color: var(--brand-primary);
             padding: 0 var(--standard-padding);
             display: flex;
             align-items: center;
             height: 60px;
+            flex-shrink: 0;
         }
 
-        /* Tab links styling - directly in navbar header (matching the h5 style but as tabs) */
-        .nav-header-tab .nav-tabs-inline {
+        .nav-tabs-inline {
             display: flex;
-            gap: 2rem;
+            gap: 2rem; 
             margin: 0;
             padding: 0;
             height: 100%;
             align-items: center;
         }
 
-        .nav-header-tab .nav-link-tab {
-            color: rgba(255, 255, 255, 0.5);
-            border: none;
-            padding: 10px 0;
-            font-weight: 600;
-            background: transparent !important;
-            position: relative;
-            transition: 0.3s;
+        .nav-link-tab {
+            color: #ffffff;
             text-decoration: none;
-            font-size: 1rem;
-            display: inline-block;
-            cursor: pointer;
-        }
-
-        .nav-header-tab .nav-link-tab:hover {
-            color: #ffffff !important;
-        }
-
-        .nav-header-tab .nav-link-tab.active {
-            color: #ffffff !important;
-            background: transparent !important;
-        }
-
-        /* --- Content Area --- */
-        .report-content {
-            padding: var(--standard-padding);
-        }
-
-        /* Stats Cards Styling */
-        .stats-card {
-            background: var(--clay-bg);
-            border-radius: 16px;
-            padding: 1.5rem;
-            border-left: 5px solid var(--medical-blue);
-            transition: 0.3s;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-        }
-
-        /* Table Styling */
-        .report-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-        }
-
-        .report-table thead th {
-            color: var(--text-muted);
             font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            padding: 10px 15px;
-            border: none;
-            background: transparent;
-        }
-
-        .report-table tbody tr {
-            background: var(--white);
-            transition: 0.2s;
-        }
-
-        .report-table tbody tr:hover {
-            background: var(--medical-blue-soft);
-        }
-
-        .report-table td {
-            padding: 15px;
-            vertical-align: middle;
-            border-top: var(--border-subtle);
-            border-bottom: var(--border-subtle);
-        }
-
-        .report-table td:first-child { 
-            border-left: var(--border-subtle); 
-            border-radius: 12px 0 0 12px; 
-        }
-        .report-table td:last-child { 
-            border-right: var(--border-subtle); 
-            border-radius: 0 12px 12px 0; 
-        }
-
-        /* Avatar Styling */
-        .avatar-sm {
-            width: 40px;
-            height: 40px;
-            background: var(--clay-bg);
-            border-radius: 50%;
+            font-size: 1.05rem; 
+            opacity: 0.6; 
+            transition: 0.3s ease;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
+            position: relative;
         }
 
-        /* Badge Styling */
-        .badge-outline {
-            border: 1px solid var(--medical-blue);
-            color: var(--medical-blue);
+        .nav-link-tab:hover {
+            opacity: 0.9;
+            color: #ffffff;
+        }
+
+        .nav-link-tab.active {
+            opacity: 1; 
+            color: #ffffff !important;
+        }
+
+        .profile-body {
+            flex-grow: 1;
+            background: #ffffff;
+            position: relative;
+            display: flex;
+        }
+
+        #reports-frame {
+            width: 100%;
+            flex-grow: 1;
+            border: none;
             background: transparent;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            display: block;
+            min-height: 500px;
         }
 
-        /* Status Badges */
-        .status-completed {
-            background: #e6fffa;
-            color: #234e52;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Responsive adjustments */
         @media (max-width: 768px) {
-            .nav-header-tab {
-                padding: 0 1rem;
-            }
-            .nav-header-tab .nav-tabs-inline {
-                gap: 1rem;
-            }
-            .nav-header-tab .nav-link-tab {
-                font-size: 0.85rem;
-                padding: 8px 0;
-            }
-            .report-content {
-                padding: 1rem;
-            }
-            .stats-card {
-                padding: 1rem;
-            }
+            .nav-tabs-inline { gap: 1rem; }
+            .nav-link-tab { font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="floating-report-container">
-        <!-- NAVIGATION TAB HEADER - Matching nurseappointment.html style (icons removed from tabs) -->
+    <div class="floating-form-container">
         <nav class="nav-header-tab">
             <div class="nav-tabs-inline" id="reportTabs">
-                <a href="?subpage=summary" class="nav-link-tab active" data-tab="summary">
-                    Summary Report
+                <a href="nursereportssummary.html" data-tab="summary" class="nav-link-tab active">
+                    <span>Summary Report</span>
                 </a>
-                <a href="?subpage=appointments" class="nav-link-tab" data-tab="appointments">
-                    Appointments Report
-                </a>
-                <a href="?subpage=medications" class="nav-link-tab" data-tab="medications">
-                    Medications Report
-                </a>
+ <!--                <a href="nursereportsappointment.html" data-tab="appointment" class="nav-link-tab">
+                    <span>Appointments</span>
+                </a> -->
+<!--                 <a href="nursereportsmedication.html" data-tab="medication" class="nav-link-tab">
+                    <span>Medications Report</span>
+                </a> -->
             </div>
         </nav>
 
-        <div class="report-content">
-            <!-- Summary Report Tab Content -->
-            <div id="summary-content" class="tab-content-pane active">
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6">
-                        <div class="stats-card">
-                            <small class="text-uppercase fw-bold text-muted">Consultation Success</small>
-                            <div class="d-flex align-items-center mt-2">
-                                <h2 class="fw-bold mb-0" style="color: var(--brand-primary);">124</h2>
-                                <span class="badge bg-success ms-3"><i class="fa-solid fa-arrow-up"></i> 12%</span>
-                            </div>
-                            <p class="text-muted small mt-2 mb-0">Total patients successfully consulted this month.</p>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="stats-card" style="border-left-color: var(--medical-blue-light);">
-                            <small class="text-uppercase fw-bold text-muted">Appointments Assisted</small>
-                            <div class="d-flex align-items-center mt-2">
-                                <h2 class="fw-bold mb-0" style="color: var(--brand-primary);">85</h2>
-                                <span class="badge bg-primary ms-3">Active</span>
-                            </div>
-                            <p class="text-muted small mt-2 mb-0">Total patients assisted with follow-up schedules.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6">
-                        <div class="stats-card" style="border-left-color: #667f94;">
-                            <small class="text-uppercase fw-bold text-muted">Medications Dispensed</small>
-                            <div class="d-flex align-items-center mt-2">
-                                <h2 class="fw-bold mb-0" style="color: var(--brand-primary);">342</h2>
-                                <span class="badge bg-info ms-3"><i class="fa-solid fa-box"></i> Items</span>
-                            </div>
-                            <p class="text-muted small mt-2 mb-0">Total drug units dispensed this month.</p>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="stats-card" style="border-left-color: #475867;">
-                            <small class="text-uppercase fw-bold text-muted">Patient Satisfaction</small>
-                            <div class="d-flex align-items-center mt-2">
-                                <h2 class="fw-bold mb-0" style="color: var(--brand-primary);">96%</h2>
-                                <span class="badge bg-warning ms-3"><i class="fa-solid fa-star"></i> Excellent</span>
-                            </div>
-                            <p class="text-muted small mt-2 mb-0">Based on 156 feedback responses.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-clock-rotate-left me-2"></i>Recent Activity Log</h6>
-                    <div class="table-responsive">
-                        <table class="table report-table">
-                            <thead>
-                                <tr>
-                                    <th class="py-3">Patient Name</th>
-                                    <th class="py-3">Service Type</th>
-                                    <th class="py-3">Status</th>
-                                    <th class="py-3 text-end">Completion Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm me-3">
-                                                <i class="fa-solid fa-user text-muted"></i>
-                                            </div>
-                                            <div>
-                                                <div class="fw-bold">Juan Dela Cruz</div>
-                                                <small class="text-muted">ID: #2026-0551</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge-outline">General Consultation</span></td>
-                                    <td><span class="status-completed"><i class="fa-solid fa-circle-check text-success me-1"></i> Completed</span></td>
-                                    <td class="text-end fw-semibold">10:45 AM</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm me-3">
-                                                <i class="fa-solid fa-user text-muted"></i>
-                                            </div>
-                                            <div>
-                                                <div class="fw-bold">Maria Santos</div>
-                                                <small class="text-muted">ID: #2026-0782</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge-outline">Medication Refill</span></td>
-                                    <td><span class="status-completed"><i class="fa-solid fa-circle-check text-success me-1"></i> Completed</span></td>
-                                    <td class="text-end fw-semibold">11:20 AM</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm me-3">
-                                                <i class="fa-solid fa-user text-muted"></i>
-                                            </div>
-                                            <div>
-                                                <div class="fw-bold">Reynaldo Cruz</div>
-                                                <small class="text-muted">ID: #2026-0934</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge-outline">Lab Result Review</span></td>
-                                    <td><span class="status-completed"><i class="fa-solid fa-circle-check text-success me-1"></i> Completed</span></td>
-                                    <td class="text-end fw-semibold">02:15 PM</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm me-3">
-                                                <i class="fa-solid fa-user text-muted"></i>
-                                            </div>
-                                            <div>
-                                                <div class="fw-bold">Angela Reyes</div>
-                                                <small class="text-muted">ID: #2026-1023</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge-outline">Follow-up Check</span></td>
-                                    <td><span class="status-completed"><i class="fa-solid fa-circle-check text-success me-1"></i> Completed</span></td>
-                                    <td class="text-end fw-semibold">03:45 PM</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Appointments Report Tab Content -->
-            <div id="appointments-content" class="tab-content-pane" style="display: none;">
-                <div class="row g-4 mb-4">
-                    <div class="col-md-4">
-                        <div class="stats-card">
-                            <small class="text-uppercase fw-bold text-muted">Total Appointments</small>
-                            <h2 class="fw-bold mt-2 mb-0" style="color: var(--brand-primary);">156</h2>
-                            <p class="text-muted small mt-2 mb-0">This month</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="stats-card" style="border-left-color: #28a745;">
-                            <small class="text-uppercase fw-bold text-muted">Completed</small>
-                            <h2 class="fw-bold mt-2 mb-0" style="color: #28a745;">124</h2>
-                            <p class="text-muted small mt-2 mb-0">79% completion rate</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="stats-card" style="border-left-color: #ffc107;">
-                            <small class="text-uppercase fw-bold text-muted">Pending</small>
-                            <h2 class="fw-bold mt-2 mb-0" style="color: #ffc107;">32</h2>
-                            <p class="text-muted small mt-2 mb-0">Awaiting confirmation</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-calendar-week me-2"></i>Weekly Appointment Summary</h6>
-                    <div class="table-responsive">
-                        <table class="table report-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Scheduled</th>
-                                    <th>Completed</th>
-                                    <th>Cancelled</th>
-                                    <th>Attendance Rate</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="fw-semibold">Week 1 (Mar 1-7)</td>
-                                    <td>42</td>
-                                    <td>38</td>
-                                    <td>4</td>
-                                    <td><span class="badge bg-success">90%</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">Week 2 (Mar 8-14)</td>
-                                    <td>38</td>
-                                    <td>32</td>
-                                    <td>6</td>
-                                    <td><span class="badge bg-success">84%</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">Week 3 (Mar 15-21)</td>
-                                    <td>45</td>
-                                    <td>36</td>
-                                    <td>9</td>
-                                    <td><span class="badge bg-warning">80%</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">Week 4 (Mar 22-28)</td>
-                                    <td>31</td>
-                                    <td>28</td>
-                                    <td>3</td>
-                                    <td><span class="badge bg-success">90%</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Medications Report Tab Content -->
-            <div id="medications-content" class="tab-content-pane" style="display: none;">
-                <div class="row g-4 mb-4">
-                    <div class="col-md-4">
-                        <div class="stats-card">
-                            <small class="text-uppercase fw-bold text-muted">Total Dispensed</small>
-                            <h2 class="fw-bold mt-2 mb-0" style="color: var(--brand-primary);">342</h2>
-                            <p class="text-muted small mt-2 mb-0">Units this month</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="stats-card" style="border-left-color: #17a2b8;">
-                            <small class="text-uppercase fw-bold text-muted">Unique Drugs</small>
-                            <h2 class="fw-bold mt-2 mb-0" style="color: #17a2b8;">24</h2>
-                            <p class="text-muted small mt-2 mb-0">Different medications</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="stats-card" style="border-left-color: #dc3545;">
-                            <small class="text-uppercase fw-bold text-muted">Low Stock Items</small>
-                            <h2 class="fw-bold mt-2 mb-0" style="color: #dc3545;">3</h2>
-                            <p class="text-muted small mt-2 mb-0">Need reordering</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-chart-simple me-2"></i>Top Dispensed Medications</h6>
-                    <div class="table-responsive">
-                        <table class="table report-table">
-                            <thead>
-                                <tr>
-                                    <th>Medication Name</th>
-                                    <th>Category</th>
-                                    <th>Units Dispensed</th>
-                                    <th>Current Stock</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="fw-semibold">Paracetamol 500mg</td>
-                                    <td>Analgesic</td>
-                                    <td>87</td>
-                                    <td><span class="text-success">156 units</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">Amoxicillin 500mg</td>
-                                    <td>Antibiotic</td>
-                                    <td>54</td>
-                                    <td><span class="text-warning">42 units</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">Loperamide 2mg</td>
-                                    <td>Antidiarrheal</td>
-                                    <td>32</td>
-                                    <td><span class="text-success">89 units</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">Omeprazole 20mg</td>
-                                    <td>Antacid</td>
-                                    <td>28</td>
-                                    <td><span class="text-danger">12 units</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold">Cetirizine 10mg</td>
-                                    <td>Antihistamine</td>
-                                    <td>25</td>
-                                    <td><span class="text-success">67 units</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="profile-body">
+            <iframe src="nursereportssummary.html" name="reports-frame" id="reports-frame"></iframe>
+        </div>        
     </div>
 
-<script>
-    if (window.self === window.top) {
-    const currentPage = window.location.pathname.split("/").pop();
-    const urlParams = new URLSearchParams(window.location.search);
-    const sub = urlParams.get('subpage') || 'summary';
-    
-    // Siguraduhin na "nurse dashboard.html" ang filename mo. 
-    // Kung walang space, palitan ng "nursedashboard.html"
-    window.location.href = "nursedashboard.html?page=" + currentPage + "&subpage=" + sub;
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const tabs = document.querySelectorAll('.nav-link-tab');
-        
-        function switchTab(tabId) {
-            // MALI: document.querySelectorAll('.report-section').forEach...
-            // TAMA: Gamitin ang class na nandun sa HTML mo
-            document.querySelectorAll('.tab-content-pane').forEach(s => s.style.display = 'none');
-            
-            // Ipakita ang target
-            const target = document.getElementById(tabId + '-content');
-            if (target) target.style.display = 'block';
-
-            // Update active tab style
-            tabs.forEach(t => {
-                t.classList.remove('active');
-                if (t.getAttribute('data-tab') === tabId) t.classList.add('active');
-            });
+    <script>
+        /**
+         * FUNCTION #1: SECURITY REDIRECT (LAYOUT PROTECTION)
+         */
+        if (window.self === window.top) {
+            const currentPage = window.location.pathname.split("/").pop();
+            const urlParams = new URLSearchParams(window.location.search);
+            const sub = urlParams.get('subpage') || 'nursereportssummary.html';
+            window.location.href = "nursedashboard.html?page=" + currentPage + "&subpage=" + sub;
         }
 
-        // Basahin ang 'subpage' mula sa PARENT URL (Dashboard URL)
-        const parentParams = new URLSearchParams(window.parent.location.search);
-        const activeSub = parentParams.get('subpage') || 'summary';
-        
-        // Initial switch
-        switchTab(activeSub);
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.nav-link-tab');
+            const iframe = document.getElementById('reports-frame');
 
-        // Event listeners para sa manual click
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                if (!e.ctrlKey && !e.metaKey) {
-                    e.preventDefault();
-                    const tabId = this.getAttribute('data-tab');
-                    switchTab(tabId);
+            /**
+             * FUNCTION #2: TAB SWITCHING LOGIC (Updated for 3 Tabs)
+             */
+            function switchTab(tabId) {
+                const mapping = {
+                    'summary': 'nursereportssummary.html',
+                    'appointment': 'nursereportsappointment.html',
+                    'medication': 'nursereportsmedication.html'
+                };
+
+                const iframeSrc = mapping[tabId] || 'nursereportssummary.html';
+                iframe.src = iframeSrc;
+                
+                tabs.forEach(t => {
+                    t.classList.remove('active');
+                    if (t.getAttribute('data-tab') === tabId) t.classList.add('active');
+                });
+            }
+
+            /**
+             * FUNCTION #3: INITIAL URL STATE CHECKER (DEEP LINKING)
+             */
+            let activeSub = 'summary';
+            try {
+                if (window.parent !== window.self) {
+                    const parentParams = new URLSearchParams(window.parent.location.search);
+                    const parentSubpage = parentParams.get('subpage');
                     
-                    // I-update ang Dashboard URL bar nang hindi nagre-refresh
-                    const newURL = window.parent.location.origin + window.parent.location.pathname + 
-                                '?page=nursereports.html&subpage=' + tabId;
-                    window.parent.history.replaceState({ path: newURL }, '', newURL);
+                    if (parentSubpage) {
+                        if (parentSubpage.includes('summary')) activeSub = 'summary';
+                        else if (parentSubpage.includes('appointment')) activeSub = 'appointment';
+                        else if (parentSubpage.includes('medication')) activeSub = 'medication';
+                    }
                 }
+            } catch(e) { 
+                console.log('Using default tab');
+                activeSub = 'summary'; 
+            } 
+            
+            switchTab(activeSub);
+
+            /**
+             * FUNCTION #4: TAB CLICK EVENT HANDLER
+             */
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    if (!e.ctrlKey && !e.metaKey) {
+                        e.preventDefault();
+                        const tabId = this.getAttribute('data-tab');
+                        switchTab(tabId);
+                        
+                        try {
+                            if (window.parent !== window.self) {
+                                const subFile = this.getAttribute('href');
+                                const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                               '?page=nursereports.html&subpage=' + subFile;
+                                window.parent.history.replaceState({ path: newURL }, '', newURL);
+                            }
+                        } catch(e) { console.warn('URL sync failed'); }
+                    }
+                });
+            });
+
+            /**
+             * FUNCTION #5: IFRAME-TO-PARENT SYNC (AUTO-UPDATE)
+             */
+            iframe.addEventListener('load', function() {
+                try {
+                    const iframeSrc = iframe.contentWindow.location.pathname.split('/').pop();
+                    let activeTabId = '';
+                    
+                    if (iframeSrc.includes('summary')) activeTabId = 'summary';
+                    else if (iframeSrc.includes('appointment')) activeTabId = 'appointment';
+                    else if (iframeSrc.includes('medication')) activeTabId = 'medication';
+                    
+                    if (activeTabId) {
+                        tabs.forEach(t => {
+                            t.classList.remove('active');
+                            if (t.getAttribute('data-tab') === activeTabId) t.classList.add('active');
+                        });
+                        
+                        if (window.parent !== window.self) {
+                            const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                           '?page=nursereports.html&subpage=' + iframeSrc;
+                            window.parent.history.replaceState({ path: newURL }, '', newURL);
+                        }
+                    }
+                } catch(e) { }
             });
         });
-        
-    });
-</script>
+    </script>
 </body>
 </html>

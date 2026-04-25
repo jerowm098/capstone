@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Walk-In Appointment | PUPBC CareLink Kiosk</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<style>
+    /* 1. CORE VARIABLES & BACKGROUND */
+    :root {
+        --pup-maroon: #9C0C20;
+        --medical-blue: #475867;
+        --clay-bg: #f0f0f0;
+        --clay-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+        --clay-inset: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+        --success-green: #4BB543;
+        --warning-amber: #f0ad4e;
+        --danger-red: #d9534f;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(rgba(156, 12, 32, 0.85), rgba(13, 20, 26, 0.9)), 
+                    url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1920');
+        background-size: cover;
+        background-attachment: fixed;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; 
+    }
+
+    /* 2. FIXED DIMENSIONS (1300x800) - REMAINS UNCHANGED */
+    .appointment-card {
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(15px);
+        border-radius: 35px;
+        padding: 2rem 3.5rem;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+        width: 1300px;
+        height: 800px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+        border: 1px solid rgba(255,255,255,0.4);
+        box-sizing: border-box;
+        overflow: hidden; 
+    }
+
+    .page-header { 
+        text-align: center;
+        margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
+    }
+    .page-header h2 { 
+        color: var(--pup-maroon); 
+        font-weight: 800; 
+        margin: 0;
+        font-size: 1.8rem; 
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* 4. COMPACT PROGRESS BAR */
+    .progress-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 5px 0;
+        margin-bottom: 10px;
+        margin-top: 5px;
+    }
+
+    .step-circle {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: var(--clay-bg);
+        box-shadow: var(--clay-shadow);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 0.9rem; color: var(--medical-blue);
+        transition: all 0.4s ease;
+    }
+
+    .step-circle.active { background: var(--pup-maroon); color: white; }
+    .step-circle.completed { background: var(--success-green) !important; color: white !important; }
+    .step-line { height: 3px; width: 60px; background: #d1d9e6; border-radius: 2px; }
+
+    /* 5. WIDER STEP CONTENT (SIDE-BY-SIDE) */
+    .steps-wrapper { 
+        flex-grow: 1; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .step-content {
+        background: var(--clay-bg);
+        border-radius: 30px;
+        padding: 40px 60px;
+        box-shadow: var(--clay-shadow);
+        width: 100%;
+        max-width: 1150px;
+        min-height: 520px; 
+        display: none;
+        flex-direction: row; 
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 auto;
+        gap: 60px;
+    }
+
+    .step-content.active { display: flex; animation: fadeIn 0.5s ease; }
+
+    .step-main-visual {
+        flex: 1.2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-right: 2px dashed #d1d9e6;
+        padding-right: 50px;
+    }
+
+    .step-side-controls {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 10px;
+    }
+
+    /* QR & TICKET STYLES */
+    .qr-placeholder {
+        width: 250px;
+        height: 250px;
+        background: rgba(0,0,0,0.05);
+        border: 4px dashed #d1d9e6;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #b0b8c4;
+        margin: 20px auto;
+    }
+
+    #qrcode-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px auto;
+    }
+    #qrcode {
+        background: white;
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid rgba(0,0,0,0.05);
+        display: inline-flex;
+        box-shadow: var(--clay-shadow);
+    }
+
+    .info-tile {
+        background: white;
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: var(--clay-inset);
+        text-align: center;
+    }
+
+    .info-label { font-size: 0.8rem; font-weight: 600; color: #888; text-transform: uppercase; }
+    .info-value { font-size: 2rem; font-weight: 800; color: var(--medical-blue); display: block; line-height: 1.2; }
+
+    .big-step-icon {
+        width: 70px; height: 70px;
+        background: white; border-radius: 20px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem; color: var(--pup-maroon);
+        box-shadow: var(--clay-shadow); margin-bottom: 15px;
+    }
+
+    .qr-wrapper {
+        width: 280px; height: 280px;
+        background: #000; border-radius: 25px;
+        overflow: hidden; position: relative;
+        box-shadow: var(--clay-inset); border: 8px solid white;
+    }
+
+    #reader { width: 100% !important; height: 100% !important; }
+
+    .btn-next {
+        background: var(--pup-maroon); color: white; border: none; border-radius: 25px;
+        padding: 18px; width: 100%; font-weight: 600; font-size: 1.2rem;
+        transition: 0.3s; box-shadow: 0 10px 20px rgba(156, 12, 32, 0.3);
+    }
+    .btn-next:disabled { background: #ccc; cursor: not-allowed; opacity: 0.6; box-shadow: none; }
+    .btn-logout-style {
+        background: #2c3e50;
+        margin-top: 12px;
+    }
+    .btn-logout-style i {
+        margin-right: 8px;
+    }
+
+    .input-group-clay {
+        background: white; border-radius: 15px;
+        padding: 12px 15px; box-shadow: var(--clay-inset);
+        display: flex; align-items: center; margin-bottom: 15px; width: 100%;
+    }
+    .input-group-clay select, .input-group-clay input {
+        background: transparent; border: none; outline: none; width: 100%; color: var(--medical-blue);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .auto-triage-container {
+        margin-top: 0.5rem;
+        background: rgba(71, 88, 103, 0.08);
+        border-radius: 16px;
+        padding: 0.9rem;
+        text-align: center;
+    }
+    .triage-badge-display {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 18px;
+        border-radius: 40px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .triage-badge-display i { font-size: 0.85rem; }
+    .triage-green { background: #d4edda; color: #155724; border-left: 3px solid #28a745; }
+    .triage-yellow { background: #fff3cd; color: #856404; border-left: 3px solid #ffc107; }
+    .triage-red { background: #f8d7da; color: #721c24; border-left: 3px solid #dc3545; }
+    .triage-info-text { font-size: 0.7rem; color: var(--text-muted); margin-top: 6px; }
+    
+    .ticket-details {
+        background: rgba(71, 88, 103, 0.08);
+        border-radius: 18px;
+        padding: 1rem;
+        width: 100%;
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .ticket-detail-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        padding: 6px 0;
+        border-bottom: 1px dashed rgba(0,0,0,0.05);
+    }
+    .ticket-detail-item:last-child { border-bottom: none; }
+    .ticket-label { font-weight: 500; color: #666; }
+    .ticket-value { font-weight: 600; color: var(--medical-blue); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    #reader video {
+        object-fit: cover !important;
+        border-radius: 15px;
+    }
+    #reader__dashboard, #reader__status_span {
+        display: none !important;
+    }
+    .qr-wrapper::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--pup-maroon);
+        box-shadow: 0 0 15px var(--pup-maroon);
+        animation: scanMove 2.5s infinite linear;
+        z-index: 10;
+        opacity: 0.7;
+    }
+    @keyframes scanMove {
+        0% { top: 0%; }
+        50% { top: 100%; }
+        100% { top: 0%; }
+    }
+    
+    .alert-message {
+        font-size: 0.75rem;
+        margin-top: 12px;
+        font-weight: 500;
+        text-align: center;
+    }
+    .form-label-small {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        color: #5c7285;
+        margin-bottom: 0.3rem;
+        display: block;
+    }
+    .logout-timer-badge {
+        background: #2c3e50;
+        color: white;
+        border-radius: 40px;
+        padding: 6px 12px;
+        font-size: 0.7rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 10px;
+        width: auto;
+        justify-content: center;
+    }
+</style>
+</head>
+<body>
+
+<div class="appointment-card">
+    <div class="page-header">
+        <h2>Walk-In Appointment · PUPBC CareLink</h2>
+    </div>
+
+    <div class="progress-container">
+        <div class="step-circle active" id="dot1">1</div>
+        <div class="step-line" id="line1"></div>
+        <div class="step-circle" id="dot2">2</div>
+        <div class="step-line" id="line2"></div>
+        <div class="step-circle" id="dot3">3</div>
+    </div>
+
+<div class="steps-wrapper">
+    <!-- STEP 1: QR SCANNER -->
+    <div class="step-content active" id="step1">
+        <div class="step-main-visual">
+            <div class="big-step-icon"><i class="fa-solid fa-qrcode"></i></div>
+            <h4 class="fw-bold">Step 1: Identity Scan</h4>
+            <div class="qr-wrapper my-3">
+                <div id="reader"></div>
+            </div>
+            <button class="border-0 bg-transparent text-muted text-decoration-underline" 
+                    onclick="simulateWalkIn()" style="font-size: 0.75rem;">[ Dev: Simulate Scan ]</button>
+        </div>
+        <div class="step-side-controls">
+            <label class="small fw-bold text-muted d-block mb-2">Scanned Student Name</label>
+            <div class="input-group-clay mb-4" style="background: #e9ecef;">
+                <input type="text" id="walkin-name" placeholder="Waiting for data..." readonly 
+                       style="font-weight: 600; color: var(--pup-maroon);">
+            </div>
+            <p class="text-muted small mb-4">Please position your student QR code within the frame to verify your identity automatically.</p>
+            <button class="btn-next" id="btn-to-step2" onclick="goToStep(2)" disabled>
+                Proceed to Details <i class="fa-solid fa-arrow-right ms-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- STEP 2: VISIT DETAILS (Nurse, Service, Dynamic Reason, Auto Triage) -->
+    <div class="step-content" id="step2">
+        <div class="step-main-visual">
+            <div class="big-step-icon"><i class="fa-solid fa-notes-medical"></i></div>
+            <h4 class="fw-bold">Step 2: Visit Details</h4>
+            <div class="mt-4 text-center">
+                <i class="fa-solid fa-clinic-medical fa-5x opacity-25"></i>
+                <p class="mt-3 text-muted">Fill out the necessary information for your walk-in consultation.</p>
+            </div>
+        </div>
+
+        <div class="step-side-controls">
+            <label class="form-label-small"><i class="fa-solid fa-user-nurse"></i> Available Nurse</label>
+            <div class="input-group-clay mb-3">
+                <select id="availableNurse" class="form-select">
+                    <option value="Emily Rodriguez (Nurse Practitioner)">Emily Rodriguez (Nurse Practitioner)</option>
+                    <option value="Michael Tan (Staff Nurse)">Michael Tan (Staff Nurse)</option>
+                    <option value="Sarah Gomez (Senior Nurse)">Sarah Gomez (Senior Nurse)</option>
+                    <option value="James Rivera (Clinic Nurse)">James Rivera (Clinic Nurse)</option>
+                    <option value="Patricia Lim (Head Nurse)">Patricia Lim (Head Nurse)</option>
+                </select>
+            </div>
+
+            <label class="form-label-small"><i class="fa-solid fa-briefcase-medical"></i> Medical Service</label>
+            <div class="input-group-clay mb-3">
+                <select id="serviceType">
+                    <option value="medical_certificate">Medical Certificate</option>
+                    <option value="follow_checkup">Follow Check-up</option>
+                    <option value="vaccination">Vaccination</option>
+                    <option value="lab_result_review">Lab Result Review</option>
+                    <option value="emergency">Emergency</option>
+                </select>
+            </div>
+
+            <div id="reasonContainer">
+                <label class="form-label-small" id="reasonLabel">Reason / Specific Concern</label>
+                <div class="input-group-clay mb-3">
+                    <select id="reasonSelect"></select>
+                </div>
+            </div>
+
+            <div class="auto-triage-container">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="form-label-small mb-0"><i class="fa-solid fa-shield-haltered"></i> Triage Level (Auto-assigned)</span>
+                </div>
+                <div id="triageDisplayBadge" class="triage-badge-display triage-green">
+                    <i class="fa-regular fa-circle-check"></i> Green (Not Urgent)
+                </div>
+                <div class="triage-info-text" id="triageReasonText">
+                    Medical certificates are classified as non-urgent.
+                </div>
+                <input type="hidden" id="triageLevel" value="green">
+            </div>
+            
+            <div class="mt-4">
+                <button class="btn-next" id="btn-to-step3" onclick="goToStep(3)" disabled>
+                    Finalize Appointment <i class="fa-solid fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3: CONFIRMATION + QR + LOGOUT REDIRECT (IMPROVED: after confirmation, redirects to logout page after short delay / manual logout) -->
+    <div class="step-content" id="step3">
+        <div class="step-main-visual">
+            <div class="big-step-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <h4 class="fw-bold">Step 3: Confirmation</h4>
+            <div id="qr-placeholder-box" class="qr-placeholder">
+                <i class="fa-solid fa-qrcode fa-3x opacity-25"></i>
+            </div>
+            <div id="qrcode-container" style="display: none;">
+                <div id="qrcode"></div>
+            </div>
+            <p class="text-muted small px-4 mt-2">Your appointment QR code will appear here. Present this for queueing.</p>
+        </div>
+
+        <div class="step-side-controls">
+            <div class="ticket-details">
+                <div class="ticket-detail-item">
+                    <span class="ticket-label"><i class="fa-regular fa-hashtag"></i> Appointment #:</span>
+                    <span class="ticket-value" id="appointmentNumber">APT-2401-001</span>
+                </div>
+                <div class="ticket-detail-item">
+                    <span class="ticket-label"><i class="fa-regular fa-user"></i> Patient Name:</span>
+                    <span class="ticket-value" id="displayName">Waiting...</span>
+                </div>
+                <div class="ticket-detail-item">
+                    <span class="ticket-label"><i class="fa-solid fa-chart-line"></i> Queue Number:</span>
+                    <span class="ticket-value" id="queueNumber">Q-102</span>
+                </div>
+                <div class="ticket-detail-item">
+                    <span class="ticket-label"><i class="fa-solid fa-gauge-high"></i> Triage:</span>
+                    <span class="ticket-value" id="ticketTriageLabel">Green</span>
+                </div>
+                <div class="ticket-detail-item">
+                    <span class="ticket-label"><i class="fa-regular fa-clock"></i> Est. Wait:</span>
+                    <span class="ticket-value" id="res-wait">--</span>
+                </div>
+            </div>
+            
+            <!-- MAIN ACTION BUTTON: "Confirm & Generate QR" / after generation changes to "Logout / End Session" with redirect -->
+            <button class="btn-next" id="btnAction" onclick="handleFinalAction()">
+                Confirm & Generate QR <i class="fa-solid fa-bolt ms-2"></i>
+            </button>
+            
+            <div id="confirmMessage" class="alert-message"></div>
+            
+            <!-- Optional: dynamic timer or logout note -->
+            <div id="logoutStatusArea" style="text-align: center; margin-top: 12px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================
+    // WALK-IN APPOINTMENT SYSTEM (1300x800 fixed)
+    // FEATURE: "Confirm & Generate QR" then redirect to logout (kioskportal.html)
+    // If user clicks again after generation, redirects instantly.
+    // ============================================
+    
+    const html5QrCode = new Html5Qrcode("reader");
+    let currentStep = 1;
+    let scannedStudentName = "";
+    let scannedStudentId = "";
+    let isGenerated = false;
+    let logoutTimerInterval = null;
+    
+    // Reason mapping
+    const reasonOptionsMap = {
+        follow_checkup: [
+            { value: "difficulty_breathing", label: "Difficulty Breathing" },
+            { value: "cough", label: "Cough" },
+            { value: "cold", label: "Cold" },
+            { value: "fever", label: "Fever" },
+            { value: "more", label: "More (General Discomfort)" }
+        ],
+        medical_certificate: [
+            { value: "ojt", label: "OJT Requirement" },
+            { value: "sports", label: "Sports Clearance" },
+            { value: "absence_justification", label: "Absence Justification" },
+            { value: "fit_to_school", label: "Fit to School" }
+        ],
+        vaccination: [
+            { value: "flu_vaccine", label: "Flu Vaccine" },
+            { value: "hpv_vaccine", label: "HPV Vaccine" },
+            { value: "hepatitis_b", label: "Hepatitis B" },
+            { value: "covid_booster", label: "COVID-19 Booster" }
+        ],
+        lab_result_review: [
+            { value: "xray_chest", label: "X-ray (Chest)" },
+            { value: "urinalysis", label: "Urinalysis" },
+            { value: "blood_chemistry", label: "Blood Chemistry" },
+            { value: "cbc", label: "Complete Blood Count (CBC)" }
+        ],
+        emergency: [
+            { value: "chest_pain", label: "Chest Pain" },
+            { value: "severe_allergy", label: "Severe Allergic Reaction" },
+            { value: "unconsciousness", label: "Unconsciousness" },
+            { value: "bleeding", label: "Severe Bleeding" }
+        ]
+    };
+    
+    function getTriageFromService(serviceType) {
+        switch(serviceType) {
+            case 'medical_certificate': return { level: 'green', label: 'Green (Not Urgent)', description: 'Medical certificates are non-urgent documentation.', wait: '25-30 Mins' };
+            case 'follow_checkup': return { level: 'yellow', label: 'Yellow (Medium Urgent)', description: 'Routine follow-up requires timely attention.', wait: '15-20 Mins' };
+            case 'vaccination': return { level: 'yellow', label: 'Yellow (Medium Urgent)', description: 'Vaccination services scheduled accordingly.', wait: '15-20 Mins' };
+            case 'lab_result_review': return { level: 'yellow', label: 'Yellow (Medium Urgent)', description: 'Lab review needs priority.', wait: '15-20 Mins' };
+            case 'emergency': return { level: 'red', label: 'Red (Urgent)', description: 'Emergency requires immediate attention.', wait: '5-10 Mins' };
+            default: return { level: 'green', label: 'Green (Not Urgent)', description: 'General consultation.', wait: '25-30 Mins' };
+        }
+    }
+    
+    function updateTriageDisplay() {
+        const serviceType = document.getElementById('serviceType').value;
+        const triageInfo = getTriageFromService(serviceType);
+        document.getElementById('triageLevel').value = triageInfo.level;
+        const badgeDiv = document.getElementById('triageDisplayBadge');
+        badgeDiv.classList.remove('triage-green', 'triage-yellow', 'triage-red');
+        if (triageInfo.level === 'green') {
+            badgeDiv.classList.add('triage-green');
+            badgeDiv.innerHTML = `<i class="fa-regular fa-circle-check"></i> ${triageInfo.label}`;
+        } else if (triageInfo.level === 'yellow') {
+            badgeDiv.classList.add('triage-yellow');
+            badgeDiv.innerHTML = `<i class="fa-solid fa-clock"></i> ${triageInfo.label}`;
+        } else {
+            badgeDiv.classList.add('triage-red');
+            badgeDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${triageInfo.label}`;
+        }
+        document.getElementById('triageReasonText').innerText = triageInfo.description;
+        document.getElementById('res-wait').innerText = triageInfo.wait;
+        let shortLabel = triageInfo.level === 'green' ? 'Green (Not Urgent)' : (triageInfo.level === 'yellow' ? 'Yellow (Medium Urgent)' : 'Red (Urgent)');
+        document.getElementById('ticketTriageLabel').innerText = shortLabel;
+        validateStep2();
+    }
+    
+    function updateReasonDropdown() {
+        const serviceType = document.getElementById('serviceType').value;
+        const reasonOptions = reasonOptionsMap[serviceType] || reasonOptionsMap.follow_checkup;
+        const reasonSelect = document.getElementById('reasonSelect');
+        reasonSelect.innerHTML = '';
+        reasonOptions.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt.value;
+            option.textContent = opt.label;
+            reasonSelect.appendChild(option);
+        });
+        const reasonLabel = document.getElementById('reasonLabel');
+        if (serviceType === 'follow_checkup') reasonLabel.innerText = 'Reason for Follow-up';
+        else if (serviceType === 'medical_certificate') reasonLabel.innerText = 'Certificate Purpose';
+        else if (serviceType === 'vaccination') reasonLabel.innerText = 'Vaccination Type';
+        else if (serviceType === 'lab_result_review') reasonLabel.innerText = 'Lab Test / Review';
+        else if (serviceType === 'emergency') reasonLabel.innerText = 'Emergency Concern';
+        else reasonLabel.innerText = 'Reason / Specific Concern';
+        updateTriageDisplay();
+    }
+    
+    function validateStep2() {
+        const serviceSelected = document.getElementById('serviceType').value;
+        const reasonSelected = document.getElementById('reasonSelect').value;
+        const isValid = serviceSelected && reasonSelected;
+        document.getElementById('btn-to-step3').disabled = !isValid;
+    }
+    
+    function generateAppointmentNumber() {
+        const now = new Date();
+        const yy = now.getFullYear().toString().slice(-2);
+        const mm = (now.getMonth() + 1).toString().padStart(2,'0');
+        const rand = Math.floor(Math.random() * 999).toString().padStart(3,'0');
+        return `APT-${yy}${mm}-${rand}`;
+    }
+    
+    let currentQueue = Math.floor(Math.random() * 50) + 101;
+    function generateQueueNumber() {
+        currentQueue = (currentQueue % 150) + 101;
+        return `Q-${currentQueue}`;
+    }
+    
+    function updateTicketDisplay() {
+        document.getElementById('displayName').innerText = scannedStudentName || "Guest User";
+        document.getElementById('appointmentNumber').innerText = generateAppointmentNumber();
+        document.getElementById('queueNumber').innerText = generateQueueNumber();
+    }
+    
+    function generateFullQR() {
+        const aptNum = document.getElementById('appointmentNumber').innerText;
+        const patientName = scannedStudentName || "Guest";
+        const serviceSelect = document.getElementById('serviceType');
+        const serviceText = serviceSelect.options[serviceSelect.selectedIndex]?.text || "Consultation";
+        const reasonSelect = document.getElementById('reasonSelect');
+        const reasonText = reasonSelect.options[reasonSelect.selectedIndex]?.text || "General";
+        const triageVal = document.getElementById('triageLevel').value.toUpperCase();
+        const nurseVal = document.getElementById('availableNurse').value;
+        const qrData = `Walk-in | Apt: ${aptNum} | Patient: ${patientName} | Service: ${serviceText} | Reason: ${reasonText} | Triage: ${triageVal} | Nurse: ${nurseVal}`;
+        const qrContainer = document.getElementById('qrcode');
+        qrContainer.innerHTML = "";
+        new QRCode(qrContainer, {
+            text: qrData,
+            width: 160,
+            height: 160,
+            colorDark: "#28313a",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.M
+        });
+        document.getElementById('qr-placeholder-box').style.display = 'none';
+        document.getElementById('qrcode-container').style.display = 'flex';
+    }
+    
+    function goToStep(step) {
+        if (step === 2 && !scannedStudentName) {
+            showConfirmMsg("Please scan your student QR code first.", false);
+            return;
+        }
+        if (step === 3) {
+            updateTicketDisplay();
+            const serviceType = document.getElementById('serviceType').value;
+            const triageInfo = getTriageFromService(serviceType);
+            document.getElementById('res-wait').innerText = triageInfo.wait;
+        }
+        document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + step).classList.add('active');
+        if(step > currentStep) {
+            document.getElementById('dot' + currentStep).classList.add('completed');
+            document.getElementById('dot' + currentStep).innerHTML = '<i class="fa-solid fa-check"></i>';
+            document.getElementById('line' + currentStep).style.background = 'var(--pup-maroon)';
+        }
+        document.getElementById('dot' + step).classList.add('active');
+        currentStep = step;
+    }
+    
+    function simulateWalkIn() { onIdentityFound("2023-01020-BN-0,Jerome Mallari"); }
+    
+    function onIdentityFound(decodedText) {
+        const data = decodedText.split(',');
+        if(data.length >= 2) {
+            scannedStudentName = data[1];
+            scannedStudentId = data[0];
+            document.getElementById('walkin-name').value = scannedStudentName;
+            document.getElementById('btn-to-step2').disabled = false;
+            html5QrCode.stop().catch(() => {});
+            showConfirmMsg("Student verified! You may proceed.", true);
+        } else { console.warn("Invalid format"); }
+    }
+    
+    function showConfirmMsg(msg, isSuccess) {
+        const msgDiv = document.getElementById('confirmMessage');
+        if (!msgDiv) return;
+        msgDiv.innerHTML = `<i class="fa-solid ${isSuccess ? 'fa-circle-check' : 'fa-circle-exclamation'} me-1"></i> ${msg}`;
+        msgDiv.style.color = isSuccess ? '#1e7e34' : '#dc3545';
+        setTimeout(() => { if (msgDiv.innerHTML.includes(msg)) msgDiv.innerHTML = ""; }, 4000);
+    }
+    
+    // Clear any active logout timer
+    function stopLogoutTimer() {
+        if(logoutTimerInterval) {
+            clearInterval(logoutTimerInterval);
+            logoutTimerInterval = null;
+        }
+    }
+    
+    // Redirect to logout page (kioskportal.html) - simulating logout / session end
+    function redirectToLogout() {
+        window.location.href = "kioskportal.html";
+    }
+    
+    // Enhanced final action: confirm & generate QR, then provide logout redirection with countdown / manual next click
+    function handleFinalAction() {
+        const btn = document.getElementById('btnAction');
+        
+        if (!isGenerated) {
+            // First click: generate QR and save appointment
+            if (!scannedStudentName) {
+                showConfirmMsg("No student identity scanned. Please go back to step 1.", false);
+                return;
+            }
+            generateFullQR();
+            const aptNum = document.getElementById('appointmentNumber').innerText;
+            const queueVal = document.getElementById('queueNumber').innerText;
+            const triageLvl = document.getElementById('triageLevel').value;
+            const appointmentData = {
+                id: "walkin_" + Date.now(),
+                appointmentNumber: aptNum,
+                patient: scannedStudentName,
+                patientId: scannedStudentId,
+                nurse: document.getElementById('availableNurse').value,
+                service: document.getElementById('serviceType').options[document.getElementById('serviceType').selectedIndex]?.text,
+                reason: document.getElementById('reasonSelect').options[document.getElementById('reasonSelect').selectedIndex]?.text,
+                triage: triageLvl,
+                queueNumber: queueVal,
+                status: "Confirmed",
+                timestamp: new Date().toISOString()
+            };
+            let pending = JSON.parse(localStorage.getItem('pupbc_walkin_appointments') || '[]');
+            pending.push(appointmentData);
+            localStorage.setItem('pupbc_walkin_appointments', JSON.stringify(pending));
+            
+            isGenerated = true;
+            // Change button appearance and text to "Logout / End Session" and prepare redirect
+            btn.innerHTML = '<i class="fa-solid fa-sign-out-alt me-2"></i> Logout & End Session';
+            btn.classList.add('btn-logout-style');
+            showConfirmMsg("✅ QR code generated! Click 'Logout & End Session' to return to kiosk portal.", true);
+            
+            // Optional: display auto redirect countdown message
+            const statusArea = document.getElementById('logoutStatusArea');
+            statusArea.innerHTML = '<div class="logout-timer-badge"><i class="fa-regular fa-clock"></i> Session ready. Click logout button to finish.</div>';
+        } 
+        else {
+            // Second click: redirect to logout / kiosk portal page (exactly what was requested: redirecting to logging out)
+            // Stop any existing timer and redirect
+            stopLogoutTimer();
+            redirectToLogout();
+        }
+    }
+    
+    // Event bindings
+    document.getElementById('serviceType').addEventListener('change', () => { updateReasonDropdown(); validateStep2(); });
+    document.getElementById('reasonSelect').addEventListener('change', validateStep2);
+    document.getElementById('availableNurse').addEventListener('change', () => { if(currentStep===3) updateTicketDisplay(); });
+    
+    // Initialize Step 2 fields
+    updateReasonDropdown();
+    validateStep2();
+    
+    // QR Scanner config
+    const config = { fps: 30, qrbox: { width: 200, height: 200 }, aspectRatio: 1.0 };
+    html5QrCode.start({ facingMode: "environment" }, config, 
+        (decodedText) => { if (navigator.vibrate) navigator.vibrate(100); onIdentityFound(decodedText); },
+        (errorMessage) => {}
+    ).catch(err => console.error("Scan error", err));
+</script>
+</body>
+</html>

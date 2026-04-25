@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Nurse Inventory | PUPBC CareLink</title>
+    <title>Inventory Management | PUPBC CareLink</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,37 +14,29 @@
 
     <style>
         :root {
-            /* --- Main Layout & Dimensions --- */
-            --main-form-width: 1150px;
-            --layout-margin-top: 2rem;
+            --main-form-width: 1200px; 
+            --layout-margin-top: 1rem;
             --standard-padding: 1.5rem;
-            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
-            
-            /* --- Colors --- */
             --brand-primary: #28313a;      
             --medical-blue: #475867;        
-            --medical-blue-dark: #323e49;
-            --medical-blue-light: #667f94;
+            --medical-blue-dark: #1a2127; 
             --medical-blue-soft: rgba(71, 88, 103, 0.08); 
-            --white: #ffffff;
             --text-main: #28313a;          
             --text-muted: #5c7285;     
             --clay-bg: #f4f7f6;
-            
-            /* --- Form Container --- */
             --form-bg-color: #ffffff;
-            --form-border-radius: 20px;           
+            --form-border-radius: 10px;            
             --form-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-            --form-border: 1px solid rgba(0, 0, 0, 0.05);
+
+            --app-height-fs: 100vh;
+            --app-height-min: 600px;
+            --app-height-fit: auto;
         }
 
-        html {
-            overflow-y: scroll; 
-            scrollbar-gutter: stable;
-        }
+        html { overflow-y: auto; scrollbar-gutter: stable; height: auto; }
         
         body {
-            min-height: 101vh;
+            min-height: 100vh;
             font-family: 'Poppins', sans-serif;
             background-color: var(--clay-bg);
             margin: 0;
@@ -54,121 +46,120 @@
             color: var(--text-main);
         }
 
-        /* --- MAIN FLOATING FORM LAYOUT --- */
         .floating-form-container {
             width: 95%;
             max-width: var(--main-form-width);
-            background: var(--white);
-            border-radius: 20px;
+            min-height: var(--app-height-min);
+            height: var(--app-height-fit);
+            background: var(--form-bg-color);
+            border-radius: var(--form-border-radius);
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            border: var(--border-subtle);
+            box-shadow: var(--form-box-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* ============================================= */
-        /* NAVIGATION TAB HEADER - MATCHING nursereports.html STYLE */
-        /* ============================================= */
         .nav-header-tab {
             background-color: var(--brand-primary);
             padding: 0 var(--standard-padding);
             display: flex;
             align-items: center;
             height: 60px;
+            flex-shrink: 0;
         }
 
-        /* Tab links styling - directly in navbar header */
-        .nav-header-tab .nav-tabs-inline {
+        .nav-tabs-inline {
             display: flex;
-            gap: 2rem;
+            gap: 2rem; 
             margin: 0;
             padding: 0;
             height: 100%;
             align-items: center;
         }
 
-        .nav-header-tab .nav-link-tab {
-            color: rgba(255, 255, 255, 0.5);
-            border: none;
-            padding: 10px 0;
-            font-weight: 600;
-            background: transparent !important;
-            position: relative;
-            transition: 0.3s;
+        .nav-link-tab {
+            color: #ffffff;
             text-decoration: none;
-            font-size: 1rem;
-            display: inline-block;
+            font-weight: 600;
+            font-size: 1.05rem; 
+            opacity: 0.6; 
+            transition: 0.3s ease;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
         }
 
-        .nav-header-tab .nav-link-tab:hover {
+        .nav-link-tab:hover {
+            opacity: 0.9;
+            color: #ffffff;
+        }
+
+        .nav-link-tab.active {
+            opacity: 1; 
             color: #ffffff !important;
         }
 
-        .nav-header-tab .nav-link-tab.active {
-            color: #ffffff !important;
-            background: transparent !important;
-        }
-
-        /* --- Content Area --- */
         .profile-body {
             flex-grow: 1;
-            display: block;
-            width: 100%;
-            background: var(--white);
-            padding: 0;
+            background: #ffffff;
+            position: relative;
+            display: flex;
         }
 
         #inventory-frame {
             width: 100%;
-            min-height: 550px;
+            flex-grow: 1;
             border: none;
             background: transparent;
             display: block;
+            min-height: 500px;
         }
 
-        /* --- Responsive adjustments --- */
         @media (max-width: 768px) {
-            .nav-header-tab {
-                padding: 0 1rem;
-            }
-            .nav-header-tab .nav-tabs-inline {
-                gap: 1rem;
-            }
-            .nav-header-tab .nav-link-tab {
-                font-size: 0.85rem;
-                padding: 8px 0;
-            }
+            .nav-tabs-inline { gap: 1rem; }
+            .nav-link-tab { font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="floating-form-container">
-        <!-- NAVIGATION TAB HEADER - Matching nursereports.html style -->
         <nav class="nav-header-tab">
             <div class="nav-tabs-inline" id="inventoryTabs">
-                <a href="nurseinventoryavailable.html" data-tab="available" class="nav-link-tab active" id="available-tab">
-                    Available Drugs
+                <a href="nurseinventoryavailable.html" data-tab="available" class="nav-link-tab active">
+                    <span>Available Medicines</span> <!-- Available Inventory -->
                 </a>
-                <a href="nurseinventoryregister.html" data-tab="register" class="nav-link-tab" id="register-tab">
-                    Register New Drug
+                
+                <a href="nurseinventorystock.html" data-tab="stock" class="nav-link-tab">
+                    <span>Stock Monitoring</span>
                 </a>
+
+                <a href="nurseinventoryexpiration.html" data-tab="expiration" class="nav-link-tab">
+                    <span>Expiration Monitoring</span>
+                </a>
+
+<!--                 <a href="nurseinventoryregister.html" data-tab="register" class="nav-link-tab">
+                    <span>Register New Item</span>
+                </a> -->
+                
             </div>
         </nav>
 
         <div class="profile-body">
             <iframe src="nurseinventoryavailable.html" name="inventory-frame" id="inventory-frame"></iframe>
-        </div>
+        </div>        
     </div>
 
     <script>
-        // SECURITY REDIRECT: If opened alone outside dashboard
+        /**
+         * FUNCTION #1: SECURITY REDIRECT
+         */
         if (window.self === window.top) {
             const currentPage = window.location.pathname.split("/").pop();
             const urlParams = new URLSearchParams(window.location.search);
             const sub = urlParams.get('subpage') || 'nurseinventoryavailable.html';
-            
-            // Redirect to dashboard with page and subpage parameters
             window.location.href = "nursedashboard.html?page=" + currentPage + "&subpage=" + sub;
         }
 
@@ -176,139 +167,97 @@
             const tabs = document.querySelectorAll('.nav-link-tab');
             const iframe = document.getElementById('inventory-frame');
 
-            // Function to switch tabs (similar to nursereports.html)
+            /**
+             * FUNCTION #2: TAB SWITCHING LOGIC (Updated with new mappings)
+             */
             function switchTab(tabId) {
-                // Determine the iframe source based on tabId
-                let iframeSrc = '';
-                if (tabId === 'available') {
-                    iframeSrc = 'nurseinventoryavailable.html';
-                } else if (tabId === 'register') {
-                    iframeSrc = 'nurseinventoryregister.html';
-                }
-                
-                // Update iframe source
+                const mapping = {
+                    'available': 'nurseinventoryavailable.html',
+                    'stock': 'nurseinventorystock.html',
+                    'expiration': 'nurseinventoryexpiration.html',
+                    'register': 'nurseinventoryregister.html'
+                };
+
+                const iframeSrc = mapping[tabId] || 'nurseinventoryavailable.html';
                 iframe.src = iframeSrc;
                 
-                // Update active tab style
                 tabs.forEach(t => {
                     t.classList.remove('active');
-                    if (t.getAttribute('data-tab') === tabId) {
-                        t.classList.add('active');
-                    }
+                    if (t.getAttribute('data-tab') === tabId) t.classList.add('active');
                 });
             }
 
-            // Read the 'subpage' from PARENT URL (Dashboard URL)
-            // This is the key part - it checks the parent dashboard's URL parameters
-            let activeSub = 'available'; // Default value
-            
+            /**
+             * FUNCTION #3: INITIAL URL STATE CHECKER (Updated for deep linking new tabs)
+             */
+            let activeSub = 'available';
             try {
-                // Check if we're inside an iframe (has parent)
                 if (window.parent !== window.self) {
                     const parentParams = new URLSearchParams(window.parent.location.search);
                     const parentSubpage = parentParams.get('subpage');
                     
                     if (parentSubpage) {
-                        // Extract tab ID from the subpage filename
-                        if (parentSubpage.includes('nurseinventoryregister.html')) {
-                            activeSub = 'register';
-                        } else if (parentSubpage.includes('nurseinventoryavailable.html')) {
-                            activeSub = 'available';
-                        } else {
-                            activeSub = 'available';
-                        }
-                    }
-                } else {
-                    // If not in iframe, check URL parameters directly
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const subpage = urlParams.get('subpage');
-                    
-                    if (subpage) {
-                        if (subpage.includes('nurseinventoryregister.html')) {
-                            activeSub = 'register';
-                        } else if (subpage.includes('nurseinventoryavailable.html')) {
-                            activeSub = 'available';
-                        }
+                        if (parentSubpage.includes('available')) activeSub = 'available';
+                        else if (parentSubpage.includes('stock')) activeSub = 'stock';
+                        else if (parentSubpage.includes('expiration')) activeSub = 'expiration';
+                        else if (parentSubpage.includes('register')) activeSub = 'register';
                     }
                 }
-            } catch(e) {
-                // Cross-origin error when accessing parent, fallback to default
-                console.log('Cannot access parent URL, using default tab');
-                activeSub = 'available';
-            }
+            } catch(e) { 
+                console.log('Using default tab');
+                activeSub = 'available'; 
+            } 
             
-            // Initial switch based on parent dashboard's subpage parameter
             switchTab(activeSub);
 
-            // Event listeners for manual click (similar to nursereports.html)
+            /**
+             * FUNCTION #4: TAB CLICK EVENT HANDLER
+             */
             tabs.forEach(tab => {
                 tab.addEventListener('click', function(e) {
-                    // If Ctrl+Click or Meta+Click (Cmd+Click on Mac), let the link open normally
                     if (!e.ctrlKey && !e.metaKey) {
                         e.preventDefault();
                         const tabId = this.getAttribute('data-tab');
                         switchTab(tabId);
                         
-                        // Update the Dashboard URL bar without refreshing (if inside iframe)
                         try {
                             if (window.parent !== window.self) {
-                                // Determine the subpage filename based on tabId
-                                let subpageFile = '';
-                                if (tabId === 'available') {
-                                    subpageFile = 'nurseinventoryavailable.html';
-                                } else if (tabId === 'register') {
-                                    subpageFile = 'nurseinventoryregister.html';
-                                }
-                                
+                                const subFile = this.getAttribute('href');
                                 const newURL = window.parent.location.origin + window.parent.location.pathname + 
-                                            '?page=nurseinventory.html&subpage=' + subpageFile;
+                                               '?page=nurseinventory.html&subpage=' + subFile;
                                 window.parent.history.replaceState({ path: newURL }, '', newURL);
                             }
-                        } catch(e) {
-                            // Cross-origin error, ignore
-                            console.log('Cannot update parent URL');
-                        }
+                        } catch(e) { console.warn('URL sync failed'); }
                     }
-                    // If Ctrl+Click, let the default behavior happen (opens in new tab)
                 });
             });
 
-            // Handle iframe load events to sync active tab when iframe navigates internally
+            /**
+             * FUNCTION #5: IFRAME-TO-PARENT SYNC (Updated for new filenames)
+             */
             iframe.addEventListener('load', function() {
                 try {
                     const iframeSrc = iframe.contentWindow.location.pathname.split('/').pop();
                     let activeTabId = '';
                     
-                    if (iframeSrc === 'nurseinventoryregister.html') {
-                        activeTabId = 'register';
-                    } else if (iframeSrc === 'nurseinventoryavailable.html') {
-                        activeTabId = 'available';
-                    }
+                    if (iframeSrc.includes('available')) activeTabId = 'available';
+                    else if (iframeSrc.includes('stock')) activeTabId = 'stock';
+                    else if (iframeSrc.includes('expiration')) activeTabId = 'expiration';
+                    else if (iframeSrc.includes('register')) activeTabId = 'register';
                     
                     if (activeTabId) {
-                        // Update active tab style
                         tabs.forEach(t => {
                             t.classList.remove('active');
-                            if (t.getAttribute('data-tab') === activeTabId) {
-                                t.classList.add('active');
-                            }
+                            if (t.getAttribute('data-tab') === activeTabId) t.classList.add('active');
                         });
                         
-                        // Update parent dashboard URL if inside iframe
-                        try {
-                            if (window.parent !== window.self) {
-                                const newURL = window.parent.location.origin + window.parent.location.pathname + 
-                                            '?page=nurseinventory.html&subpage=' + iframeSrc;
-                                window.parent.history.replaceState({ path: newURL }, '', newURL);
-                            }
-                        } catch(e) {
-                            console.log('Cannot update parent URL from iframe load');
+                        if (window.parent !== window.self) {
+                            const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                           '?page=nurseinventory.html&subpage=' + iframeSrc;
+                            window.parent.history.replaceState({ path: newURL }, '', newURL);
                         }
                     }
-                } catch(e) {
-                    // Cross-origin errors may occur, ignore
-                    console.log('Cannot access iframe location due to cross-origin policy');
-                }
+                } catch(e) { }
             });
         });
     </script>

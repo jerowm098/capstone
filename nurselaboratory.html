@@ -14,548 +14,254 @@
 
     <style>
         :root {
-            /* --- Main Layout & Dimensions --- */
-            --main-form-width: 1150px;
-            --layout-margin-top: 2rem;
+            --main-form-width: 1200px; 
+            --layout-margin-top: 1rem;
             --standard-padding: 1.5rem;
-            --form-padding: 1.8rem;
-            
-            /* --- Borders & Colors --- */
-            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
             --brand-primary: #28313a;      
             --medical-blue: #475867;        
-            --medical-blue-dark: #323e49;
-            --medical-blue-light: #667f94;
+            --medical-blue-dark: #1a2127; 
             --medical-blue-soft: rgba(71, 88, 103, 0.08); 
-            --white: #ffffff;
             --text-main: #28313a;          
             --text-muted: #5c7285;     
             --clay-bg: #f4f7f6;
-            
-            /* --- Form Container --- */
             --form-bg-color: #ffffff;
-            --form-border-radius: 20px;           
+            --form-border-radius: 10px;            
             --form-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-            --form-border: 1px solid rgba(0, 0, 0, 0.05);
+
+            /* HEIGHT LOGIC VARIABLES */
+            --app-height-fs: 100vh;
+            --app-height-min: 600px;
+            --app-height-fit: auto;
         }
 
-        html {
-            overflow-y: scroll; 
-            scrollbar-gutter: stable;
-        }
+        html { overflow-y: auto; scrollbar-gutter: stable; height: auto; }
         
         body {
-            min-height: 101vh;
+            min-height: 100vh;
             font-family: 'Poppins', sans-serif;
             background-color: var(--clay-bg);
+            margin: 0;
             padding: var(--layout-margin-top) 0;
-            color: var(--text-main);
             display: flex;
             justify-content: center;
-            margin: 0;
+            color: var(--text-main);
         }
 
-        /* --- MAIN FLOATING FORM LAYOUT (Matches nurseappointment.html) --- */
         .floating-form-container {
             width: 95%;
             max-width: var(--main-form-width);
+            min-height: var(--app-height-min);
+            height: var(--app-height-fit);
             background: var(--form-bg-color);
             border-radius: var(--form-border-radius);
             overflow: hidden;
             box-shadow: var(--form-box-shadow);
-            border: var(--form-border);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* ============================================= */
-        /* CONSISTENT NAVIGATION HEADER - MATCHES NURSEAPPOINTMENT.HTML EXACTLY */
-        /* ============================================= */
         .nav-header-tab {
             background-color: var(--brand-primary);
             padding: 0 var(--standard-padding);
             display: flex;
             align-items: center;
             height: 60px;
+            flex-shrink: 0;
         }
 
-        .nav-header-tab h5 {
-            color: rgba(255, 255, 255, 0.5);
+        .nav-tabs-inline {
+            display: flex;
+            gap: 2rem; 
             margin: 0;
-            font-weight: 600;
-            font-size: 1.1rem;
-            position: relative;
-            padding: 10px 0;
-            cursor: default;
-            letter-spacing: 0.3px;
-            transition: color 0.3s ease;
+            padding: 0;
+            height: 100%;
+            align-items: center;
         }
-        .nav-header-tab h5:hover {
+
+        .nav-link-tab {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem; 
+            opacity: 0.6; 
+            transition: 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-link-tab:hover {
+            opacity: 0.9;
             color: #ffffff;
         }
 
-        /* --- CONTENT SECTION (Matches nurseappointment structure) --- */
-        .form-content {
-            padding: var(--standard-padding);
+        .nav-link-tab.active {
+            opacity: 1; 
+            color: #ffffff !important;
         }
 
-        /* --- Page Title & Subtitle (Refined to match laboratory context) --- */
-        .page-header {
-            margin-bottom: 1.5rem;
-        }
-        
-        .content-title {
-            font-weight: 600;
-            color: var(--text-main);
-            font-size: 1.35rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .content-subtitle {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 0;
-        }
-
-        /* --- ACTION BAR (Same as appointment page: right-aligned with button) --- */
-        .action-row {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: var(--border-subtle);
-        }
-
-        /* --- Search Box (consistent with appointment page) --- */
-        .search-box {
-            background: var(--clay-bg);
-            border: 1px solid rgba(0,0,0,0.05);
-            border-radius: 10px;
-            padding: 8px 15px;
-            width: 280px;
-            transition: 0.3s;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.85rem;
-        }
-
-        .search-box:focus {
-            outline: none;
-            border-color: var(--medical-blue-light);
+        .profile-body {
+            flex-grow: 1;
             background: var(--white);
-            box-shadow: 0 0 0 3px var(--medical-blue-soft);
+            position: relative;
+            display: flex;
         }
 
-        /* --- Button Styling (Matches btn-medical from appointment) --- */
-        .btn-medical {
-            background-color: var(--brand-primary);
-            color: white;
-            border-radius: 8px;
-            padding: 8px 20px;
-            border: none;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-medical:hover {
-            background-color: var(--medical-blue-dark);
-            color: white;
-            transform: translateY(-1px);
-        }
-
-        /* --- TABLE STYLING (Matches table-custom from appointment page) --- */
-        .table-custom {
+        #lab-frame {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-        }
-
-        .table-custom thead th {
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 10px 15px;
+            flex-grow: 1;
             border: none;
             background: transparent;
-        }
-
-        .table-custom tbody tr {
-            background: var(--white);
-            transition: 0.2s ease;
-        }
-
-        .table-custom tbody tr:hover {
-            background: var(--medical-blue-soft);
-            transform: translateY(-1px);
-        }
-
-        .table-custom td {
-            padding: 14px 15px;
-            vertical-align: middle;
-            border-top: var(--border-subtle);
-            border-bottom: var(--border-subtle);
-            background-color: inherit;
-        }
-
-        .table-custom td:first-child { 
-            border-left: var(--border-subtle); 
-            border-radius: 12px 0 0 12px; 
-        }
-        .table-custom td:last-child { 
-            border-right: var(--border-subtle); 
-            border-radius: 0 12px 12px 0; 
-        }
-
-        /* --- Badge Styles (Enhanced lab status indicators) --- */
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            display: inline-block;
-            letter-spacing: 0.3px;
-        }
-        .status-urgent { background: #fee2e2; color: #b91c1c; }
-        .status-processing { background: #e0f2fe; color: #0369a1; }
-        .status-ready { background: #dcfce7; color: #15803d; }
-        .status-pending { background: #fff4e5; color: #b7791f; }
-
-        /* --- Patient name & ID styling --- */
-        .patient-name {
-            font-weight: 600;
-            color: var(--medical-blue-dark);
             display: block;
-            font-size: 0.9rem;
-        }
-        
-        .patient-id {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            font-family: monospace;
+            min-height: 500px;
         }
 
-        /* --- Action Buttons (Matches appointment action-btn style) --- */
-        .action-btn {
-            color: var(--medical-blue);
-            background: var(--clay-bg);
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            transition: 0.2s;
-            font-size: 0.85rem;
-        }
-
-        .action-btn:hover {
-            background: var(--brand-primary);
-            color: white;
-        }
-
-        /* --- Additional utility for test ID badge --- */
-        .test-id {
-            font-weight: 600;
-            font-family: monospace;
-            background: var(--clay-bg);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            display: inline-block;
-        }
-        
-        /* --- Responsive adjustments --- */
         @media (max-width: 768px) {
-            .form-content {
-                padding: 1rem;
-            }
-            .table-custom td, .table-custom th {
-                padding: 10px 8px;
-            }
-            .action-row {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-            }
-            .search-box {
-                width: 100%;
-            }
-            .btn-medical {
-                justify-content: center;
-            }
+            .nav-tabs-inline { gap: 1rem; }
+            .nav-link-tab { font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="floating-form-container">
-        
-        <!-- UPDATED NAVBAR: Now matches nurseappointment.html exactly with h5 and animated underline -->
         <nav class="nav-header-tab">
-            <h5>Laboratory test</h5>
+            <div class="nav-tabs-inline" id="labTabs">
+                <a href="nurselaboratoryurgent.html" data-tab="urgent" class="nav-link-tab active">
+                    <span>Urgent Requests</span>
+                </a>
+                <a href="nurselaboratorypending.html" data-tab="pending" class="nav-link-tab">
+                    <span>Pending Requests</span>
+                </a>
+                <a href="nurselaboratoryprocess.html" data-tab="processing" class="nav-link-tab">
+                    <span>Processing</span>
+                </a>                
+                <a href="nurselaboratoryready.html" data-tab="ready" class="nav-link-tab">
+                    <span>Ready Results</span>
+                </a>
+            </div>
         </nav>
 
-        <div class="form-content">
-            
-            <!-- Page Header Section -->
-            <div class="page-header">
-                <h4 class="content-title">Manage and monitor laboratory examinations</h4>
-                <p class="content-subtitle">Overview of current laboratory status and requests</p>
-            </div>
-            
-            <!-- Action Row: Search + New Request Button (consistent with appointment page) -->
-            <div class="action-row">
-                <div class="d-flex gap-2">
-                    <input type="text" class="search-box" id="searchLabInput" placeholder="Search patient name, test ID, or test type...">
-                    <button class="btn-medical shadow-sm" id="newLabRequestBtn">
-                        <i class="fa-solid fa-flask me-1"></i> New Lab Request
-                    </button>
-                </div>
-            </div>
-
-            <!-- Laboratory Tests Table (styled like table-custom from appointment page) -->
-            <div class="table-responsive">
-                <table class="table table-custom" id="labTable">
-                    <thead>
-                        <tr>
-                            <th>Test ID</th>
-                            <th>Patient Details</th>
-                            <th>Test Type</th>
-                            <th>Requested By</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </thead>
-                    <tbody id="labTableBody">
-                        <!-- Dynamic rows will be populated via JavaScript for better maintainability and search -->
-                    </tbody>
-                 </table>
-            </div>
-        </div>
+        <div class="profile-body">
+            <iframe src="nurselaboratoryurgent.html" name="lab-frame" id="lab-frame"></iframe>
+        </div>        
     </div>
 
     <script>
-        // =============================================
-        // Laboratory Data (Enhanced for search functionality)
-        // =============================================
-        const labRequestsData = [
-            {
-                id: "LAB-9920",
-                patientName: "Juan Dela Cruz",
-                patientIdNumber: "STUD-2024-001",
-                testType: "Complete Blood Count (CBC)",
-                requestedBy: "Dr. Rivera",
-                status: "urgent",
-                statusLabel: "Urgent",
-                statusClass: "status-urgent"
-            },
-            {
-                id: "LAB-9921",
-                patientName: "Maria Clara",
-                patientIdNumber: "FAC-2019-055",
-                testType: "Urinalysis",
-                requestedBy: "Dr. Santos",
-                status: "processing",
-                statusLabel: "Processing",
-                statusClass: "status-processing"
-            },
-            {
-                id: "LAB-9918",
-                patientName: "Leonor Rivera",
-                patientIdNumber: "STUD-2023-088",
-                testType: "Blood Typing",
-                requestedBy: "Dr. Rivera",
-                status: "ready",
-                statusLabel: "Ready",
-                statusClass: "status-ready"
-            },
-            {
-                id: "LAB-9925",
-                patientName: "Mark Anthony Sy",
-                patientIdNumber: "STUD-2024-0552",
-                testType: "Lipid Profile",
-                requestedBy: "Dr. Mercado",
-                status: "pending",
-                statusLabel: "Pending",
-                statusClass: "status-pending"
-            },
-            {
-                id: "LAB-9930",
-                patientName: "Isabella Reyes",
-                patientIdNumber: "STUD-2025-0123",
-                testType: "X-Ray (Chest)",
-                requestedBy: "Dr. Lopez",
-                status: "processing",
-                statusLabel: "Processing",
-                statusClass: "status-processing"
-            },
-            {
-                id: "LAB-9932",
-                patientName: "Dr. Rafael Cruz",
-                patientIdNumber: "FAC-2015-078",
-                testType: "Blood Chemistry",
-                requestedBy: "Dr. Rivera",
-                status: "ready",
-                statusLabel: "Ready",
-                statusClass: "status-ready"
-            }
-        ];
-
-        // Helper: Escape HTML to prevent XSS
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
+        /**
+         * FUNCTION #1: SECURITY REDIRECT (LAYOUT PROTECTION)
+         * GINAGAWA: Sinisiguro na ang page ay laging nakabukas sa loob ng Dashboard.
+         */
+        if (window.self === window.top) {
+            const currentPage = window.location.pathname.split("/").pop();
+            const urlParams = new URLSearchParams(window.location.search);
+            const sub = urlParams.get('subpage') || 'nurselaboratoryurgent.html';
+            window.location.href = "nursedashboard.html?page=" + currentPage + "&subpage=" + sub;
         }
 
-        // Render table based on search query
-        function renderLabTable(searchTerm = "") {
-            const tbody = document.getElementById("labTableBody");
-            if (!tbody) return;
-            
-            const lowerCaseSearch = searchTerm.toLowerCase().trim();
-            let filteredData = labRequestsData;
-            
-            if (lowerCaseSearch !== "") {
-                filteredData = labRequestsData.filter(item => {
-                    return (
-                        item.patientName.toLowerCase().includes(lowerCaseSearch) ||
-                        item.id.toLowerCase().includes(lowerCaseSearch) ||
-                        item.testType.toLowerCase().includes(lowerCaseSearch) ||
-                        item.patientIdNumber.toLowerCase().includes(lowerCaseSearch) ||
-                        item.requestedBy.toLowerCase().includes(lowerCaseSearch)
-                    );
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.nav-link-tab');
+            const iframe = document.getElementById('lab-frame');
+
+            /**
+             * FUNCTION #2: TAB SWITCHING LOGIC
+             */
+            function switchTab(tabId) {
+                const mapping = {
+                    'urgent': 'nurselaboratoryurgent.html',
+                    'pending': 'nurselaboratorypending.html',
+                    'processing': 'nurselaboratoryprocess.html',
+                    'ready': 'nurselaboratoryready.html'
+                };
+
+                const iframeSrc = mapping[tabId] || 'nurselaboratoryurgent.html';
+                iframe.src = iframeSrc;
+                
+                tabs.forEach(t => {
+                    t.classList.remove('active');
+                    if (t.getAttribute('data-tab') === tabId) t.classList.add('active');
                 });
             }
-            
-            if (filteredData.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">
-                            <i class="fa-solid fa-flask fa-2x mb-2 d-block opacity-50"></i>
-                            No laboratory requests found matching "<strong>${escapeHtml(searchTerm)}</strong>"
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            let htmlRows = "";
-            filteredData.forEach(item => {
-                // Determine action button icon and text based on status
-                let actionButton = '';
-                if (item.status === 'urgent') {
-                    actionButton = `<button class="action-btn" data-test-id="${item.id}" data-action="upload" title="Upload Result"><i class="fa-solid fa-cloud-arrow-up"></i></button>`;
-                } else if (item.status === 'processing') {
-                    actionButton = `<button class="action-btn" data-test-id="${item.id}" data-action="view" title="View Details"><i class="fa-solid fa-eye"></i></button>`;
-                } else if (item.status === 'ready') {
-                    actionButton = `<button class="action-btn" data-test-id="${item.id}" data-action="print" title="Print Report"><i class="fa-solid fa-file-pdf"></i></button>`;
-                } else {
-                    actionButton = `<button class="action-btn" data-test-id="${item.id}" data-action="update" title="Update Status"><i class="fa-solid fa-pen"></i></button>`;
-                }
-                
-                // Additional options button for consistency (like appointment page has ellipsis)
-                const moreButton = `<button class="action-btn ms-1" data-test-id="${item.id}" data-action="more" title="More Options"><i class="fa-solid fa-ellipsis-vertical"></i></button>`;
-                
-                htmlRows += `
-                    <tr data-test-id="${escapeHtml(item.id)}">
-                        <td><span class="test-id">#${escapeHtml(item.id)}</span></td>
-                        <td>
-                            <span class="patient-name">${escapeHtml(item.patientName)}</span>
-                            <small class="patient-id">ID: ${escapeHtml(item.patientIdNumber)}</small>
-                        </td>
-                        <td><span class="fw-medium">${escapeHtml(item.testType)}</span></td>
-                        <td><span>${escapeHtml(item.requestedBy)}</span></td>
-                        <td><span class="status-badge ${item.statusClass}">${item.statusLabel}</span></td>
-                        <td>
-                            <div class="d-flex gap-1">
-                                ${actionButton}
-                                ${moreButton}
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = htmlRows;
-            
-            // Attach event listeners to all action buttons
-            document.querySelectorAll('#labTableBody .action-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const testId = btn.getAttribute('data-test-id');
-                    const action = btn.getAttribute('data-action');
-                    const row = btn.closest('tr');
-                    const patientName = row?.querySelector('.patient-name')?.innerText || 'Unknown';
+
+            /**
+             * FUNCTION #3: INITIAL URL STATE CHECKER (DEEP LINKING)
+             */
+            let activeSub = 'urgent';
+            try {
+                // Check sa parent dashboard URL kung anong subpage ang dapat i-load
+                if (window.parent !== window.self) {
+                    const parentParams = new URLSearchParams(window.parent.location.search);
+                    const parentSubpage = parentParams.get('subpage');
                     
-                    // Show appropriate feedback based on action
-                    switch(action) {
-                        case 'upload':
-                            alert(`📤 Upload lab results for test ${testId}\nPatient: ${patientName}\n\nFeature: Upload laboratory document.`);
-                            break;
-                        case 'view':
-                            alert(`👁️ View lab details for test ${testId}\nPatient: ${patientName}\n\nComplete test information would appear here.`);
-                            break;
-                        case 'print':
-                            alert(`🖨️ Generating PDF report for test ${testId}\nPatient: ${patientName}\n\nPreparing laboratory results document.`);
-                            break;
-                        case 'update':
-                            alert(`✏️ Update status for test ${testId}\nPatient: ${patientName}\n\nStatus options: Pending, Processing, Ready, Urgent.`);
-                            break;
-                        case 'more':
-                            alert(`⚙️ Additional options for ${testId}\nPatient: ${patientName}\n\n- Edit test details\n- Reschedule\n- Cancel request\n- Add notes`);
-                            break;
-                        default:
-                            alert(`Action triggered for test: ${testId}`);
+                    if (parentSubpage) {
+                        if (parentSubpage.includes('pending')) activeSub = 'pending';
+                        else if (parentSubpage.includes('process')) activeSub = 'processing';
+                        else if (parentSubpage.includes('ready')) activeSub = 'ready';
+                        else if (parentSubpage.includes('urgent')) activeSub = 'urgent';
+                    }
+                }
+            } catch(e) { 
+                console.log('Using default tab');
+                activeSub = 'urgent'; 
+            } 
+            
+            switchTab(activeSub);
+
+            /**
+             * FUNCTION #4: TAB CLICK EVENT HANDLER
+             */
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    if (!e.ctrlKey && !e.metaKey) {
+                        e.preventDefault();
+                        const tabId = this.getAttribute('data-tab');
+                        switchTab(tabId);
+                        
+                        // I-sync ang URL bar ng main dashboard
+                        try {
+                            if (window.parent !== window.self) {
+                                const subFile = this.getAttribute('href');
+                                const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                               '?page=nurselaboratory.html&subpage=' + subFile;
+                                window.parent.history.replaceState({ path: newURL }, '', newURL);
+                            }
+                        } catch(e) { console.warn('URL sync failed'); }
                     }
                 });
             });
-        }
-        
-        // Debounce function for efficient search
-        function debounce(func, delay) {
-            let timer;
-            return function(...args) {
-                clearTimeout(timer);
-                timer = setTimeout(() => func.apply(this, args), delay);
-            };
-        }
-        
-        // Initialize on page load
-        document.addEventListener("DOMContentLoaded", () => {
-            // Initial render
-            renderLabTable("");
-            
-            // Setup search input listener
-            const searchInput = document.getElementById("searchLabInput");
-            if (searchInput) {
-                const handleSearch = debounce((event) => {
-                    renderLabTable(event.target.value);
-                }, 250);
-                searchInput.addEventListener("input", handleSearch);
-            }
-            
-            // Setup "New Lab Request" button
-            const newRequestBtn = document.getElementById("newLabRequestBtn");
-            if (newRequestBtn) {
-                newRequestBtn.addEventListener("click", () => {
-                    alert("🔬 New Laboratory Request\n\nFill out the following:\n- Patient Information\n- Test Type\n- Requesting Physician\n- Urgency Level\n\n(This would open a modal or form page)");
-                });
-            }
+
+            /**
+             * FUNCTION #5: IFRAME-TO-PARENT SYNC (AUTO-UPDATE)
+             * GINAGAWA: Bina-balanse ang highlight ng tabs kapag nag-load ang iframe.
+             */
+            iframe.addEventListener('load', function() {
+                try {
+                    const iframeSrc = iframe.contentWindow.location.pathname.split('/').pop();
+                    let activeTabId = '';
+                    
+                    if (iframeSrc.includes('pending')) activeTabId = 'pending';
+                    else if (iframeSrc.includes('process')) activeTabId = 'processing';
+                    else if (iframeSrc.includes('ready')) activeTabId = 'ready';
+                    else if (iframeSrc.includes('urgent')) activeTabId = 'urgent';
+                    
+                    if (activeTabId) {
+                        tabs.forEach(t => {
+                            t.classList.remove('active');
+                            if (t.getAttribute('data-tab') === activeTabId) t.classList.add('active');
+                        });
+                        
+                        // Sync URL kung ang navigation ay galing sa loob ng iframe buttons
+                        if (window.parent !== window.self) {
+                            const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                           '?page=nurselaboratory.html&subpage=' + iframeSrc;
+                            window.parent.history.replaceState({ path: newURL }, '', newURL);
+                        }
+                    }
+                } catch(e) { }
+            });
         });
-        
-        // =============================================
-        // ORIGINAL REDIRECT LOGIC - PRESERVED FOR IFRAME INTEGRATION
-        // =============================================
-        if (window.self === window.top) {
-            const currentPage = window.location.pathname.split("/").pop();
-            window.location.href = "nursedashboard.html?page=" + currentPage;
-        }
     </script>
 </body>
 </html>
