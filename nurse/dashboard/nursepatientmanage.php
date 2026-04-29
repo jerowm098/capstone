@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Manage Patients | PUPBC CareLink | Patient Records</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --standard-padding: 1.5rem;
+            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
+            --brand-primary: #28313a;      
+            --medical-blue: #475867;        
+            --medical-blue-dark: #1a2127; 
+            --medical-blue-light: #667f94;
+            --medical-blue-soft: rgba(71, 88, 103, 0.08); 
+            --white: #ffffff;
+            --text-main: #28313a;          
+            --text-muted: #5c7285;     
+            --clay-bg: #f4f7f6;
+            --registered-green: #2c7a47;
+            --registered-bg: #e0f2e9;
+            --danger-red: #dc3545;
+            --success-green: #28a745;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: transparent;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        .appointments-wrapper {
+            width: 100%;
+            background: transparent;
+        }
+
+        .form-content {
+            padding: var(--standard-padding);
+        }
+
+        /* ===== NEW LAYOUT: Search bar area (above counter/pagination) ===== */
+        .search-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .search-box {
+            background: var(--clay-bg);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 10px;
+            padding: 8px 15px 8px 38px;
+            width: 300px;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--medical-blue-light);
+            background: var(--white);
+            box-shadow: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        /* Counter + Pagination row (side by side) */
+        .counter-pagination-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 16px;
+        }
+
+        .total-counter {
+            background: var(--medical-blue-soft);
+            color: var(--medical-blue-dark);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .total-counter i {
+            color: var(--registered-green);
+            font-size: 1rem;
+        }
+
+        .pagination-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .pagination-btn {
+            background: var(--white);
+            border: 1px solid rgba(40, 49, 58, 0.2);
+            color: var(--brand-primary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination-btn i {
+            font-size: 0.7rem;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            background: #f1f2f4;
+        }
+
+        .page-number.active-page {
+            background: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* HORIZONTAL SEPARATOR LINE - positioned below counter/pagination row */
+        .separator-line {
+            border-bottom: var(--border-subtle);
+            margin-bottom: 16px;
+        }
+
+        /* status badge for "registered" */
+        .status-badge-registered {
+            background: var(--registered-bg);
+            color: var(--registered-green);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .action-edit-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: rgba(71, 88, 103, 0.12);
+            color: var(--medical-blue);
+            font-size: 1rem;
+        }
+
+        .action-edit-btn:hover {
+            background: var(--medical-blue);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(71, 88, 103, 0.2);
+        }
+
+        .action-delete-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: rgba(220, 53, 69, 0.12);
+            color: var(--danger-red);
+            font-size: 1rem;
+        }
+
+        .action-delete-btn:hover {
+            background: var(--danger-red);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .action-edit-btn:active, .action-delete-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* TABLE STYLES */
+        .table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-bottom: 0;
+            font-size: 0.82rem;
+        }
+
+        .table-custom thead th {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.77rem;
+            text-transform: uppercase;
+            padding: 10px 12px;
+            border: none;
+            background: transparent;
+            letter-spacing: 0.3px;
+            border-bottom: var(--border-subtle);
+        }
+
+        .table-custom tbody tr {
+            background-color: var(--white);
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+
+        .table-custom tbody tr:hover td {
+            background-color: var(--medical-blue-soft) !important;
+        }
+
+        .table-custom td {
+            padding: 12px 12px;
+            vertical-align: middle;
+            border-top: var(--border-subtle);
+            border-bottom: var(--border-subtle);
+            background-color: var(--white);
+            font-size: 0.82rem;
+        }
+
+        .table-custom td:first-child { 
+            border-left: var(--border-subtle); 
+            border-radius: 10px 0 0 10px; 
+        }
+        .table-custom td:last-child { 
+            border-right: var(--border-subtle); 
+            border-radius: 0 10px 10px 0; 
+        }
+
+        .profile-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            background: var(--medical-blue);
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease;
+        }
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .student-info-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .student-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            color: var(--brand-primary);
+            display: block;
+            font-size: 0.88rem;
+        }
+
+        .patient-id-text {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .id-label {
+            font-weight: 500;
+            color: var(--medical-blue);
+            margin-right: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem;
+            color: var(--text-muted);
+        }
+
+        /* MODAL top-aligned */
+        .modal.top-aligned-modal .modal-dialog {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0;
+            align-items: flex-start !important;
+        }
+        .modal.top-aligned-modal .modal-dialog {
+            display: flex;
+            align-items: flex-start;
+            min-height: calc(100% - 0.5rem);
+        }
+        .modal.top-aligned-modal .modal-content {
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+            border-radius: 20px;
+            border: none;
+        }
+
+        /* 3-COLUMN LAYOUT FOR MODAL FORM (para bumaba ang height) */
+        .modal-form-grid-3col {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 0.5rem 0.5rem;
+        }
+        .full-width-field-3col {
+            grid-column: span 3;
+        }
+        .modal-dialog {
+    max-width: 600px; /* Mas maliit na value para mas manipis */
+    margin: 1.75rem auto; /* Para manatiling gitna */
+}
+        .modal-body-custom {
+            padding: 1.5rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .form-label-custom {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            color: var(--brand-primary);
+            display: block;
+        }
+        .required-star {
+            color: var(--danger-red);
+            margin-left: 2px;
+        }
+        .modal-input-custom {
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.15);
+            padding: 0.55rem 0.75rem;
+            font-size: 0.85rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        .modal-input-custom:focus {
+            border-color: var(--medical-blue-light);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(71, 88, 103, 0.2);
+        }
+        select.modal-input-custom {
+            cursor: pointer;
+            background-color: var(--white);
+        }
+        .modal-header-custom {
+            background: var(--medical-blue);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 1rem 1.5rem;
+        }
+        .modal-footer-custom {
+            border-top: none;
+            padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+            gap: 10px;
+        }
+
+        @media (max-width: 1200px) {
+            .table-custom td, .table-custom th {
+                padding: 10px 8px;
+            }
+            .action-edit-btn, .action-delete-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
+            }
+            .profile-avatar {
+                width: 34px;
+                height: 34px;
+                font-size: 0.8rem;
+            }
+            /* 3-column becomes 2-column on medium screens */
+            .modal-form-grid-3col {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .full-width-field-3col {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-content {
+                padding: 1rem;
+            }
+            .counter-pagination-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .total-counter {
+                justify-content: center;
+                width: fit-content;
+                margin: 0 auto;
+            }
+            .pagination-wrapper {
+                justify-content: center;
+            }
+            .search-section {
+                justify-content: center;
+            }
+            .search-box {
+                width: 100%;
+            }
+            .search-wrapper {
+                width: 100%;
+            }
+            .table-responsive-custom {
+                overflow-x: auto;
+            }
+            .action-buttons {
+                gap: 6px;
+            }
+            .action-edit-btn, .action-delete-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+            .pagination-btn {
+                padding: 0.3rem 0.7rem;
+                font-size: 0.7rem;
+            }
+            /* 3-column becomes 1-column on mobile */
+            .modal-form-grid-3col {
+                grid-template-columns: 1fr;
+                gap: 0.9rem;
+            }
+            .full-width-field-3col {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="appointments-wrapper">
+    <div class="form-content">
+        <!-- SEARCH BAR SECTION - above counter/pagination -->
+        <div class="search-section">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-box" id="searchPatientInput" placeholder="Search registered patients...">
+            </div>
+        </div>
+
+        <!-- COUNTER + PAGINATION ROW (side by side) -->
+        <div class="counter-pagination-row">
+            <div class="total-counter" id="totalRegisteredCounter">
+                <i class="fa-solid fa-users"></i> 
+                Total Registered Patients: <span id="totalCount">0</span>
+            </div>
+            <div class="pagination-wrapper" id="paginationControlsTop">
+                <!-- pagination injected here -->
+            </div>
+        </div>
+
+        <!-- HORIZONTAL SEPARATOR LINE -->
+        <div class="separator-line"></div>
+
+        <!-- TABLE CONTAINER -->
+        <div class="table-responsive-custom">
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th>Patient Details</th>
+                        <th>Email of Patient</th>
+                        <th>Course & Year</th>
+                        <th>Service Type</th>
+                        <th>Register Date</th>
+                        <th>Status</th>
+                        <th style="width: 110px; text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="patientTableBody">
+                    <!-- dynamic rows: Registered patients with Edit/Delete -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT MODAL - 3-COLUMN LAYOUT (mas mababa ang height) -->
+<div class="modal fade top-aligned-modal" id="editPatientModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border-radius: 24px;">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title"><i class="fa-solid fa-user-pen me-2"></i>Edit Patient Information</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body modal-body-custom">
+                <input type="hidden" id="editPatientId">
+                <div class="modal-form-grid-3col">
+                    <div>
+                        <label class="form-label-custom">Full Name <span class="required-star">*</span></label>
+                        <input type="text" class="modal-input-custom" id="editPatientName" placeholder="e.g., Juan Dela Cruz">
+                    </div>
+                    <div>
+                        <label class="form-label-custom">Patient ID <span class="required-star">*</span></label>
+                        <input type="text" class="modal-input-custom" id="editPatientIdNumber" placeholder="e.g., 2026-00123-PT-0">
+                    </div>
+                    <div>
+                        <label class="form-label-custom">Email Address <span class="required-star">*</span></label>
+                        <input type="email" class="modal-input-custom" id="editEmail" placeholder="patient@example.com">
+                    </div>
+                    <div>
+                        <label class="form-label-custom">Department / Course</label>
+                        <input type="text" class="modal-input-custom" id="editDepartment" placeholder="e.g., BSIT">
+                    </div>
+                    <div>
+                        <label class="form-label-custom">Course Year</label>
+                        <input type="text" class="modal-input-custom" id="editCourseYear" placeholder="e.g., 3-1">
+                    </div>
+                    <div>
+                        <label class="form-label-custom">Service Type</label>
+                        <select class="modal-input-custom" id="editServiceType">
+                            <option value="Online Register">Online Register</option>
+                            <option value="Kiosk Register">Kiosk Register</option>
+                        </select>
+                    </div>
+                    <div class="full-width-field-3col">
+                        <label class="form-label-custom">Register Date</label>
+                        <input type="text" class="modal-input-custom" id="editRegisterDate" placeholder="MM/DD/YY">
+                    </div>
+                </div>
+                <div class="mt-3 text-muted small"><i class="fas fa-info-circle"></i> All fields with <span class="text-danger">*</span> are required.</div>
+            </div>
+            <div class="modal-footer modal-footer-custom">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 30px;">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveEditBtn" style="background: var(--medical-blue); border-radius: 30px; padding: 0.5rem 1.8rem;">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal fade top-aligned-modal" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius: 16px;">
+            <div class="modal-header" style="background: var(--danger-red); color: white; border-radius: 16px 16px 0 0;">
+                <h5 class="modal-title"><i class="fa-solid fa-trash-can me-2"></i>Confirm Deletion</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem;">
+                <p class="mb-0">Are you sure you want to permanently remove <strong id="deletePatientName"></strong> from the registered patients list?</p>
+                <small class="text-muted">This action cannot be undone.</small>
+            </div>
+            <div class="modal-footer" style="border-top: none;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="finalDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ============================================================
+    // MANAGE PATIENTS (nursepatientmanage.php)
+    // UPDATED: 3-COLUMN LAYOUT for Edit Modal (mas mababa ang height)
+    // Para hindi masyadong matangkad ang modal popup form
+    // ============================================================
+    
+    let registeredPatientsList = [
+        { id: "reg1", patientName: "Maria Santos", patientId: "2026-00123-PT-0", email: "maria.santos@example.com", department: "BSIT", courseYear: "3-1", serviceType: "Online Register", registerDate: "02/15/26", status: "registered" },
+        { id: "reg2", patientName: "John Dela Cruz", patientId: "2026-00124-PT-1", email: "john.dc@example.com", department: "BSCS", courseYear: "2-2", serviceType: "Kiosk Register", registerDate: "02/16/26", status: "registered" },
+        { id: "reg3", patientName: "Reyna Lopez", patientId: "2026-00125-PT-2", email: "reyna.lopez@example.com", department: "BSN", courseYear: "4-1", serviceType: "Online Register", registerDate: "02/16/26", status: "registered" },
+        { id: "reg4", patientName: "Eduardo Gomez", patientId: "2026-00126-PT-3", email: "edu.gomez@example.com", department: "BSCE", courseYear: "3-2", serviceType: "Online Register", registerDate: "02/17/26", status: "registered" },
+        { id: "reg5", patientName: "Francesca Cruz", patientId: "2026-00127-PT-4", email: "frances.cruz@example.com", department: "BSBA", courseYear: "2-1", serviceType: "Kiosk Register", registerDate: "02/18/26", status: "registered" },
+        { id: "reg6", patientName: "Liam Mercado", patientId: "2026-00128-PT-5", email: "liam.merc@example.com", department: "BSIT", courseYear: "1-3", serviceType: "Online Register", registerDate: "02/19/26", status: "registered" },
+        { id: "reg7", patientName: "Sophia Ramirez", patientId: "2026-00129-PT-6", email: "sophia.ram@example.com", department: "BS Psychology", courseYear: "3-1", serviceType: "Kiosk Register", registerDate: "02/20/26", status: "registered" },
+        { id: "reg8", patientName: "Andrei Villanueva", patientId: "2026-00130-PT-7", email: "andrei.v@example.com", department: "BSCS", courseYear: "4-2", serviceType: "Online Register", registerDate: "02/20/26", status: "registered" },
+        { id: "reg9", patientName: "Gianna Rivera", patientId: "2026-00131-PT-8", email: "gianna.riv@example.com", department: "BSN", courseYear: "2-2", serviceType: "Online Register", registerDate: "02/21/26", status: "registered" },
+        { id: "reg10", patientName: "Paolo Mendoza", patientId: "2026-00132-PT-9", email: "paolo.mend@example.com", department: "BSIT", courseYear: "3-3", serviceType: "Kiosk Register", registerDate: "02/21/26", status: "registered" },
+        { id: "reg11", patientName: "Isabella Flores", patientId: "2026-00133-PT-10", email: "bella.flores@example.com", department: "BSN", courseYear: "4-2", serviceType: "Online Register", registerDate: "02/22/26", status: "registered" },
+        { id: "reg12", patientName: "Carlos Reyes", patientId: "2026-00134-PT-11", email: "carlos.reyes@example.com", department: "BSCE", courseYear: "3-1", serviceType: "Kiosk Register", registerDate: "02/22/26", status: "registered" },
+        { id: "reg13", patientName: "Megan Torres", patientId: "2026-00135-PT-12", email: "megan.torres@example.com", department: "BSIT", courseYear: "2-2", serviceType: "Online Register", registerDate: "02/23/26", status: "registered" },
+        { id: "reg14", patientName: "Justin Bautista", patientId: "2026-00136-PT-13", email: "justin.b@example.com", department: "BSBA", courseYear: "1-4", serviceType: "Online Register", registerDate: "02/23/26", status: "registered" }
+    ];
+
+    const ITEMS_PER_PAGE = 4;
+    let currentPage = 1;
+    let currentFilteredList = [];
+    let editModal, deleteModal;
+    let currentDeleteId = null;
+    let currentDeleteName = "";
+
+    // Helper functions
+    function getInitials(name) {
+        if (!name) return "?";
+        const parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+        return parts[0].charAt(0).toUpperCase() + parts[parts.length - 1].charAt(0).toUpperCase();
+    }
+
+    function getAvatarColor(name) {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        const colors = ['#4a6fa5', '#6c5b7b', '#c06c6c', '#2c7a47', '#d97706', '#7c3aed', '#db2777', '#0891b2'];
+        return colors[Math.abs(hash) % colors.length];
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    }
+
+    function getFilteredPatients() {
+        const searchTerm = document.getElementById('searchPatientInput')?.value.toLowerCase().trim() || '';
+        let filtered = [...registeredPatientsList];
+        if (searchTerm) {
+            filtered = filtered.filter(pat => 
+                pat.patientName.toLowerCase().includes(searchTerm) ||
+                pat.patientId.toLowerCase().includes(searchTerm) ||
+                pat.email.toLowerCase().includes(searchTerm) ||
+                pat.department.toLowerCase().includes(searchTerm) ||
+                (pat.courseYear && pat.courseYear.toLowerCase().includes(searchTerm)) ||
+                pat.serviceType.toLowerCase().includes(searchTerm) ||
+                pat.registerDate.includes(searchTerm)
+            );
+        }
+        return filtered;
+    }
+
+    function renderPaginationControls() {
+        const container = document.getElementById('paginationControlsTop');
+        if (!container) return;
+        const totalItems = currentFilteredList.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+        let html = `<button class="pagination-btn" id="prevPageBtn" ${currentPage === 1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-left"></i> Prev</button>`;
+        const maxVisible = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+        if (endPage - startPage + 1 < maxVisible) startPage = Math.max(1, endPage - maxVisible + 1);
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<button class="pagination-btn page-number ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`;
+        }
+        html += `<button class="pagination-btn" id="nextPageBtn" ${currentPage === totalPages ? 'disabled' : ''}>Next <i class="fa-solid fa-chevron-right"></i></button>`;
+        container.innerHTML = html;
+        document.getElementById('prevPageBtn')?.addEventListener('click', () => goToPage(currentPage - 1));
+        document.getElementById('nextPageBtn')?.addEventListener('click', () => goToPage(currentPage + 1));
+        document.querySelectorAll('.page-number').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const page = parseInt(btn.dataset.page);
+                if (!isNaN(page)) goToPage(page);
+            });
+        });
+    }
+
+    function goToPage(page) {
+        const totalPages = Math.max(1, Math.ceil(currentFilteredList.length / ITEMS_PER_PAGE));
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderPatientTable();
+    }
+
+    function renderPatientTable() {
+        const tbody = document.getElementById('patientTableBody');
+        if (!tbody) return;
+        const filtered = getFilteredPatients();
+        currentFilteredList = filtered;
+        const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+        const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+        const pageItems = filtered.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+        document.getElementById('totalCount').innerText = registeredPatientsList.length;
+        
+        if (pageItems.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5"><div class="empty-state"><i class="fa-solid fa-users fa-3x mb-3 opacity-50"></i><p class="mb-0">No registered patients found.</p><small class="text-muted">All patient records appear here after registration.</small></div></td></tr>`;
+            renderPaginationControls();
+            return;
+        }
+        
+        tbody.innerHTML = pageItems.map(pat => {
+            const initials = getInitials(pat.patientName);
+            const avatarBg = getAvatarColor(pat.patientName);
+            const safeName = escapeHtml(pat.patientName).replace(/'/g, "&#39;");
+            const safeId = escapeHtml(pat.id);
+            const courseDept = `${escapeHtml(pat.department)}, ${escapeHtml(pat.courseYear)}`;
+            const displayPatientId = `<span class="id-label">ID:</span> ${escapeHtml(pat.patientId)}`;
+            return `<tr data-id="${pat.id}">
+                <td><div class="student-info-wrapper"><div class="profile-avatar" style="background: ${avatarBg};">${escapeHtml(initials)}</div><div class="student-text"><span class="patient-name">${escapeHtml(pat.patientName)}</span><span class="patient-id-text">${displayPatientId}</span></div></div></td>
+                <td class="email-cell"><i class="fa-regular fa-envelope me-1"></i> ${escapeHtml(pat.email)}</td>
+                <td class="dept-course">${courseDept}</td>
+                <td class="service-cell">${pat.serviceType === 'Online Register' ? '<i class="fa-solid fa-globe me-1"></i>' : '<i class="fa-solid fa-desktop me-1"></i>'} ${escapeHtml(pat.serviceType)}</td>
+                <td class="date-cell">${escapeHtml(pat.registerDate)}</td>
+                <td><span class="status-badge-registered"><i class="fa-regular fa-circle-check"></i> Registered</span></td>
+                <td style="text-align: center;">
+                    <div class="action-buttons">
+                        <button class="action-edit-btn" onclick="openEditModal('${safeId}')" title="Edit Patient"><i class="fa-regular fa-pen-to-square"></i></button>
+                        <button class="action-delete-btn" onclick="openDeleteModal('${safeId}', '${safeName}')" title="Delete Patient"><i class="fa-regular fa-trash-can"></i></button>
+                    </div>
+                 </td>
+              </tr>`;
+        }).join('');
+        renderPaginationControls();
+    }
+
+    function refreshTable() {
+        currentPage = 1;
+        renderPatientTable();
+    }
+
+    // EDIT MODAL logic (with 3-column layout)
+    window.openEditModal = function(patientId) {
+        const patient = registeredPatientsList.find(p => p.id === patientId);
+        if (!patient) return;
+        document.getElementById('editPatientId').value = patient.id;
+        document.getElementById('editPatientName').value = patient.patientName;
+        document.getElementById('editPatientIdNumber').value = patient.patientId;
+        document.getElementById('editEmail').value = patient.email;
+        document.getElementById('editDepartment').value = patient.department;
+        document.getElementById('editCourseYear').value = patient.courseYear;
+        document.getElementById('editServiceType').value = patient.serviceType;
+        document.getElementById('editRegisterDate').value = patient.registerDate;
+        editModal.show();
+    };
+
+    function saveEditPatient() {
+        const id = document.getElementById('editPatientId').value;
+        const index = registeredPatientsList.findIndex(p => p.id === id);
+        if (index !== -1) {
+            registeredPatientsList[index] = {
+                ...registeredPatientsList[index],
+                patientName: document.getElementById('editPatientName').value.trim(),
+                patientId: document.getElementById('editPatientIdNumber').value.trim(),
+                email: document.getElementById('editEmail').value.trim(),
+                department: document.getElementById('editDepartment').value.trim(),
+                courseYear: document.getElementById('editCourseYear').value.trim(),
+                serviceType: document.getElementById('editServiceType').value,
+                registerDate: document.getElementById('editRegisterDate').value.trim(),
+                status: 'registered'
+            };
+            refreshTable();
+            editModal.hide();
+            showToastMessage("Patient record updated successfully.", "success");
+        }
+    }
+
+    // DELETE modal logic
+    window.openDeleteModal = function(patientId, patientName) {
+        currentDeleteId = patientId;
+        currentDeleteName = patientName;
+        document.getElementById('deletePatientName').innerText = patientName;
+        deleteModal.show();
+    };
+
+    function confirmDeletePatient() {
+        if (currentDeleteId) {
+            const index = registeredPatientsList.findIndex(p => p.id === currentDeleteId);
+            if (index !== -1) {
+                registeredPatientsList.splice(index, 1);
+                refreshTable();
+                deleteModal.hide();
+                showToastMessage(`${currentDeleteName} has been removed.`, "danger");
+                currentDeleteId = null;
+            }
+        }
+    }
+
+    function showToastMessage(message, type) {
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed bottom-0 end-0 p-3';
+        toast.style.zIndex = '9999';
+        let bgClass = 'bg-success', icon = 'fa-check-circle';
+        if (type === 'danger') { bgClass = 'bg-danger'; icon = 'fa-exclamation-circle'; }
+        if (type === 'info') { bgClass = 'bg-info'; icon = 'fa-info-circle'; }
+        toast.innerHTML = `<div class="toast align-items-center text-white ${bgClass} border-0" role="alert" data-bs-autohide="true" data-bs-delay="2000"><div class="d-flex"><div class="toast-body"><i class="fa-solid ${icon} me-2"></i>${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div>`;
+        document.body.appendChild(toast);
+        const bsToast = new bootstrap.Toast(toast.querySelector('.toast'), { autohide: true, delay: 2000 });
+        bsToast.show();
+        toast.addEventListener('hidden.bs.toast', () => toast.remove());
+    }
+
+    function setupEventListeners() {
+        const searchInput = document.getElementById('searchPatientInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => { currentPage = 1; renderPatientTable(); });
+        }
+        document.getElementById('saveEditBtn').addEventListener('click', saveEditPatient);
+        document.getElementById('finalDeleteBtn').addEventListener('click', confirmDeletePatient);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        editModal = new bootstrap.Modal(document.getElementById('editPatientModal'), { backdrop: 'static', keyboard: false });
+        deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'), { backdrop: 'static', keyboard: false });
+        setupEventListeners();
+        renderPatientTable();
+    });
+
+    /* IMPORTANT SCRIPT MUST BE PRESERVED */
+    if (window.self === window.top) {
+        const currentPagePath = window.location.pathname.split("/").pop();
+        if (currentPagePath && !currentPagePath.includes('nursedashboard.php')) {
+            window.location.href = "nursedashboard.php?page=nursepatient.php&subpage=" + currentPagePath;
+        }
+    }
+</script>
+</body>
+</html>

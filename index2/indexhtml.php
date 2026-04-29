@@ -37,7 +37,7 @@
                       Home <i class="bi bi-chevron-down ms-1" style="font-size: 0.8rem;"></i>
                   </a>
                   <ul class="dropdown-menu shadow border-0" aria-labelledby="homeDropdown" style="border-radius: 12px;">
-                      <li><a class="dropdown-item" href="../../index.html">home page 1</a></li>
+                      <li><a class="dropdown-item" href="../index1/index.php">home page 1</a></li>
                   </ul>
               </li>
 
@@ -58,11 +58,7 @@
               </li>
           </ul>
 
-          <div class="d-flex gap-3 align-items-center">
-    <a href="../../kioskhomepage.html" class="btn-kiosk-nav">
-        <i class="bi bi-desktop me-1"></i> Kiosk Mode
-    </a>
-    
+          <div class="d-flex gap-3 align-items-center">    
     <a href="../../portalmain.html" class="btn-login-nav">Login</a>
 </div>
       </div>

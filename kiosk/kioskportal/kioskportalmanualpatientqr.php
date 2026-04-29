@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>CareLink Express | Manual Patient ID Login — QWERTY Kiosk</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --pup-maroon-dark: #7a0919;
+            --key-bg: #f1f5f9;
+            --key-active: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px) brightness(0.45);
+            transform: scale(1.02);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: -1;
+        }
+
+        .portal-card {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 20px;
+            width: 1300px;
+            height: 850px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.2) inset;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.92);
+            flex-shrink: 0;
+        }
+        
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.65) 100%);
+            z-index: 1;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .navbar-custom {
+            position: absolute;
+            top: 20px;
+            left: 100px;
+            right: 100px;
+            padding: 15px 40px 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            z-index: 100;
+        }
+
+        .logo-separator-wrapper {
+            position: absolute;
+            top: 95px;
+            left: 100px;
+            right: 100px;
+            z-index: 99;
+            pointer-events: none;
+        }
+        
+        .bottom-separator-wrapper {
+            position: absolute;
+            bottom: 90px;
+            left: 100px;
+            right: 100px;
+            z-index: 99;
+            pointer-events: none;
+        }
+        
+        .brand-separator {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.7) 15%, 
+                rgba(255,215,0,0.9) 50%, 
+                rgba(255,255,255,0.7) 85%, 
+                rgba(255,255,255,0) 100%);
+            border-radius: 4px;
+        }
+
+        .logo-area { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            justify-content: flex-start; 
+        }
+        
+        .logo-area img { 
+            height: 45px; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); 
+        }
+        
+        .logo-area span { 
+            font-weight: 800; 
+            font-size: 1.5rem; 
+            color: white; 
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .login-area { 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        .time-container-permanent {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            font-family: 'Poppins', monospace;
+            letter-spacing: 1px;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.45);
+            color: white;
+            border: 1.5px solid rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            min-width: 180px;
+            width: auto;
+            white-space: nowrap;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            transition: all 0.1s ease;
+            cursor: default;
+        }
+        
+        .time-container-permanent span {
+            display: inline-block;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* MIDDLE SECTION: same margins as navbar */
+        .middle-maximized {
+            position: absolute;
+            top: 130px;
+            bottom: 130px;
+            left: 100px;
+            right: 100px;
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            overflow: visible;
+        }
+
+        /* Header styling - text width now defines alignment target */
+        .manual-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            background: transparent;
+            margin: 0;
+            padding: 0;
+            width: auto;
+        }
+        
+        .manual-header i {
+            font-size: 3rem;
+            color: #ffffff;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+        }
+        
+        .manual-header h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: white;
+            margin: 0;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+            white-space: nowrap;
+        }
+        
+        .manual-sub {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.98);
+            text-align: center;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+            margin: 0;
+            width: auto;
+        }
+        
+        /* INPUT CARD AREA - width reduced to match header text edges */
+        .input-card-area {
+            width: auto;
+            min-width: 580px;
+            max-width: 780px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 18px;
+        }
+        
+        /* input + button group: full width within the constrained container */
+        .input-button-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+        }
+        
+        .patient-id-field {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 56px;
+            border: 2px solid rgba(255,255,255,0.5);
+            padding: 4px 20px;
+            min-width: 0;
+        }
+        
+        .patient-id-field input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.9rem;
+            font-weight: 600;
+            font-family: 'Poppins', monospace;
+            letter-spacing: 1px;
+            color: white;
+            text-align: center;
+            padding: 12px 8px;
+        }
+        
+        .patient-id-field input::placeholder {
+            color: rgba(255,255,240,0.6);
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+        
+        .verify-btn-inline {
+            background: linear-gradient(95deg, #0f3b5c, #0ea5e9);
+            border: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 0 28px;
+            border-radius: 56px;
+            color: white;
+            white-space: nowrap;
+            letter-spacing: 1px;
+            transition: 0.15s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            height: 100%;
+            min-height: 64px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .verify-btn-inline:active { transform: scale(0.97); }
+        
+        /* ===== PHONE-STYLE QWERTY KEYBOARD ===== */
+        .kiosk-keyboard {
+            background: rgba(20, 20, 28, 0.92);
+            backdrop-filter: blur(18px);
+            border-radius: 32px;
+            padding: 12px 16px;
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.6);
+        }
+        
+        .key-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        /* Compact but comfortable keys inside constrained width */
+        .key {
+            background: #2c2c32;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            padding: 7px 0;
+            border-radius: 14px;
+            width: 58px;
+            text-align: center;
+            color: #ffffff;
+            transition: 0.05s linear;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .key:active {
+            transform: scale(0.92);
+            background: #3a3a44;
+        }
+        
+        .key-func {
+            background: #3a3a44;
+            color: #ffd966;
+            font-size: 0.8rem;
+            font-weight: 600;
+            width: 68px;
+        }
+        
+        .key-backspace { background: #a1222a; color: white; width: 76px; }
+        .key-clear { background: #b91c1c; color: white; width: 72px; }
+        .key-space { background: #2c2c32; width: 160px; color: white; font-weight: 400; letter-spacing: 2px; }
+        .key-switch {
+            background: #1e5f6e;
+            color: white;
+            width: 76px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        
+        .key-switch i { margin-right: 4px; }
+        
+        /* Responsive: maintain proportional shrinking while keeping edge alignment with header */
+        @media (max-width: 1200px) {
+            .navbar-custom, .logo-separator-wrapper, .bottom-separator-wrapper, .middle-maximized { left: 70px; right: 70px; }
+            .manual-header h1 { font-size: 2.2rem; white-space: normal; text-align: center; }
+            .input-card-area { min-width: 520px; max-width: 700px; }
+            .key { width: 54px; font-size: 1rem; padding: 6px 0; }
+            .key-func { width: 64px; font-size: 0.75rem; }
+            .key-backspace { width: 72px; }
+            .key-clear { width: 68px; }
+            .key-space { width: 150px; }
+            .key-switch { width: 72px; }
+            .go-back-wrapper, .faq-link-wrapper { left: 70px; }
+            .faq-link-wrapper { right: 70px; left: auto; }
+        }
+        
+        @media (max-width: 950px) {
+            .navbar-custom, .logo-separator-wrapper, .bottom-separator-wrapper, .middle-maximized { left: 45px; right: 45px; }
+            .manual-header h1 { font-size: 1.9rem; }
+            .patient-id-field input { font-size: 1.6rem; }
+            .verify-btn-inline { font-size: 0.95rem; padding: 0 20px; min-height: 56px; }
+            .input-card-area { min-width: 460px; max-width: 620px; }
+            .key { width: 50px; font-size: 0.9rem; padding: 6px 0; }
+            .key-func { width: 60px; font-size: 0.7rem; }
+            .key-backspace { width: 68px; }
+            .key-clear { width: 64px; }
+            .key-space { width: 130px; }
+            .key-switch { width: 66px; font-size: 0.7rem; }
+        }
+        
+        @media (max-width: 750px) {
+            .input-card-area { min-width: 380px; max-width: 520px; }
+            .key { width: 44px; font-size: 0.85rem; padding: 5px 0; }
+            .key-func { width: 54px; font-size: 0.65rem; }
+            .key-backspace { width: 60px; }
+            .key-clear { width: 56px; }
+            .key-space { width: 110px; }
+            .key-switch { width: 58px; }
+        }
+        
+        @media (max-width: 650px) {
+            .input-card-area { min-width: 320px; max-width: 450px; }
+            .key { width: 40px; font-size: 0.8rem; }
+            .key-space { width: 95px; }
+            .key-switch { width: 54px; font-size: 0.6rem; }
+        }
+        
+        /* GO BACK & FAQ buttons (unchanged, preserve styling) */
+        .go-back-wrapper {
+            position: absolute;
+            bottom: 38px;          /* matches FAQ link bottom position */
+            left: 130px;           /* same left offset symmetry as FAQ's right offset (130px) */
+            z-index: 15;
+            pointer-events: auto;
+        }
+
+        .go-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.35);
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .go-back-btn i {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+        }
+
+        .go-back-btn:hover {
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            border-color: rgba(255,255,255,0.7);
+            text-decoration: none;
+        }
+        
+        .faq-link-wrapper {
+            position: absolute;
+            bottom: 38px;       
+            right: 130px;        
+            left: auto;          
+            text-align: right;  
+            z-index: 15;
+            pointer-events: auto;
+        }
+
+        .faq-simple-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(4px);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.25);
+            letter-spacing: 0.3px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .faq-simple-link i {
+            font-size: 1rem;
+            color: #2dd4bf;
+        }
+
+        .faq-simple-link:hover {
+            background: rgba(0, 0, 0, 0.55);
+            color: white;
+            border-color: white;
+            text-decoration: none;
+        }
+        
+        .swal2-popup { font-family: 'Poppins', sans-serif !important; border-radius: 28px !important; }
+        body.swal2-shown { overflow: hidden !important; }
+    </style>
+</head>
+<body>
+
+<div class="portal-card" id="card">
+    <div class="card-overlay"></div>
+    
+    <nav class="navbar-custom">
+        <div class="logo-area">
+            <img src="../../assets/cliniclogohalf.png" alt="Logo" onerror="this.src='https://placehold.co/60x45/9C0C20/white?text=CL'">
+            <span>PUPBC CareLink</span>
+        </div>
+        <div class="login-area">
+            <div class="time-container-permanent" id="liveClockDisplay">
+                <i class="bi bi-clock me-2"></i>
+                <span id="clockTimeText">--:--:-- --</span>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="logo-separator-wrapper"><div class="brand-separator"></div></div>
+    <div class="bottom-separator-wrapper"><div class="brand-separator"></div></div>
+
+    <div class="middle-maximized">
+        <div class="manual-header">
+            <i class="fas fa-id-card"></i>
+            <h1>MANUAL PATIENT ID TO LOGIN</h1>
+        </div>
+        <div class="manual-sub">Tap your student number below</div>
+        
+        <!-- Reduced-width container that aligns with header text edges -->
+        <div class="input-card-area">
+            <div class="input-button-group">
+                <div class="patient-id-field">
+                    <input type="text" id="patientIdInput" placeholder="e.g., 2026-00123-PN-0" autocomplete="off" readonly>
+                </div>
+                <button class="verify-btn-inline" id="verifyManualBtnInline">
+                    <i class="fas fa-check-circle"></i> VERIFY PATIENT
+                </button>
+            </div>
+            
+            <!-- PHONE-STYLE QWERTY KEYBOARD with ABC/?123 toggle -->
+            <div class="kiosk-keyboard" id="dynamicKeyboard"></div>
+        </div>
+    </div>
+
+    <div class="go-back-wrapper">
+        <a href="kioskportalpage.php" class="go-back-btn" id="goBackButton"><i class="fas fa-arrow-left"></i> Go Back</a>
+    </div>
+    <div class="faq-link-wrapper">
+        <a href="faq.php" class="faq-simple-link" id="faqSimpleLink"><i class="fas fa-question-circle"></i> Need more help? <strong>FAQs</strong></a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ========== LIVE CLOCK ==========
+    function updateLiveClock() {
+        const clockSpan = document.getElementById('clockTimeText');
+        if (!clockSpan) return;
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        clockSpan.innerText = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} ${ampm}`;
+    }
+    updateLiveClock();
+    setInterval(updateLiveClock, 1000);
+    
+    // Background image
+    const backgroundImageURL = "https://5.imimg.com/data5/SELLER/Default/2023/6/316157293/TP/IJ/GK/5863015/healthcare-kiosk-solutions-1000x1000.jpg";
+    document.body.style.backgroundImage = `url('${backgroundImageURL}')`;
+    const cardElem = document.getElementById('card');
+    if (cardElem) cardElem.style.backgroundImage = `url('${backgroundImageURL}')`;
+    
+    // ========== QWERTY LAYOUTS ==========
+    const abcLayout = {
+        rows: [
+            ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+            ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+            ["Z", "X", "C", "V", "B", "N", "M"]
+        ],
+        specialBottom: [
+            { type: "switch", label: "?123", action: "switch" },
+            { type: "func", label: "SPACE", action: "space", wide: true },
+            { type: "func", label: "⌫ DEL", action: "backspace", style: "key-backspace" },
+            { type: "func", label: "CLEAR", action: "clear", style: "key-clear" }
+        ]
+    };
+    
+    const numLayout = {
+        rows: [
+            ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
+            ["-", "/", ":", ";", "(", ")", "$", "&", "@", "\""],
+            [".", ",", "?", "!", "'", "#", "%", "*", "+", "="]
+        ],
+        specialBottom: [
+            { type: "switch", label: "ABC", action: "switch" },
+            { type: "func", label: "SPACE", action: "space", wide: true },
+            { type: "func", label: "⌫ DEL", action: "backspace", style: "key-backspace" },
+            { type: "func", label: "CLEAR", action: "clear", style: "key-clear" }
+        ]
+    };
+    
+    let currentLayout = "abc";
+    const keyboardContainer = document.getElementById('dynamicKeyboard');
+    const patientInput = document.getElementById('patientIdInput');
+    
+    function insertChar(char) {
+        patientInput.value += char;
+        patientInput.focus();
+    }
+    
+    function handleAction(action) {
+        if (action === 'backspace') {
+            patientInput.value = patientInput.value.slice(0, -1);
+        } else if (action === 'clear') {
+            patientInput.value = '';
+        } else if (action === 'space') {
+            patientInput.value += ' ';
+        } else if (action === 'switch') {
+            toggleKeyboardLayout();
+        }
+        patientInput.focus();
+    }
+    
+    function toggleKeyboardLayout() {
+        currentLayout = currentLayout === 'abc' ? 'num' : 'abc';
+        renderKeyboard();
+    }
+    
+    function renderKeyboard() {
+        const layout = currentLayout === 'abc' ? abcLayout : numLayout;
+        let html = '';
+        
+        layout.rows.forEach(row => {
+            html += `<div class="key-row">`;
+            row.forEach(key => {
+                html += `<button class="key" data-type="char" data-value="${key}">${key}</button>`;
+            });
+            html += `</div>`;
+        });
+        
+        html += `<div class="key-row">`;
+        layout.specialBottom.forEach(btn => {
+            let additionalClass = "";
+            let iconHtml = "";
+            if (btn.style) additionalClass = btn.style;
+            if (btn.action === 'switch') {
+                additionalClass += " key-switch";
+                iconHtml = `<i class="fas fa-keyboard"></i> `;
+            } else if (btn.action === 'space') {
+                additionalClass += " key-space";
+            } else if (btn.action === 'backspace') {
+                additionalClass += " key-backspace";
+            } else if (btn.action === 'clear') {
+                additionalClass += " key-clear";
+            }
+            if (btn.wide) additionalClass += " key-func";
+            html += `<button class="key ${additionalClass}" data-type="action" data-action="${btn.action}">${iconHtml}${btn.label}</button>`;
+        });
+        html += `</div>`;
+        
+        keyboardContainer.innerHTML = html;
+        
+        document.querySelectorAll('#dynamicKeyboard .key').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const type = btn.getAttribute('data-type');
+                if (type === 'char') {
+                    const val = btn.getAttribute('data-value');
+                    insertChar(val);
+                } else if (type === 'action') {
+                    const action = btn.getAttribute('data-action');
+                    handleAction(action);
+                }
+            });
+        });
+    }
+    
+    renderKeyboard();
+    
+    // ========== VERIFY PATIENT ==========
+    function showWelcomeWithTimer(enteredId) {
+        const patientId = enteredId.trim();
+        if (patientId === "") {
+            Swal.fire({
+                title: 'Empty ID',
+                text: 'Please enter a valid patient ID using the keyboard.',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+            });
+            return false;
+        }
+        const welcomeName = "Juan";
+        Swal.fire({
+            title: '✅ Patient Verified',
+            html: `<div style="font-size:1.4rem; font-weight:800; margin-bottom:12px;">scanned id ${patientId}, welcome ${welcomeName}</div><div style="font-size:0.95rem;">Manual entry confirmed. Redirecting...</div>`,
+            icon: 'success',
+            confirmButtonText: 'Continue to Dashboard',
+            confirmButtonColor: '#0ea5e9',
+            backdrop: `rgba(0,0,0,0.85)`,
+            allowOutsideClick: false,
+            showConfirmButton: true,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+                const confirmBtn = Swal.getConfirmButton();
+                if (confirmBtn) confirmBtn.disabled = true;
+            }
+        }).then(() => {
+            window.location.href = "../kioskdashboard/kioskdashboardpage.php";
+        });
+        setTimeout(() => {
+            if (window.location.href.includes('kioskmanualpatientqr')) window.location.href = "../kioskdashboard/kioskdashboardpage.php";
+        }, 3100);
+        return true;
+    }
+    
+    const verifyInlineBtn = document.getElementById('verifyManualBtnInline');
+    if (verifyInlineBtn) {
+        verifyInlineBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const idValue = patientInput.value;
+            if (idValue.trim() === "") {
+                Swal.fire({ title: 'Empty ID', text: 'Please type your student ID using the on-screen keyboard.', icon: 'warning', confirmButtonText: 'OK' });
+                return;
+            }
+            showWelcomeWithTimer(idValue);
+        });
+    }
+    
+    // ========== GO BACK ==========
+    const goBackBtn = document.getElementById('goBackButton');
+    if (goBackBtn) {
+        const freshGoBack = goBackBtn.cloneNode(true);
+        goBackBtn.parentNode.replaceChild(freshGoBack, goBackBtn);
+        freshGoBack.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.history.length > 1) window.history.back();
+            else {
+                Swal.fire({ title: 'Navigate Back', text: 'Returning to dashboard.', icon: 'info', timer: 1000, showConfirmButton: false })
+                    .then(() => window.location.href = 'kioskdashboardpage.php');
+            }
+        });
+    }
+    
+    // Fix Swal overflow
+    (function fixSwalAndOverflow() {
+        const originalSwal = Swal.fire;
+        Swal.fire = function(...args) {
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            let config = args[0] || {};
+            if (typeof config === 'object') { config.scrollbarPadding = false; config.heightAuto = false; config.allowOutsideClick = false; } 
+            else { args[0] = { ...(args[0] || {}), scrollbarPadding: false, heightAuto: false }; }
+            const result = originalSwal.apply(this, args);
+            if (result && result.then) result.finally(() => { document.documentElement.style.overflow = 'hidden'; document.body.style.overflow = 'hidden'; });
+            return result;
+        };
+        const observer = new MutationObserver(() => { if (document.body.style.paddingRight !== '0px') document.body.style.paddingRight = '0px'; });
+        observer.observe(document.body, { attributes: true });
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+    })();
+    
+    console.log("✅ Width reduced & edge alignment matched: input field, verify button and keyboard now align perfectly with the header text edges (narrower, centered, and consistent with header boundaries).");
+</script>
+</body>
+</html>

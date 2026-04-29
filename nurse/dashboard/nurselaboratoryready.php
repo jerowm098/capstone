@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Ready Results | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --standard-padding: 1.5rem;
+            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
+            --brand-primary: #28313a;      
+            --medical-blue: #475867;        
+            --medical-blue-dark: #1a2127; 
+            --medical-blue-light: #667f94;
+            --medical-blue-soft: rgba(71, 88, 103, 0.08); 
+            --white: #ffffff;
+            --text-main: #28313a;          
+            --text-muted: #5c7285;     
+            --clay-bg: #f4f7f6;
+            --ready-green: #2c7a47;
+            --ready-bg: #e0f2e9;
+            --records-purple: #6f42c1;
+            --records-bg: rgba(111, 66, 193, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: transparent;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        .appointments-wrapper {
+            width: 100%;
+            background: transparent;
+        }
+
+        .form-content {
+            padding: var(--standard-padding);
+        }
+
+        /* SEARCH SECTION */
+        .search-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .search-box {
+            background: var(--clay-bg);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 10px;
+            padding: 8px 15px 8px 38px;
+            width: 300px;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--medical-blue-light);
+            background: var(--white);
+            box-shadow: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        /* Counter + Pagination row */
+        .counter-pagination-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 16px;
+        }
+
+        .total-counter {
+            background: var(--medical-blue-soft);
+            color: var(--medical-blue-dark);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .total-counter i {
+            color: var(--ready-green);
+            font-size: 1rem;
+        }
+
+        .pagination-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            min-height: 42px;
+        }
+
+        .pagination-btn {
+            background: var(--white);
+            border: 1px solid rgba(40, 49, 58, 0.2);
+            color: var(--brand-primary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination-btn i {
+            font-size: 0.7rem;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            background: #f1f2f4;
+        }
+
+        .page-number.active-page {
+            background: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .separator-line {
+            border-bottom: var(--border-subtle);
+            margin-bottom: 16px;
+        }
+
+        /* Status badge for READY */
+        .status-badge-ready {
+            background: var(--ready-bg);
+            color: var(--ready-green);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* RECORDS BUTTON */
+        .btn-records-action {
+            background: var(--records-bg);
+            color: var(--records-purple);
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 33px;
+        }
+
+        .btn-records-action:hover {
+            background: var(--records-purple);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(111, 66, 193, 0.2);
+        }
+
+        /* TABLE STYLES */
+        .table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-bottom: 0;
+            font-size: 0.82rem;
+        }
+
+        .table-custom thead th {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.77rem;
+            text-transform: uppercase;
+            padding: 10px 12px;
+            border: none;
+            background: transparent;
+            letter-spacing: 0.3px;
+            border-bottom: var(--border-subtle);
+        }
+
+        .table-custom tbody tr {
+            background-color: var(--white);
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+
+        .table-custom tbody tr:hover td {
+            background-color: var(--medical-blue-soft) !important;
+        }
+
+        .table-custom td {
+            padding: 12px 12px;
+            vertical-align: middle;
+            border-top: var(--border-subtle);
+            border-bottom: var(--border-subtle);
+            background-color: var(--white);
+            font-size: 0.82rem;
+        }
+
+        .table-custom td:first-child { 
+            border-left: var(--border-subtle); 
+            border-radius: 10px 0 0 10px; 
+        }
+        .table-custom td:last-child { 
+            border-right: var(--border-subtle); 
+            border-radius: 0 10px 10px 0; 
+        }
+
+        .profile-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            background: var(--medical-blue);
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease;
+        }
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .student-info-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .student-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            color: var(--brand-primary);
+            display: block;
+            font-size: 0.88rem;
+        }
+
+        .patient-id-text {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .id-label {
+            font-weight: 500;
+            color: var(--medical-blue);
+            margin-right: 4px;
+        }
+
+        .processing-id-style {
+            font-family: monospace;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: var(--medical-blue-dark);
+            background: var(--medical-blue-soft);
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem;
+            color: var(--text-muted);
+        }
+
+        /* MODAL top-aligned */
+        .modal.top-aligned-modal .modal-dialog {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0;
+            align-items: flex-start !important;
+        }
+        .modal.top-aligned-modal .modal-dialog {
+            display: flex;
+            align-items: flex-start;
+            min-height: calc(100% - 0.5rem);
+        }
+        .modal.top-aligned-modal .modal-content {
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+            border-radius: 20px;
+            border: none;
+        }
+
+        /* Modal details grid */
+        .detail-row {
+            display: flex;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+        .detail-label {
+            width: 110px;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        .detail-value {
+            flex: 1;
+            font-weight: 500;
+            color: var(--brand-primary);
+        }
+        /* Records section inside modal */
+        .records-section {
+            background: var(--medical-blue-soft);
+            border-radius: 14px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .records-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--brand-primary);
+            margin-bottom: 0.75rem;
+            border-left: 3px solid var(--records-purple);
+            padding-left: 10px;
+        }
+        .record-item {
+            font-size: 0.8rem;
+            padding: 6px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.05);
+        }
+        .record-item:last-child {
+            border-bottom: none;
+        }
+        .record-label {
+            font-weight: 500;
+            color: var(--medical-blue);
+            width: 110px;
+            display: inline-block;
+        }
+        .modal-header-records {
+            background: var(--records-purple);
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        @media (max-width: 1200px) {
+            .table-custom td, .table-custom th {
+                padding: 10px 8px;
+            }
+            .btn-records-action {
+                padding: 5px 12px;
+                font-size: 0.7rem;
+            }
+            .profile-avatar {
+                width: 34px;
+                height: 34px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-content {
+                padding: 1rem;
+            }
+            .counter-pagination-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .total-counter {
+                justify-content: center;
+                width: fit-content;
+                margin: 0 auto;
+            }
+            .pagination-wrapper {
+                justify-content: center;
+            }
+            .search-section {
+                justify-content: center;
+            }
+            .search-box {
+                width: 100%;
+            }
+            .search-wrapper {
+                width: 100%;
+            }
+            .table-responsive-custom {
+                overflow-x: auto;
+            }
+            .pagination-btn {
+                padding: 0.3rem 0.7rem;
+                font-size: 0.7rem;
+            }
+            .record-label {
+                width: 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="appointments-wrapper">
+    <div class="form-content">
+        <!-- SEARCH BAR SECTION -->
+        <div class="search-section">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-box" id="searchReadyInput" placeholder="Search ready results...">
+            </div>
+        </div>
+
+        <!-- COUNTER + PAGINATION ROW -->
+        <div class="counter-pagination-row">
+            <div class="total-counter" id="totalReadyCounter">
+                <i class="fa-solid fa-check-circle"></i> 
+                Total Ready Results: <span id="totalCount">0</span>
+            </div>
+            <div class="pagination-wrapper" id="paginationControlsTop">
+                <!-- pagination injected -->
+            </div>
+        </div>
+
+        <!-- HORIZONTAL SEPARATOR LINE -->
+        <div class="separator-line"></div>
+
+        <!-- TABLE CONTAINER -->
+        <div class="table-responsive-custom">
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th>Patient Details</th>
+                        <th>Request ID</th>
+                        <th>Course & Department</th>
+                        <th>Service Type</th>
+                        <th>Assigned Staff</th>
+                        <th>Status</th>
+                        <th style="width: 130px; text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="readyTableBody">
+                    <!-- dynamic rows max 4 per page -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- RECORDS MODAL (popup with details and Print Record button) -->
+<div class="modal fade top-aligned-modal" id="recordsModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border-radius: 20px;">
+            <div class="modal-header modal-header-records">
+                <h5 class="modal-title"><i class="fa-solid fa-folder-open me-2"></i>Medical Record & Result Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem; max-height: 70vh; overflow-y: auto;">
+                <!-- Patient Basic Info Section -->
+                <div class="records-section" style="background: var(--medical-blue-soft);">
+                    <div class="records-title"><i class="fa-regular fa-user me-2"></i>Patient Information</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="record-item"><span class="record-label">Full Name:</span> <span class="record-value" id="modalPatientName">-</span></div>
+                            <div class="record-item"><span class="record-label">Patient ID:</span> <span class="record-value" id="modalPatientId">-</span></div>
+                            <div class="record-item"><span class="record-label">Request ID:</span> <span class="record-value" id="modalRequestId">-</span></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="record-item"><span class="record-label">Department:</span> <span class="record-value" id="modalDepartment">-</span></div>
+                            <div class="record-item"><span class="record-label">Course Year:</span> <span class="record-value" id="modalCourseYear">-</span></div>
+                            <div class="record-item"><span class="record-label">Service Type:</span> <span class="record-value" id="modalServiceType">-</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical / Lab Results Section -->
+                <div class="records-section">
+                    <div class="records-title"><i class="fa-solid fa-flask me-2"></i>Lab Results & Medical Findings</div>
+                    <div class="record-item"><span class="record-label">Diagnosis:</span> <span class="record-value" id="modalDiagnosis">-</span></div>
+                    <div class="record-item"><span class="record-label">Findings:</span> <span class="record-value" id="modalFindings">-</span></div>
+                    <div class="record-item"><span class="record-label">Prescription:</span> <span class="record-value" id="modalPrescription">-</span></div>
+                    <div class="record-item"><span class="record-label">Assigned Staff:</span> <span class="record-value" id="modalAssignedStaff">-</span></div>
+                    <div class="record-item"><span class="record-label">Date Completed:</span> <span class="record-value" id="modalCompleteDate">-</span></div>
+                </div>
+                <div class="text-muted small mt-2"><i class="fa-regular fa-clock me-1"></i>Results are final and ready for patient pickup/release.</div>
+            </div>
+            <div class="modal-footer" style="border-top: none; justify-content: space-between;">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="printRecordBtn" style="background: var(--medical-blue); border-radius: 30px;"><i class="fa-solid fa-print me-1"></i>Print Record</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ============================================================
+    // READY RESULTS CLASS (nurselaboratoryready.php)
+    // Based on Processing List design but with Status = "Ready"
+    // Action = "Records" button that opens modal with full record + print functionality
+    // ============================================================
+    
+    // Ready results dataset (simulating completed lab/medical processes)
+    let readyResultsList = [
+        { id: "rdy1", patientName: "Maria Santos", patientId: "2026-00123-PT-0", requestId: "#LAB-00001-PT-0", department: "BSIT", courseYear: "3-1", serviceType: "Lab Test Review", assignedStaff: "Dr. Rivera", status: "ready", diagnosis: "Mild Anemia", findings: "Hemoglobin slightly below normal range. Iron deficiency suspected.", prescription: "Iron supplements + follow-up in 4 weeks.", completeDate: "2026-04-02" },
+        { id: "rdy2", patientName: "John Dela Cruz", patientId: "2026-00124-PT-1", requestId: "#LAB-00002-PT-0", department: "BSCS", courseYear: "2-2", serviceType: "Medical Certificate", assignedStaff: "Nurse Andrea", status: "ready", diagnosis: "Fit to study", findings: "No acute illness. Normal physical exam.", prescription: "Medical certificate issued.", completeDate: "2026-04-01" },
+        { id: "rdy3", patientName: "Reyna Lopez", patientId: "2026-00125-PT-2", requestId: "#LAB-00003-PT-0", department: "BSN", courseYear: "4-1", serviceType: "Physical Exam", assignedStaff: "Dr. Mendoza", status: "ready", diagnosis: "Normal health", findings: "Vitals stable. No abnormalities detected.", prescription: "Routine health maintenance.", completeDate: "2026-03-30" },
+        { id: "rdy4", patientName: "Eduardo Gomez", patientId: "2026-00126-PT-3", requestId: "#LAB-00004-PT-0", department: "BSCE", courseYear: "3-2", serviceType: "Vaccination", assignedStaff: "Nurse Clara", status: "ready", diagnosis: "Immunization complete", findings: "Administered Flu vaccine. No adverse reactions.", prescription: "Booster scheduled next year.", completeDate: "2026-03-28" },
+        { id: "rdy5", patientName: "Francesca Cruz", patientId: "2026-00127-PT-4", requestId: "#LAB-00005-PT-0", department: "BSBA", courseYear: "2-1", serviceType: "Lab Test Review", assignedStaff: "Dr. Rivera", status: "ready", diagnosis: "Normal blood work", findings: "All parameters within normal limits.", prescription: "No medication needed.", completeDate: "2026-04-03" },
+        { id: "rdy6", patientName: "Liam Mercado", patientId: "2026-00128-PT-5", requestId: "#LAB-00006-PT-0", department: "BSIT", courseYear: "1-3", serviceType: "Medical Certificate", assignedStaff: "Nurse Andrea", status: "ready", diagnosis: "Post-consultation clearance", findings: "Recovered from upper respiratory infection.", prescription: "Certificate for class absence.", completeDate: "2026-03-29" },
+        { id: "rdy7", patientName: "Sophia Ramirez", patientId: "2026-00129-PT-6", requestId: "#LAB-00007-PT-0", department: "BS Psychology", courseYear: "3-1", serviceType: "Physical Exam", assignedStaff: "Dr. Mendoza", status: "ready", diagnosis: "Healthy, elevated BP", findings: "Slightly elevated blood pressure (130/85).", prescription: "Lifestyle modification, recheck in 2 weeks.", completeDate: "2026-04-01" },
+        { id: "rdy8", patientName: "Andrei Villanueva", patientId: "2026-00130-PT-7", requestId: "#LAB-00008-PT-0", department: "BSCS", courseYear: "4-2", serviceType: "Vaccination", assignedStaff: "Nurse Clara", status: "ready", diagnosis: "Hepatitis B vaccination", findings: "Second dose administered. Tolerated well.", prescription: "Final dose after 4 weeks.", completeDate: "2026-03-27" },
+        { id: "rdy9", patientName: "Gianna Rivera", patientId: "2026-00131-PT-8", requestId: "#LAB-00009-PT-0", department: "BSN", courseYear: "2-2", serviceType: "Lab Test Review", assignedStaff: "Dr. Rivera", status: "ready", diagnosis: "Vitamin D deficiency", findings: "Low Vitamin D levels, otherwise normal.", prescription: "Vitamin D3 supplement 1000 IU daily.", completeDate: "2026-04-02" },
+        { id: "rdy10", patientName: "Paolo Mendoza", patientId: "2026-00132-PT-9", requestId: "#LAB-00010-PT-0", department: "BSIT", courseYear: "3-3", serviceType: "Medical Certificate", assignedStaff: "Nurse Andrea", status: "ready", diagnosis: "Sports clearance", findings: "Physically fit for intramurals.", prescription: "Cleared for athletic participation.", completeDate: "2026-03-31" },
+        { id: "rdy11", patientName: "Isabella Flores", patientId: "2026-00133-PT-10", requestId: "#LAB-00011-PT-0", department: "BSN", courseYear: "4-2", serviceType: "Physical Exam", assignedStaff: "Dr. Mendoza", status: "ready", diagnosis: "Muscle strain (back)", findings: "Mild lumbar tenderness. No neurological deficits.", prescription: "Rest, analgesic cream, posture exercises.", completeDate: "2026-04-01" },
+        { id: "rdy12", patientName: "Carlos Reyes", patientId: "2026-00134-PT-11", requestId: "#LAB-00012-PT-0", department: "BSCE", courseYear: "3-1", serviceType: "Vaccination", assignedStaff: "Nurse Clara", status: "ready", diagnosis: "Tetanus booster", findings: "Administered Tdap vaccine. Site mild soreness.", prescription: "Observation for 15 mins. Completed.", completeDate: "2026-03-26" }
+    ];
+
+    const ITEMS_PER_PAGE = 4;
+    let currentPage = 1;
+    let currentFilteredList = [];
+    let recordsModalInstance;
+    let currentRecordItem = null;
+
+    // Helper: get initials for avatar
+    function getInitials(name) {
+        if (!name) return "?";
+        const parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+        return parts[0].charAt(0).toUpperCase() + parts[parts.length - 1].charAt(0).toUpperCase();
+    }
+
+    function getAvatarColor(name) {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        const colors = ['#4a6fa5', '#6c5b7b', '#c06c6c', '#2c7a47', '#d97706', '#7c3aed', '#db2777', '#0891b2'];
+        return colors[Math.abs(hash) % colors.length];
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    }
+
+    // Filter logic based on search
+    function getFilteredReady() {
+        const searchTerm = document.getElementById('searchReadyInput')?.value.toLowerCase().trim() || '';
+        if (!searchTerm) return [...readyResultsList];
+        
+        return readyResultsList.filter(item => {
+            return item.patientName.toLowerCase().includes(searchTerm) ||
+                   item.patientId.toLowerCase().includes(searchTerm) ||
+                   item.requestId.toLowerCase().includes(searchTerm) ||
+                   item.serviceType.toLowerCase().includes(searchTerm) ||
+                   item.department.toLowerCase().includes(searchTerm) ||
+                   item.courseYear.toLowerCase().includes(searchTerm) ||
+                   item.assignedStaff.toLowerCase().includes(searchTerm) ||
+                   (item.diagnosis && item.diagnosis.toLowerCase().includes(searchTerm));
+        });
+    }
+
+    // Pagination controls
+    function renderPaginationControls() {
+        const container = document.getElementById('paginationControlsTop');
+        if (!container) return;
+        
+        const totalItems = currentFilteredList.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+        
+        let html = `<button class="pagination-btn" id="prevPageBtn" ${currentPage === 1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-left"></i> Prev</button>`;
+        
+        const maxVisible = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+        if (endPage - startPage + 1 < maxVisible) startPage = Math.max(1, endPage - maxVisible + 1);
+        
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<button class="pagination-btn page-number ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`;
+        }
+        
+        html += `<button class="pagination-btn" id="nextPageBtn" ${currentPage === totalPages ? 'disabled' : ''}>Next <i class="fa-solid fa-chevron-right"></i></button>`;
+        container.innerHTML = html;
+        
+        const prevBtn = document.getElementById('prevPageBtn');
+        const nextBtn = document.getElementById('nextPageBtn');
+        if (prevBtn) prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
+        
+        document.querySelectorAll('.page-number').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const page = parseInt(btn.dataset.page);
+                if (!isNaN(page)) goToPage(page);
+            });
+        });
+    }
+
+    function goToPage(page) {
+        const totalPages = Math.max(1, Math.ceil(currentFilteredList.length / ITEMS_PER_PAGE));
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderReadyTable();
+    }
+
+    // Main table renderer
+    function renderReadyTable() {
+        const tbody = document.getElementById('readyTableBody');
+        if (!tbody) return;
+        
+        const filtered = getFilteredReady();
+        currentFilteredList = filtered;
+        const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+        
+        const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+        const pageItems = filtered.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+        
+        // Update total counter (original full list count)
+        document.getElementById('totalCount').innerText = readyResultsList.length;
+        
+        if (pageItems.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5"><div class="empty-state"><i class="fa-solid fa-check-circle fa-3x mb-3 opacity-50"></i><p class="mb-0">No ready results available.</p><small class="text-muted">Completed requests will appear here.</small></div></td></tr>`;
+            renderPaginationControls();
+            return;
+        }
+        
+        tbody.innerHTML = pageItems.map(item => {
+            const initials = getInitials(item.patientName);
+            const avatarBg = getAvatarColor(item.patientName);
+            const safeName = escapeHtml(item.patientName).replace(/'/g, "&#39;");
+            const courseDept = `${escapeHtml(item.department)}, ${escapeHtml(item.courseYear)}`;
+            const displayPatientId = `<span class="id-label">ID:</span> ${escapeHtml(item.patientId)}`;
+            
+            return `<tr data-id="${item.id}">
+                <td>
+                    <div class="student-info-wrapper">
+                        <div class="profile-avatar" style="background: ${avatarBg};">${escapeHtml(initials)}</div>
+                        <div class="student-text">
+                            <span class="patient-name">${escapeHtml(item.patientName)}</span>
+                            <span class="patient-id-text">${displayPatientId}</span>
+                        </div>
+                    </div>
+                </td>
+                <td><span class="processing-id-style"> ${escapeHtml(item.requestId)}</span></td>
+                <td class="dept-course">${courseDept}</td>
+                <td class="service-cell">${escapeHtml(item.serviceType)}</td>
+                <td>${escapeHtml(item.assignedStaff)}</td>
+                <td><span class="status-badge-ready"><i class="fa-solid fa-check-circle"></i> Ready</span></td>
+                <td style="text-align: center;">
+                    <button class="btn-records-action" onclick="openRecordsModal('${item.id}', '${safeName}')">
+                        <i class="fa-solid fa-folder-open"></i> Records
+                    </button>
+                </td>
+             </tr>`;
+        }).join('');
+        
+        renderPaginationControls();
+    }
+
+    function refreshTable() {
+        currentPage = 1;
+        renderReadyTable();
+    }
+    
+    // Global function for modal opening (Records)
+    window.openRecordsModal = function(id, safeName) {
+        const recordItem = readyResultsList.find(item => item.id === id);
+        if (!recordItem) return;
+        
+        currentRecordItem = recordItem;
+        
+        // Fill modal with all relevant details
+        document.getElementById('modalPatientName').innerText = recordItem.patientName;
+        document.getElementById('modalPatientId').innerText = recordItem.patientId;
+        document.getElementById('modalRequestId').innerText = recordItem.requestId;
+        document.getElementById('modalDepartment').innerText = recordItem.department;
+        document.getElementById('modalCourseYear').innerText = recordItem.courseYear;
+        document.getElementById('modalServiceType').innerText = recordItem.serviceType;
+        document.getElementById('modalDiagnosis').innerText = recordItem.diagnosis || "Not specified";
+        document.getElementById('modalFindings').innerText = recordItem.findings || "No additional findings.";
+        document.getElementById('modalPrescription').innerText = recordItem.prescription || "None provided.";
+        document.getElementById('modalAssignedStaff').innerText = recordItem.assignedStaff;
+        document.getElementById('modalCompleteDate').innerText = recordItem.completeDate || "Completed recently";
+        
+        recordsModalInstance.show();
+    };
+    
+    // Print record functionality (based on your medical records class)
+    function printRecord() {
+        if (!currentRecordItem) {
+            alert("No record selected to print.");
+            return;
+        }
+        const item = currentRecordItem;
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html>
+            <head><title>Medical Result - ${escapeHtml(item.patientName)}</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+            <style>body { padding: 2rem; font-family: 'Poppins', sans-serif; } .header { border-bottom: 2px solid #6f42c1; margin-bottom: 1.5rem; } .section { margin-bottom: 1.5rem; } .label { font-weight: 600; } .print-container { max-width: 800px; margin: 0 auto; }</style>
+            </head>
+            <body>
+            <div class="print-container">
+                <div class="header"><h3>PUPBC CareLink - Ready Medical Result</h3><p>Generated: ${new Date().toLocaleString()}</p></div>
+                <div class="section"><h5>Patient Information</h5><p><strong>Name:</strong> ${escapeHtml(item.patientName)}<br><strong>Patient ID:</strong> ${escapeHtml(item.patientId)}<br><strong>Request ID:</strong> ${escapeHtml(item.requestId)}<br><strong>Department:</strong> ${escapeHtml(item.department)}<br><strong>Course Year:</strong> ${escapeHtml(item.courseYear)}<br><strong>Service Type:</strong> ${escapeHtml(item.serviceType)}</p></div>
+                <div class="section"><h5>Clinical Results</h5><p><strong>Diagnosis:</strong> ${escapeHtml(item.diagnosis || 'N/A')}<br><strong>Findings:</strong> ${escapeHtml(item.findings || 'N/A')}<br><strong>Prescription / Recommendation:</strong> ${escapeHtml(item.prescription || 'N/A')}<br><strong>Assigned Medical Staff:</strong> ${escapeHtml(item.assignedStaff)}<br><strong>Completion Date:</strong> ${escapeHtml(item.completeDate || 'N/A')}</p></div>
+                <div class="section"><p class="text-muted"><em>This is an official medical result from PUPBC CareLink. Ready for release.</em></p></div>
+            </div>
+            </body></html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+    
+    function setupEventListeners() {
+        const searchInput = document.getElementById('searchReadyInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                currentPage = 1;
+                renderReadyTable();
+            });
+        }
+        const printBtn = document.getElementById('printRecordBtn');
+        if (printBtn) {
+            printBtn.addEventListener('click', printRecord);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        recordsModalInstance = new bootstrap.Modal(document.getElementById('recordsModal'), { backdrop: 'static', keyboard: false });
+        setupEventListeners();
+        renderReadyTable();
+    });
+    
+    /* IMPORTANT SCRIPT */
+    if (window.self === window.top) {
+        const currentPagePath = window.location.pathname.split("/").pop();
+        if (currentPagePath && !currentPagePath.includes('nursedashboard.php')) {
+             window.location.href = "nursedashboard.php?page=nurselaboratory.php&subpage=" + currentPagePath;
+        }
+    }
+</script>
+</body>
+</html>

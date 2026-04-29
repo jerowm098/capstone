@@ -303,7 +303,7 @@
 
         <div id="role-selector">
             <!-- NURSE PORTAL: Sky Blue Background Stat Card (solid, no glowing effects) -->
-            <a href="nurselogin.html" class="role-btn nurse-stat-card">
+            <a href="../nurse/nurselogin.php" class="role-btn nurse-stat-card">
                 <i class="fa-solid fa-hand-holding-medical"></i>
                 <div>
                     <span>Nurse Portal</span>
@@ -312,7 +312,7 @@
             </a>
 
             <!-- STUDENT PORTAL: PUP Maroon Background Stat Card (solid, no glowing effects) -->
-            <a href="studlogin.html" class="role-btn student-stat-card">
+            <a href="../stud/studlogin.php" class="role-btn student-stat-card">
                 <i class="fa-solid fa-user-graduate"></i>
                 <div>
                     <span>Student Portal</span>
@@ -324,7 +324,7 @@
         <hr class="portal-divider">
 
         <div class="text-center">
-            <a href="index.html" class="text-muted small text-decoration-none fw-bold" style="font-size: 0.75rem; opacity: 0.8;">
+            <a href="../index1/index.php" class="text-muted small text-decoration-none fw-bold" style="font-size: 0.75rem; opacity: 0.8;">
                 <i class="fa-solid fa-arrow-left-long me-2"></i> Go Back
             </a>
         </div>

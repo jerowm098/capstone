@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Medical Records | Student Dashboard | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --standard-padding: 1.5rem;
+            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
+            --brand-primary: #28313a;      
+            --medical-blue: #475867;        
+            --medical-blue-dark: #1a2127; 
+            --medical-blue-light: #667f94;
+            --medical-blue-soft: rgba(71, 88, 103, 0.08); 
+            --white: #ffffff;
+            --text-main: #28313a;          
+            --text-muted: #5c7285;     
+            --clay-bg: #f4f7f6;
+            --assessed-green: #28a745;
+            --assessed-bg-soft: rgba(40, 167, 69, 0.1);
+            --info-blue: #0d6efd;
+            --info-bg-soft: rgba(13, 110, 253, 0.1);
+            --danger-red: #dc3545;
+            --danger-bg-soft: rgba(220, 53, 69, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: transparent;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        .medical-wrapper {
+            width: 100%;
+            background: transparent;
+        }
+
+        .form-content {
+            padding: var(--standard-padding);
+        }
+
+        /* SEARCH SECTION */
+        .search-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .search-box {
+            background: var(--clay-bg);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 10px;
+            padding: 8px 15px 8px 38px;
+            width: 300px;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--medical-blue-light);
+            background: var(--white);
+            box-shadow: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        /* Counter + Pagination row (side by side) - FIXED POSITION STRUCTURE */
+        .counter-pagination-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 16px;
+            min-height: 56px;
+        }
+
+        .total-counter {
+            background: var(--medical-blue-soft);
+            color: var(--medical-blue-dark);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .total-counter i {
+            color: var(--assessed-green);
+            font-size: 1rem;
+        }
+
+        .pagination-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .pagination-btn {
+            background: var(--white);
+            border: 1px solid rgba(40, 49, 58, 0.2);
+            color: var(--brand-primary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination-btn i {
+            font-size: 0.7rem;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background-color: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            background: #f1f2f4;
+        }
+
+        .page-number.active-page {
+            background: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* SEPARATOR LINE */
+        .separator-line {
+            border-bottom: var(--border-subtle);
+            margin-bottom: 16px;
+        }
+
+        /* status badge for "assessed" only - no icon */
+        .status-badge-assessed {
+            background: var(--assessed-bg-soft);
+            color: #1e7e34;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* TABLE STYLES - clean design with more columns */
+        .table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-bottom: 0;
+            font-size: 0.82rem;
+        }
+
+        .table-custom thead th {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.77rem;
+            text-transform: uppercase;
+            padding: 10px 12px;
+            border: none;
+            background: transparent;
+            letter-spacing: 0.3px;
+            border-bottom: var(--border-subtle);
+        }
+
+        .table-custom tbody tr {
+            background-color: var(--white);
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+
+        .table-custom tbody tr:hover td {
+            background-color: var(--medical-blue-soft) !important;
+        }
+
+        .table-custom td {
+            padding: 12px 12px;
+            vertical-align: middle;
+            border-top: var(--border-subtle);
+            border-bottom: var(--border-subtle);
+            background-color: var(--white);
+            font-size: 0.82rem;
+        }
+
+        .table-custom td:first-child { 
+            border-left: var(--border-subtle); 
+            border-radius: 10px 0 0 10px; 
+        }
+        .table-custom td:last-child { 
+            border-right: var(--border-subtle); 
+            border-radius: 0 10px 10px 0; 
+        }
+
+        /* Nurse avatar style */
+        .nurse-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            background: var(--medical-blue);
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .nurse-info-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nurse-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nurse-name {
+            font-weight: 600;
+            color: var(--brand-primary);
+            display: block;
+            font-size: 0.88rem;
+        }
+
+        .nurse-id-text {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .id-label {
+            font-weight: 500;
+            color: var(--medical-blue);
+            margin-right: 4px;
+        }
+
+        /* Action Buttons: View (eye) + Delete (trash) */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-view-record {
+            background: var(--info-bg-soft);
+            color: var(--info-blue);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        .btn-view-record:hover {
+            background: var(--info-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2);
+        }
+        .btn-delete-record {
+            background: var(--danger-bg-soft);
+            color: var(--danger-red);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        .btn-delete-record:hover {
+            background: var(--danger-red);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== MODAL CUSTOMIZATION - EXACT REQUIREMENT ===== */
+        /* Reset any default heights, ensure modal-content uses min-height:500px */
+        .modal.top-aligned-modal .modal-dialog {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0;
+            align-items: flex-start !important;
+            max-width: 600px !important;
+            width: 90%;
+        }
+        .modal.top-aligned-modal .modal-dialog {
+            display: flex;
+            align-items: flex-start;
+        }
+        /* CRITICAL: removed all explicit height overrides, only min-height: 500px */
+        .modal.top-aligned-modal .modal-content {
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+            border-radius: 24px;
+            border: none;
+            overflow: hidden;
+            min-height: 500px;      /* MAIN CONTROL: modal form height fixed to 500px min */
+            display: flex;
+            flex-direction: column;
+        }
+        /* Ensure modal-body can scroll if content exceeds min-height, preserving all content */
+        .modal.top-aligned-modal .modal-body {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            padding: 1.8rem 1.8rem;
+        }
+        .modal-header.bg-medical {
+            background: var(--medical-blue);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-bottom: none;
+            flex-shrink: 0;
+        }
+        .modal-footer {
+            border-top: 1px solid #eef2f8;
+            padding: 1rem 1.5rem;
+            background: white;
+            flex-shrink: 0;
+        }
+        /* two column layout preserved */
+        .modal-body.two-column-body {
+            background: #fefefe;
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem 2rem;
+        }
+        .detail-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 0rem 0;
+        }
+        .detail-field {
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #eef2f8;
+            padding-bottom: 0.73rem;
+        }
+        .detail-field:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .detail-label {
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .detail-value {
+            font-weight: 500;
+            color: var(--brand-primary);
+            font-size: 0.9rem;
+            word-break: break-word;
+        }
+        .badge-assessed-modal {
+            background: var(--assessed-bg-soft);
+            color: #1e7e34;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            .modal.top-aligned-modal .modal-dialog {
+                max-width: 95% !important;
+                margin: 0.5rem auto;
+            }
+            .modal-body.two-column-body {
+                padding: 1.2rem;
+            }
+            .table-custom {
+                font-size: 0.75rem;
+            }
+            .table-custom td, .table-custom th {
+                padding: 8px 6px;
+            }
+            .nurse-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 0.7rem;
+            }
+        }
+        @media (max-width: 1200px) {
+            .table-custom td, .table-custom th {
+                padding: 10px 8px;
+            }
+        }
+        @media (max-width: 992px) {
+            .table-responsive-custom {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="medical-wrapper">
+    <div class="form-content">
+        <!-- SEARCH BAR SECTION -->
+        <div class="search-section">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-box" id="searchMedicalInput" placeholder="Search records...">
+            </div>
+        </div>
+
+        <!-- COUNTER + PAGINATION ROW (fixed position) -->
+        <div class="counter-pagination-row">
+            <div class="total-counter" id="totalMedicalCounter">
+                <i class="fa-solid fa-notes-medical"></i> 
+                Total Medical Records: <span id="totalCount">0</span>
+            </div>
+            <div class="pagination-wrapper" id="paginationControlsTop">
+                <!-- pagination buttons injected here - permanently positioned -->
+            </div>
+        </div>
+
+        <!-- HORIZONTAL SEPARATOR LINE -->
+        <div class="separator-line"></div>
+
+        <!-- TABLE CONTAINER -->
+        <div class="table-responsive-custom">
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th>Nurse Details</th>
+                        <th>Lab ID</th>
+                        <th>Drug Name</th>
+                        <th>Dosage</th>
+                        <th>Lab Test Type</th>
+                        <th>Prescribed By</th>
+                        <th>Status</th>
+                        <th style="width: 100px; text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="medicalTableBody">
+                    <!-- dynamic rows: max 4 per page -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- WIDE MODAL WITH 2-COLUMN LAYOUT FOR VIEWING MEDICAL RECORD DETAILS -->
+<!-- CRITICAL UPDATE: modal-content has min-height:500px, no other conflicting heights; content remains fully visible and scrolls if needed -->
+<div class="modal fade top-aligned-modal" id="viewMedicalModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-medical">
+                <h5 class="modal-title"><i class="fa-solid fa-file-prescription me-2"></i>Medical Record Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body two-column-body">
+                <div class="details-grid">
+                    <!-- LEFT COLUMN -->
+                    <div class="detail-card">
+                        <div class="detail-field">
+                            <div class="detail-label">Nurse Name</div>
+                            <div class="detail-value" id="viewNurseName">-</div>
+                        </div>
+                        <div class="detail-field">
+                            <div class="detail-label">Nurse ID</div>
+                            <div class="detail-value" id="viewNurseId">-</div>
+                        </div>
+                        <div class="detail-field">
+                            <div class="detail-label">Nurse Email</div>
+                            <div class="detail-value" id="viewNurseEmail">-</div>
+                        </div>
+                        <div class="detail-field">
+                            <div class="detail-label">Lab ID</div>
+                            <div class="detail-value" id="viewLabId">-</div>
+                        </div>
+                        <div class="detail-field">
+                            <div class="detail-label">Lab Test Type</div>
+                            <div class="detail-value" id="viewTestType">-</div>
+                        </div>
+                    </div>
+                    <!-- RIGHT COLUMN -->
+                    <div class="detail-card">
+                        <div class="detail-field">
+                            <div class="detail-label">Drug Name</div>
+                            <div class="detail-value" id="viewDrugName">-</div>
+                        </div>
+                        <div class="detail-field">
+                            <div class="detail-label">Dosage</div>
+                            <div class="detail-value" id="viewDosage">-</div>
+                        </div>
+                        <div class="detail-field">
+                            <div class="detail-label">Prescribed By</div>
+                            <div class="detail-value" id="viewPrescribedBy">-</div>
+                        </div>
+                        <div class="detail-field">
+                            <div class="detail-label">Status</div>
+                            <div class="detail-value"><span class="badge-assessed-modal">Assessed</span></div>
+                        </div>
+                        <div class="detail-field">
+                            <div class="detail-label">Record Date</div>
+                            <div class="detail-value" id="viewRecordDate">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark me-1"></i>Close</button>
+                <button type="button" class="btn btn-primary" id="printMedicalBtn" style="background: var(--medical-blue); border: none;"><i class="fa-solid fa-print me-1"></i> Print Record</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL FOR DELETE CONFIRMATION (no height constraints needed) -->
+<div class="modal fade top-aligned-modal" id="deleteMedicalModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius: 16px;">
+            <div class="modal-header" style="background: var(--danger-red); color: white; border-radius: 16px 16px 0 0;">
+                <h5 class="modal-title"><i class="fa-solid fa-trash-alt me-2"></i>Delete Medical Record</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem;">
+                <p class="mb-0">Are you sure you want to permanently delete this medical record for <strong id="deleteRecordInfo"></strong>?</p>
+                <small class="text-muted">This action cannot be undone. The record will be removed from your medical history.</small>
+            </div>
+            <div class="modal-footer" style="border-top: none;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmMedicalDeleteBtn">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ============================================================
+    // STUDENT MEDICAL RECORDS MANAGEMENT 
+    // Features:
+    // - Medical records with status "Assessed"
+    // - Columns: Nurse Details, Lab ID, Drug Name, Dosage, Lab Test Type, Prescribed By, Status, Action
+    // - Maximum 4 items per page, pagination fixed position
+    // - Search bar filters across multiple fields
+    // - View button: wide modal with 2-column layout, modal content now has min-height: 500px (resetting all heights)
+    // - Delete button: removes record permanently
+    // ============================================================
+
+    // Sample medical records dataset
+    let medicalRecordsList = [
+        { id: "med_001", nurse: { name: "Emily Rodriguez", id: "NUR-2024-0123-EMP", email: "emily.rodriguez@pupbc.edu.ph" }, labId: "#LAB-2401-PT-001", drugName: "Paracetamol", dosage: "500mg", testType: "Fever", prescribedBy: "Emily Rodriguez", status: "Assessed", recordDate: "March 15, 2025" },
+        { id: "med_002", nurse: { name: "Michael Tan", id: "NUR-2023-0889-EMP", email: "michael.tan@pupbc.edu.ph" }, labId: "#LAB-2402-PT-002", drugName: "Amoxicillin", dosage: "250mg", testType: "Cough", prescribedBy: "Michael Tan", status: "Assessed", recordDate: "March 14, 2025" },
+   /*      { id: "med_003", nurse: { name: "Sarah Gomez", id: "NUR-2025-0456-EMP", email: "sarah.gomez@pupbc.edu.ph" }, labId: "#LAB-2403-PT-003", drugName: "Meclizine", dosage: "25mg", testType: "Dizziness", prescribedBy: "Sarah Gomez", status: "Assessed", recordDate: "March 12, 2025" },
+        { id: "med_004", nurse: { name: "James Rivera", id: "NUR-2024-0771-EMP", email: "james.rivera@pupbc.edu.ph" }, labId: "#LAB-2404-PT-004", drugName: "Salbutamol", dosage: "100mcg", testType: "Difficulty Breathing", prescribedBy: "James Rivera", status: "Assessed", recordDate: "March 10, 2025" },
+        { id: "med_005", nurse: { name: "Patricia Lim", id: "NUR-2022-0992-EMP", email: "patricia.lim@pupbc.edu.ph" }, labId: "#LAB-2405-PT-005", drugName: "Ibuprofen", dosage: "400mg", testType: "Headache", prescribedBy: "Patricia Lim", status: "Assessed", recordDate: "March 08, 2025" },
+        { id: "med_006", nurse: { name: "Christopher Cruz", id: "NUR-2023-1123-EMP", email: "christopher.cruz@pupbc.edu.ph" }, labId: "#LAB-2406-PT-006", drugName: "Loratadine", dosage: "10mg", testType: "Allergy", prescribedBy: "Christopher Cruz", status: "Assessed", recordDate: "March 05, 2025" },
+        { id: "med_007", nurse: { name: "Diana Reyes", id: "NUR-2024-0334-EMP", email: "diana.reyes@pupbc.edu.ph" }, labId: "#LAB-2407-PT-007", drugName: "Omeprazole", dosage: "20mg", testType: "Acid Reflux", prescribedBy: "Diana Reyes", status: "Assessed", recordDate: "March 03, 2025" },
+        { id: "med_008", nurse: { name: "Lawrence Mendoza", id: "NUR-2025-0667-EMP", email: "lawrence.mendoza@pupbc.edu.ph" }, labId: "#LAB-2408-PT-008", drugName: "Cetirizine", dosage: "10mg", testType: "Skin Rash", prescribedBy: "Lawrence Mendoza", status: "Assessed", recordDate: "February 28, 2025" },
+        { id: "med_009", nurse: { name: "Isabella Flores", id: "NUR-2023-0555-EMP", email: "isabella.flores@pupbc.edu.ph" }, labId: "#LAB-2409-PT-009", drugName: "Metformin", dosage: "500mg", testType: "Blood Sugar", prescribedBy: "Isabella Flores", status: "Assessed", recordDate: "February 25, 2025" },
+        { id: "med_010", nurse: { name: "Ricardo Santiago", id: "NUR-2024-0988-EMP", email: "ricardo.santiago@pupbc.edu.ph" }, labId: "#LAB-2410-PT-010", drugName: "Losartan", dosage: "50mg", testType: "Hypertension", prescribedBy: "Ricardo Santiago", status: "Assessed", recordDate: "February 20, 2025" },
+        { id: "med_011", nurse: { name: "Maria Santos", id: "NUR-2024-0456-EMP", email: "maria.santos@pupbc.edu.ph" }, labId: "#LAB-2411-PT-011", drugName: "Vitamin C", dosage: "1000mg", testType: "General Wellness", prescribedBy: "Maria Santos", status: "Assessed", recordDate: "February 18, 2025" }
+    */ ];
+
+    const ITEMS_PER_PAGE = 4;
+    let currentPage = 1;
+    let currentFilteredList = [];
+    let deleteModalInstance = null;
+    let viewModalInstance = null;
+    let currentDeleteId = null;
+    let currentDeleteInfo = "";
+
+    function getInitials(name) {
+        if (!name) return "N";
+        const parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+        return parts[0].charAt(0).toUpperCase() + parts[parts.length - 1].charAt(0).toUpperCase();
+    }
+
+    function getAvatarColor(name) {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        const colors = ['#4a6fa5', '#6c5b7b', '#c06c6c', '#2c7a47', '#d97706', '#7c3aed', '#db2777', '#0891b2'];
+        return colors[Math.abs(hash) % colors.length];
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    }
+
+    function getFilteredRecords() {
+        const searchTerm = document.getElementById('searchMedicalInput')?.value.toLowerCase().trim() || '';
+        if (!searchTerm) return [...medicalRecordsList];
+        return medicalRecordsList.filter(rec => 
+            rec.nurse.name.toLowerCase().includes(searchTerm) ||
+            rec.nurse.id.toLowerCase().includes(searchTerm) ||
+            rec.labId.toLowerCase().includes(searchTerm) ||
+            rec.drugName.toLowerCase().includes(searchTerm) ||
+            rec.testType.toLowerCase().includes(searchTerm) ||
+            rec.prescribedBy.toLowerCase().includes(searchTerm)
+        );
+    }
+
+    function renderPaginationControls() {
+        const container = document.getElementById('paginationControlsTop');
+        if (!container) return;
+        const totalItems = currentFilteredList.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+        let html = `<button class="pagination-btn" id="prevPageBtn" ${currentPage === 1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-left"></i> Prev</button>`;
+        const maxVisible = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+        if (endPage - startPage + 1 < maxVisible) startPage = Math.max(1, endPage - maxVisible + 1);
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<button class="pagination-btn page-number ${i === currentPage ? 'active-page' : ''}" data-page="${i}">${i}</button>`;
+        }
+        html += `<button class="pagination-btn" id="nextPageBtn" ${currentPage === totalPages ? 'disabled' : ''}>Next <i class="fa-solid fa-chevron-right"></i></button>`;
+        container.innerHTML = html;
+        document.getElementById('prevPageBtn')?.addEventListener('click', () => goToPage(currentPage - 1));
+        document.getElementById('nextPageBtn')?.addEventListener('click', () => goToPage(currentPage + 1));
+        document.querySelectorAll('.page-number').forEach(btn => {
+            btn.addEventListener('click', () => goToPage(parseInt(btn.dataset.page)));
+        });
+    }
+
+    function goToPage(page) {
+        const totalPages = Math.max(1, Math.ceil(currentFilteredList.length / ITEMS_PER_PAGE));
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderMedicalTable();
+    }
+
+    window.openViewMedicalModal = function(id) {
+        const record = medicalRecordsList.find(r => r.id === id);
+        if (record) {
+            document.getElementById('viewNurseName').innerText = record.nurse.name;
+            document.getElementById('viewNurseId').innerText = record.nurse.id;
+            document.getElementById('viewNurseEmail').innerText = record.nurse.email;
+            document.getElementById('viewLabId').innerText = record.labId;
+            document.getElementById('viewDrugName').innerText = record.drugName;
+            document.getElementById('viewDosage').innerText = record.dosage;
+            document.getElementById('viewTestType').innerText = record.testType;
+            document.getElementById('viewPrescribedBy').innerText = record.prescribedBy;
+            document.getElementById('viewRecordDate').innerText = record.recordDate || "N/A";
+            viewModalInstance.show();
+        }
+    };
+
+    window.openDeleteMedicalModal = function(id, recordInfo) {
+        currentDeleteId = id;
+        currentDeleteInfo = recordInfo;
+        document.getElementById('deleteRecordInfo').innerText = recordInfo;
+        deleteModalInstance.show();
+    };
+
+    function executeDelete() {
+        if (currentDeleteId) {
+            const index = medicalRecordsList.findIndex(r => r.id === currentDeleteId);
+            if (index !== -1) {
+                medicalRecordsList.splice(index, 1);
+                refreshMedicalTable();
+                showToastMessage(`Medical record for ${currentDeleteInfo} has been deleted.`, 'danger');
+            }
+            deleteModalInstance.hide();
+            currentDeleteId = null;
+            currentDeleteInfo = "";
+        }
+    }
+
+    function refreshMedicalTable() {
+        currentPage = 1;
+        renderMedicalTable();
+    }
+
+    function renderMedicalTable() {
+        const tbody = document.getElementById('medicalTableBody');
+        if (!tbody) return;
+        const filtered = getFilteredRecords();
+        currentFilteredList = filtered;
+        const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+        const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+        const pageItems = filtered.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+        document.getElementById('totalCount').innerText = medicalRecordsList.length;
+        
+        if (pageItems.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center py-5"><div class="empty-state"><i class="fa-solid fa-notes-medical fa-3x mb-3 opacity-50"></i><p class="mb-0">No medical records found.</p><small class="text-muted">Your medical history is empty or no matches.</small></div></td></tr>`;
+            renderPaginationControls();
+            return;
+        }
+        
+        tbody.innerHTML = pageItems.map(rec => {
+            const initials = getInitials(rec.nurse.name);
+            const avatarBg = getAvatarColor(rec.nurse.name);
+            const nurseNameSafe = escapeHtml(rec.nurse.name);
+            const nurseIdSafe = escapeHtml(rec.nurse.id);
+            const labIdSafe = escapeHtml(rec.labId);
+            const drugNameSafe = escapeHtml(rec.drugName);
+            const dosageSafe = escapeHtml(rec.dosage);
+            const testTypeSafe = escapeHtml(rec.testType);
+            const prescribedBySafe = escapeHtml(rec.prescribedBy);
+            const recordDisplayInfo = `${rec.labId} - ${rec.testType}`;
+            
+            return `<tr data-id="${rec.id}">
+                <td><div class="nurse-info-wrapper"><div class="nurse-avatar" style="background: ${avatarBg};">${escapeHtml(initials)}</div><div class="nurse-text"><span class="nurse-name">${nurseNameSafe}</span><span class="nurse-id-text"><span class="id-label">ID:</span> ${nurseIdSafe}</span></div></div></td>
+                <td><span class="fw-medium">${labIdSafe}</span></td>
+                <td>${drugNameSafe}</td>
+                <td>${dosageSafe}</td>
+                <td>${testTypeSafe}</td>
+                <td>${prescribedBySafe}</td>
+                <td><span class="status-badge-assessed">Assessed</span></td>
+                <td style="text-align: center;"><div class="action-buttons"><button class="btn-view-record" onclick="openViewMedicalModal('${rec.id}')" title="View Details"><i class="fa-solid fa-eye"></i></button><button class="btn-delete-record" onclick="openDeleteMedicalModal('${rec.id}', '${recordDisplayInfo.replace(/'/g, "\\'")}')" title="Delete Record"><i class="fa-solid fa-trash-can"></i></button></div></td>
+            </td>`;
+        }).join('');
+        renderPaginationControls();
+    }
+
+    function showToastMessage(message, type) {
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed bottom-0 end-0 p-3';
+        toast.style.zIndex = '9999';
+        const icon = type === 'success' ? 'fa-check-circle' : (type === 'danger' ? 'fa-trash-alt' : 'fa-info-circle');
+        const bgClass = type === 'success' ? 'bg-success' : (type === 'danger' ? 'bg-danger' : 'bg-info');
+        toast.innerHTML = `<div class="toast align-items-center text-white ${bgClass} border-0" role="alert" data-bs-autohide="true" data-bs-delay="2000"><div class="d-flex"><div class="toast-body"><i class="fa-solid ${icon} me-2"></i>${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div>`;
+        document.body.appendChild(toast);
+        const bsToast = new bootstrap.Toast(toast.querySelector('.toast'), { autohide: true, delay: 2200 });
+        bsToast.show();
+        toast.addEventListener('hidden.bs.toast', () => toast.remove());
+    }
+
+    document.getElementById('printMedicalBtn')?.addEventListener('click', () => {
+        const modalContent = document.querySelector('#viewMedicalModal .modal-body');
+        const originalTitle = document.title;
+        document.title = "Medical Record";
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write('<html><head><title>Medical Record</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"><style>body{padding:20px; font-family: Poppins;}</style></head><body>');
+        printWindow.document.write('<div class="container">' + modalContent.cloneNode(true).innerHTML + '</div>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+        document.title = originalTitle;
+    });
+
+    function setupEventListeners() {
+        const searchInput = document.getElementById('searchMedicalInput');
+        if (searchInput) searchInput.addEventListener('input', () => { currentPage = 1; renderMedicalTable(); });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        deleteModalInstance = new bootstrap.Modal(document.getElementById('deleteMedicalModal'), { backdrop: 'static', keyboard: false });
+        viewModalInstance = new bootstrap.Modal(document.getElementById('viewMedicalModal'), { backdrop: 'static', keyboard: false });
+        document.getElementById('confirmMedicalDeleteBtn')?.addEventListener('click', executeDelete);
+        setupEventListeners();
+        renderMedicalTable();
+    });
+
+    if (window.self === window.top) {
+        const currentPagePath = window.location.pathname.split("/").pop();
+        if (currentPagePath && !currentPagePath.includes('studdashboard.php')) {
+             window.location.href = "studdashboard.php?page=studmedicalrecords.php&subpage=" + currentPagePath;
+        }
+    }    
+</script>
+</body>
+</html>

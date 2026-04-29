@@ -966,7 +966,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#home" id="homeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Home</a>
                         <ul class="dropdown-menu shadow-sm border-0" aria-labelledby="homeDropdown" style="border-radius: 15px;">
-                            <li><a class="dropdown-item" href="digitalhealthcare/index/indexhtml.php">Homepage 1</a></li>
+                            <li><a class="dropdown-item" href="../index2/indexhtml.php">Homepage 1</a></li>
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
