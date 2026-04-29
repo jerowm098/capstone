@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Nurse Profile | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --main-form-width: 1200px;
+            --layout-margin-top: 1rem;
+            --standard-padding: 1.5rem;
+            --brand-primary: #28313a;      
+            --medical-blue: #475867;        
+            --medical-blue-dark: #1a2127; 
+            --medical-blue-soft: rgba(71, 88, 103, 0.08); 
+            --text-main: #28313a;          
+            --text-muted: #5c7285;     
+            --clay-bg: #f4f7f6;
+            --form-bg-color: #ffffff;
+            --form-border-radius: 10px;            
+            --form-box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+
+        /* CRITICAL FIX: main layout handles scrolling ONLY at body level */
+        html {
+            height: 100%;
+            overflow-y: auto;    /* main scrollbar is here — outer only */
+            scrollbar-gutter: stable;
+        }
+        
+        body {
+            min-height: 100vh;   /* allow body to stretch naturally */
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--clay-bg);
+            margin: 0;
+            padding: var(--layout-margin-top) 0;
+            display: flex;
+            justify-content: center;
+            color: var(--text-main);
+            /* no overflow hidden, no forced height — pure flex */
+        }
+
+        .floating-form-container {
+            width: 95%;
+            max-width: var(--main-form-width);
+            background: var(--form-bg-color);
+            border-radius: var(--form-border-radius);
+            overflow: hidden;    /* keeps rounded corners, but does NOT create scrollbar */
+            box-shadow: var(--form-box-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            /* no fixed height, flex container grows with content */
+        }
+
+        /* --- UPDATED NAVIGATION HEADER (Breadcrumbs Removed) --- */
+        .nav-header-tab {
+            background-color: var(--brand-primary);
+            padding: 0 var(--standard-padding);
+            display: flex;
+            align-items: center;
+            min-height: 60px;    /* changed from fixed height to min-height for flexibility */
+            flex-shrink: 0;
+        }
+
+        .nav-tabs-inline {
+            display: flex;
+            gap: 1.5rem;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            align-items: center;
+        }
+
+        .nav-link-tab {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem; 
+            opacity: 0.6; 
+            transition: 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-link-tab:hover {
+            opacity: 1;
+            color: #ffffff;
+        }
+
+        .nav-link-tab.active {
+            opacity: 1; 
+            color: #ffffff !important;
+        }
+
+        .profile-body {
+            flex-grow: 1;
+            background: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            /* critical: allows iframe to expand without constraints */
+        }
+
+        /* IFRAME FIX: remove fixed height, use min-height + 100% to allow content to dictate size */
+        #profile-frame {
+            width: 100%;
+            min-height: 500px;        /* fallback minimum, but will grow with content */
+            height: auto;             /* auto height based on content */
+            border: none;
+            background: transparent;
+            display: block;
+            flex-grow: 1;             /* fill remaining space */
+        }
+
+        /* ensure iframe document can stretch naturally */
+        @media (max-width: 768px) {
+            .nav-tabs-inline { gap: 1rem; }
+            .nav-link-tab { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="floating-form-container">
+    <nav class="nav-header-tab">
+        <div class="nav-tabs-inline" id="profileTabs">
+            <a href="nurseprofileview.html" data-tab="view" class="nav-link-tab active">
+                <span>Personal Info</span>
+            </a>
+            <!-- additional tabs can be added but not needed for core fix -->
+        </div>
+    </nav>
+
+    <div class="profile-body">
+        <iframe 
+            src="nurseprofileview.html" 
+            name="profile-frame" 
+            id="profile-frame"
+            title="Nurse Profile Content"
+            scrolling="no"           <!-- prevent double scrollbars inside iframe -->
+            style="overflow: visible;">
+        </iframe>
+    </div>
+</div>
+
+<script>
+    // Preserve existing redirect logic but ensure it works without breaking iframe resizing
+    if (window.self === window.top) {
+        const currentPage = window.location.pathname.split("/").pop();
+        const urlParams = new URLSearchParams(window.location.search);
+        const sub = urlParams.get('subpage') || 'nurseprofileview.html';
+        window.location.href = "nursedashboard.html?page=" + currentPage + "&subpage=" + sub;
+    }
+
+    // Helper to dynamically adjust iframe height based on its content (NO SCROLLBAR inside)
+    function autoResizeIframe() {
+        const iframe = document.getElementById('profile-frame');
+        if (!iframe) return;
+        
+        // try to access iframe contentDocument
+        try {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (iframeDoc && iframeDoc.body) {
+                // get total scroll height of embedded content
+                const contentHeight = iframeDoc.body.scrollHeight;
+                const containerHeight = iframeDoc.documentElement?.scrollHeight || contentHeight;
+                const totalHeight = Math.max(contentHeight, containerHeight, 300);
+                // apply height to iframe so it expands naturally, avoiding inner scroll
+                iframe.style.height = totalHeight + 'px';
+                // also ensure the body inside iframe has no overflow restrictions
+                if (iframeDoc.body.style.overflow !== 'visible') {
+                    iframeDoc.body.style.overflow = 'visible';
+                }
+                if (iframeDoc.documentElement.style.overflow !== 'visible') {
+                    iframeDoc.documentElement.style.overflow = 'visible';
+                }
+            }
+        } catch(e) {
+            // cross-origin limitations: fallback to a reasonable auto-sizing via min-height
+            iframe.style.height = 'auto';
+        }
+    }
+
+    // Listen for iframe load and also observe DOM changes inside iframe if possible
+    function setupIframeResize() {
+        const iframe = document.getElementById('profile-frame');
+        if (!iframe) return;
+        
+        // initial resize after load
+        iframe.addEventListener('load', function() {
+            autoResizeIframe();
+            // also attempt to observe mutations inside iframe (if same origin)
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (iframeDoc && iframeDoc.body) {
+                    const observer = new ResizeObserver(() => autoResizeIframe());
+                    observer.observe(iframeDoc.body);
+                    // also observe documentElement for safety
+                    if (iframeDoc.documentElement) observer.observe(iframeDoc.documentElement);
+                    // fallback: window resize inside iframe
+                    iframe.contentWindow.addEventListener('resize', () => autoResizeIframe());
+                }
+            } catch(e) { /* cross-origin: ignore, but we still have load event */ }
+        });
+        
+        // ensure iframe reloads on tab switch (already covered by switchTab)
+        // also trigger resize on window resize
+        window.addEventListener('resize', () => autoResizeIframe());
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.nav-link-tab');
+        const iframe = document.getElementById('profile-frame');
+
+        function switchTab(tabId) {
+            const mapping = {
+                'view': 'nurseprofileview.html',
+                'edit': 'nurseprofileedit.html',
+                'security': 'nurseprofilesettings.html'
+            };
+            const iframeSrc = mapping[tabId] || 'nurseprofileview.html';
+            iframe.src = iframeSrc;
+            
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                if (t.getAttribute('data-tab') === tabId) t.classList.add('active');
+            });
+        }
+
+        let activeSub = 'view';
+        try {
+            const params = (window.parent !== window.self) 
+                ? new URLSearchParams(window.parent.location.search) 
+                : new URLSearchParams(window.location.search);
+            
+            const subpage = params.get('subpage');
+            if (subpage) {
+                if (subpage.includes('edit')) activeSub = 'edit';
+                else if (subpage.includes('settings')) activeSub = 'security';
+                else activeSub = 'view';
+            }
+        } catch(e) { 
+            activeSub = 'view'; 
+        }
+        
+        // initialize tab
+        switchTab(activeSub);
+        
+        // setup auto-resize after iframe loads
+        setupIframeResize();
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                if (!e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                    
+                    try {
+                        if (window.parent !== window.self) {
+                            const subFile = this.getAttribute('href');
+                            const newURL = window.parent.location.origin + window.parent.location.pathname + 
+                                           '?page=nurseprofile.html&subpage=' + subFile;
+                            window.parent.history.replaceState({ path: newURL }, '', newURL);
+                        }
+                    } catch(error) { 
+                        console.warn('URL sync failed:', error); 
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

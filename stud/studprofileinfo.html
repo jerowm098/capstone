@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Personal Information | Student Profile | PUPBC CareLink</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --standard-padding: 1.5rem;
+            --border-subtle: 1px solid rgba(40, 49, 58, 0.1);
+            --brand-primary: #28313a;      
+            --medical-blue: #475867;        
+            --medical-blue-dark: #1a2127; 
+            --medical-blue-light: #667f94;
+            --medical-blue-soft: rgba(71, 88, 103, 0.08); 
+            --white: #ffffff;
+            --text-main: #28313a;          
+            --text-muted: #5c7285;     
+            --clay-bg: #f4f7f6;
+            --success-green: #28a745;
+            --success-bg-soft: rgba(40, 167, 69, 0.1);
+            --info-blue: #0d6efd;
+            --danger-red: #dc3545;
+            --warning-yellow: #ffc107;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: transparent;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-wrapper {
+            width: 100%;
+            background: transparent;
+        }
+
+        .form-content {
+            padding: var(--standard-padding);
+        }
+
+        /* Header Title */
+        .form-header {
+            margin-bottom: 1.8rem;
+            border-bottom: var(--border-subtle);
+            padding-bottom: 0.75rem;
+        }
+        .form-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--brand-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .form-header h2 i {
+            color: var(--medical-blue-light);
+            font-size: 1.7rem;
+        }
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 6px;
+            margin-bottom: 0;
+        }
+
+        /* Profile Card Layout - Two Column */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.8rem;
+            align-items: start;
+        }
+
+        /* LEFT COLUMN - Profile Summary Card */
+        .profile-summary-card {
+            background: var(--white);
+            border-radius: 24px;
+            border: var(--border-subtle);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            text-align: center;
+        }
+        .profile-avatar-section {
+            padding: 2rem 1.5rem 1rem;
+            background: linear-gradient(135deg, var(--medical-blue-soft) 0%, rgba(71,88,103,0.05) 100%);
+        }
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: var(--medical-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            border: 4px solid var(--white);
+        }
+        .profile-avatar i {
+            font-size: 3.8rem;
+            color: white;
+        }
+        .profile-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--brand-primary);
+            margin-bottom: 0.25rem;
+        }
+        .patient-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--success-bg-soft);
+            color: #1e7e34;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .member-since {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .status-registered {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--medical-blue-soft);
+            color: var(--medical-blue-dark);
+            padding: 5px 16px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        .status-registered i {
+            color: var(--success-green);
+            font-size: 0.65rem;
+        }
+
+        /* Button group container */
+        .action-buttons-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 1.2rem;
+        }
+        .edit-profile-btn, .qr-share-btn {
+            border: none;
+            border-radius: 40px;
+            padding: 10px 24px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .edit-profile-btn {
+            background: var(--medical-blue);
+            color: white;
+        }
+        .edit-profile-btn:hover {
+            background: var(--medical-blue-dark);
+            transform: translateY(-1px);
+        }
+        .qr-share-btn {
+            background: rgba(13, 110, 253, 0.1);
+            color: var(--info-blue);
+            border: 1px solid rgba(13, 110, 253, 0.3);
+        }
+        .qr-share-btn:hover {
+            background: rgba(13, 110, 253, 0.2);
+            transform: translateY(-1px);
+            border-color: var(--info-blue);
+        }
+
+        /* RIGHT COLUMN - Details Card */
+        .details-card {
+            background: var(--white);
+            border-radius: 24px;
+            border: var(--border-subtle);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .card-header-custom {
+            background: var(--medical-blue-soft);
+            padding: 1rem 1.8rem;
+            border-bottom: var(--border-subtle);
+        }
+        .card-header-custom h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--medical-blue-dark);
+            letter-spacing: -0.2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header-custom h3 i {
+            color: var(--medical-blue-light);
+            font-size: 1.1rem;
+        }
+        .card-body-custom {
+            padding: 1.8rem;
+        }
+
+        /* Info Grid - Two columns inside details */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2rem 2rem;
+        }
+        .info-field {
+            border-bottom: 1px solid rgba(71, 88, 103, 0.08);
+            padding-bottom: 0.7rem;
+        }
+        .info-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .info-label i {
+            font-size: 0.7rem;
+            color: var(--medical-blue-light);
+        }
+        .info-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--brand-primary);
+            word-break: break-word;
+        }
+
+        /* Additional Info Section (suggested extra) */
+        .additional-section {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: var(--border-subtle);
+        }
+        .additional-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .extra-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .extra-badge {
+            background: var(--medical-blue-soft);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: var(--medical-blue-dark);
+        }
+        .extra-badge i {
+            margin-right: 6px;
+            font-size: 0.7rem;
+        }
+
+        /* QR Modal Styles */
+        .qr-modal .modal-content {
+            border-radius: 28px;
+            border: none;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+            font-family: 'Poppins', sans-serif;
+        }
+        .qr-modal-header {
+            border-bottom: var(--border-subtle);
+            background: var(--medical-blue-soft);
+            padding: 1rem 1.5rem;
+        }
+        .qr-modal-header .modal-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--brand-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .qr-body {
+            text-align: center;
+            padding: 2rem 1.5rem;
+        }
+        .qr-code-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #qrcode img, #qrcode canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 16px;
+        }
+        .qr-email-info {
+            background: var(--medical-blue-soft);
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+            word-break: break-all;
+        }
+        .qr-email-info i {
+            margin-right: 8px;
+            color: var(--medical-blue);
+        }
+        .share-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .btn-outline-share {
+            border-radius: 40px;
+            padding: 8px 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid var(--border-subtle);
+            background: white;
+            transition: 0.2s;
+        }
+        .btn-outline-share:hover {
+            background: var(--medical-blue-soft);
+            border-color: var(--medical-blue-light);
+        }
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .form-content {
+                padding: 1rem;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            .card-body-custom {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="profile-wrapper">
+    <div class="form-content">
+        <!-- HEADER / TITLE -->
+        <div class="form-header">
+            <h2><i class="fa-solid fa-user-circle"></i> Personal Information</h2>
+            <p>View and manage your registered profile details. All information is securely stored.</p>
+        </div>
+
+        <!-- TWO COLUMN PROFILE LAYOUT -->
+        <div class="profile-grid">
+            <!-- LEFT COLUMN: Profile Summary with Avatar -->
+            <div class="profile-summary-card">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h3 class="profile-name" id="profileName">Maria R. Santos</h3>
+                    <div class="patient-badge">
+                        <i class="fa-solid fa-id-card"></i> Registered Patient
+                    </div>
+                    <div class="member-since" id="memberSince">
+                        <i class="fa-regular fa-calendar-alt"></i> Member since: August 2023
+                    </div>
+                    <div class="status-registered">
+                        <i class="fa-solid fa-circle"></i> Active · Registered
+                    </div>
+                </div>
+                <!-- Optional extra stats + action buttons group -->
+                <div style="padding: 1rem 1.5rem 1.5rem; border-top: var(--border-subtle); background: white;">
+                    <div class="extra-badges" style="justify-content: center;">
+                        <span class="extra-badge"><i class="fa-regular fa-clock"></i> 4 Appointments</span>
+                        <span class="extra-badge"><i class="fa-solid fa-check-circle"></i> Verified</span>
+                    </div>
+                    
+                    <!-- Action Buttons Group: Edit Profile + QR Code Sharing -->
+                    <div class="action-buttons-group">
+                        <button class="edit-profile-btn" id="editProfileBtn">
+                            <i class="fa-regular fa-pen-to-square"></i> Edit Profile
+                        </button>
+                        <button class="qr-share-btn" id="qrShareBtn">
+                            <i class="fa-solid fa-qrcode"></i> Share QR Code (Student Email)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Detailed Information Grid -->
+            <div class="details-card">
+                <div class="card-header-custom">
+                    <h3><i class="fa-solid fa-address-card"></i> Student Information Details</h3>
+                </div>
+                <div class="card-body-custom">
+                    <div class="info-grid">
+                        <!-- Student Email -->
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-regular fa-envelope"></i> Student Email</div>
+                            <div class="info-value" id="studentEmail">maria.santos@pupbc.edu.ph</div>
+                        </div>
+                        <!-- Patient Type -->
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-solid fa-tag"></i> Patient Type</div>
+                            <div class="info-value" id="patientType">Regular Student</div>
+                        </div>
+                        <!-- Year -->
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-solid fa-graduation-cap"></i> Year Level</div>
+                            <div class="info-value" id="yearLevel">3rd Year</div>
+                        </div>
+                        <!-- Course -->
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-solid fa-book-open"></i> Course / Program</div>
+                            <div class="info-value" id="course">Bachelor of Science in Information of Technology</div>
+                        </div>
+                        <!-- Department -->
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-solid fa-building"></i> Department</div>
+                            <div class="info-value" id="department">College of Computer Sciences</div>
+                        </div>
+                        <!-- Gender -->
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-solid fa-venus-mars"></i> Gender</div>
+                            <div class="info-value" id="gender">Female</div>
+                        </div>
+                        <!-- Birth Date -->
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-regular fa-calendar"></i> Birth Date</div>
+                            <div class="info-value" id="birthDate">March 15, 2003</div>
+                        </div>
+                        <!-- Age -->
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-solid fa-cake-candles"></i> Age</div>
+                            <div class="info-value" id="age">23 years old</div>
+                        </div>
+                        <!-- Additional Suggested Fields -->
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-solid fa-phone"></i> Contact Number</div>
+                            <div class="info-value" id="contactNumber">+63 912 3456 789</div>
+                        </div>
+                        <div class="info-field">
+                            <div class="info-label"><i class="fa-solid fa-location-dot"></i> Student ID</div>
+                            <div class="info-value" id="studentId">2024-12345</div>
+                        </div>
+                    </div>
+
+                    <!-- ADDITIONAL SUGGESTED INFO SECTION (Emergency Contact, Blood Type) -->
+                    <div class="additional-section">
+                        <div class="additional-title">
+                            <i class="fa-solid fa-plus-circle"></i> Additional Health Information
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-field">
+                                <div class="info-label"><i class="fa-solid fa-droplet"></i> Blood Type</div>
+                                <div class="info-value" id="bloodType">O+</div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-label"><i class="fa-solid fa-phone-volume"></i> Emergency Contact</div>
+                                <div class="info-value" id="emergencyContact">Ramon Santos (Father): +63 917 234 5678</div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-label"><i class="fa-solid fa-allergies"></i> Allergies (if any)</div>
+                                <div class="info-value" id="allergies">None reported</div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-label"><i class="fa-solid fa-notes-medical"></i> Medical History</div>
+                                <div class="info-value" id="medicalHistory">No chronic conditions. Updated tetanus vaccine 2024.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QR Code Modal (Bootstrap 5) -->
+<div class="modal fade qr-modal" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="qr-modal-header modal-header">
+                <h5 class="modal-title" id="qrModalLabel">
+                    <i class="fa-solid fa-qrcode"></i> Student Email QR Code
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="qr-body modal-body">
+                <div class="qr-code-container">
+                    <div id="qrcode"></div>
+                </div>
+                <div class="qr-email-info">
+                    <i class="fa-regular fa-envelope"></i> <strong>Scannable Data:</strong> <span id="qrEmailValue"></span>
+                </div>
+                <p class="text-muted small">Share this QR code to let others easily access your student email contact or profile identifier.</p>
+                <div class="share-actions">
+                    <button class="btn-outline-share" id="downloadQRBtn"><i class="fa-solid fa-download"></i> Download QR</button>
+                    <button class="btn-outline-share" id="copyEmailBtn"><i class="fa-regular fa-copy"></i> Copy Email</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ============================================================
+    // PERSONAL INFORMATION CLASS (studprofileinfo.html)
+    // Student profile viewer with matching design + QR Code Sharing Feature
+    // QR code contains current student email for sharing
+    // ============================================================
+
+    // Simulated student profile data (can be fetched from backend / localStorage)
+    let studentProfile = {
+        fullName: "Maria R. Santos",
+        studentEmail: "maria.santos@pupbc.edu.ph",
+        patientType: "Regular Student",
+        yearLevel: "3rd Year",
+        course: "Bachelor of Science in Information of Technology",
+        department: "College of Computer Sciences",
+        gender: "Female",
+        birthDate: "March 15, 2003",
+        age: "23 years old",
+        contactNumber: "+63 912 3456 789",
+        studentId: "2024-12345",
+        memberSince: "August 2023",
+        bloodType: "O+",
+        emergencyContact: "Ramon Santos (Father): +63 917 234 5678",
+        allergies: "None reported",
+        medicalHistory: "No chronic conditions. Updated tetanus vaccine 2024.",
+        avatarInitials: "MS"
+    };
+
+    // Populate all profile fields in the DOM
+    function populateProfileData() {
+        document.getElementById('profileName').innerText = studentProfile.fullName;
+        document.getElementById('memberSince').innerHTML = `<i class="fa-regular fa-calendar-alt"></i> Member since: ${studentProfile.memberSince}`;
+        document.getElementById('studentEmail').innerText = studentProfile.studentEmail;
+        document.getElementById('patientType').innerText = studentProfile.patientType;
+        document.getElementById('yearLevel').innerText = studentProfile.yearLevel;
+        document.getElementById('course').innerText = studentProfile.course;
+        document.getElementById('department').innerText = studentProfile.department;
+        document.getElementById('gender').innerText = studentProfile.gender;
+        document.getElementById('birthDate').innerText = studentProfile.birthDate;
+        document.getElementById('age').innerText = studentProfile.age;
+        document.getElementById('contactNumber').innerText = studentProfile.contactNumber;
+        document.getElementById('studentId').innerText = studentProfile.studentId;
+        document.getElementById('bloodType').innerText = studentProfile.bloodType;
+        document.getElementById('emergencyContact').innerText = studentProfile.emergencyContact;
+        document.getElementById('allergies').innerText = studentProfile.allergies;
+        document.getElementById('medicalHistory').innerText = studentProfile.medicalHistory;
+    }
+
+    // QR Code instance reference
+    let currentQR = null;
+
+    // Generate QR code inside modal using current student email
+    function generateAndShowQR() {
+        const studentEmail = studentProfile.studentEmail;
+        if (!studentEmail) {
+            showNotification("No student email found to generate QR code.", "danger");
+            return;
+        }
+        
+        // Clear previous QR code container content
+        const qrContainer = document.getElementById('qrcode');
+        qrContainer.innerHTML = '';
+        
+        // Generate new QR code with email data
+        // Using qrcodejs library (simple)
+        try {
+            currentQR = new QRCode(qrContainer, {
+                text: studentEmail,
+                width: 200,
+                height: 200,
+                colorDark: "#28313a",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+            // Update displayed email text
+            document.getElementById('qrEmailValue').innerText = studentEmail;
+        } catch (error) {
+            console.error("QR generation error", error);
+            qrContainer.innerHTML = '<p class="text-danger">Failed to generate QR code.</p>';
+        }
+    }
+
+    // Download QR code as PNG image
+    function downloadQRCode() {
+        const qrContainer = document.getElementById('qrcode');
+        let imgElement = qrContainer.querySelector('img');
+        let canvasElement = qrContainer.querySelector('canvas');
+        
+        let downloadUrl = null;
+        if (imgElement && imgElement.src) {
+            downloadUrl = imgElement.src;
+        } else if (canvasElement) {
+            downloadUrl = canvasElement.toDataURL("image/png");
+        } else {
+            showNotification("QR code not ready. Please try again.", "danger");
+            return;
+        }
+        
+        const link = document.createElement('a');
+        link.download = `student_qr_${studentProfile.studentEmail.replace(/[^a-z0-9]/gi, '_')}.png`;
+        link.href = downloadUrl;
+        link.click();
+        showNotification("QR Code downloaded successfully!", "success");
+    }
+
+    // Copy student email to clipboard
+    function copyEmailToClipboard() {
+        const email = studentProfile.studentEmail;
+        if (!email) return;
+        navigator.clipboard.writeText(email).then(() => {
+            showNotification(`Email "${email}" copied to clipboard!`, "success");
+        }).catch(() => {
+            showNotification("Failed to copy email.", "danger");
+        });
+    }
+
+    // Toast notification system
+    function showNotification(message, type = "info") {
+        const toastContainer = document.createElement('div');
+        toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+        toastContainer.style.zIndex = '9999';
+        let icon = 'fa-info-circle';
+        let bgClass = 'bg-info';
+        if (type === 'success') {
+            icon = 'fa-check-circle';
+            bgClass = 'bg-success';
+        } else if (type === 'danger') {
+            icon = 'fa-exclamation-triangle';
+            bgClass = 'bg-danger';
+        }
+        toastContainer.innerHTML = `<div class="toast align-items-center text-white ${bgClass} border-0" role="alert" data-bs-autohide="true" data-bs-delay="2500"><div class="d-flex"><div class="toast-body"><i class="fa-solid ${icon} me-2"></i>${message}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div>`;
+        document.body.appendChild(toastContainer);
+        const bsToast = new bootstrap.Toast(toastContainer.querySelector('.toast'), { autohide: true, delay: 2500 });
+        bsToast.show();
+        toastContainer.addEventListener('hidden.bs.toast', () => toastContainer.remove());
+    }
+
+    // Handle Edit Profile placeholder
+    function handleEditProfile() {
+        showNotification("Profile editing will be available in the next update. For now, contact admin to update details.", "info");
+    }
+
+    // Initialize QR modal and event listeners
+    function initQRFeature() {
+        const qrShareBtn = document.getElementById('qrShareBtn');
+        const qrModalEl = document.getElementById('qrModal');
+        
+        if (qrShareBtn && qrModalEl) {
+            // Before showing modal, generate fresh QR code based on current email
+            qrShareBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                generateAndShowQR();
+                const modal = new bootstrap.Modal(qrModalEl);
+                modal.show();
+            });
+            
+            // Download button inside modal
+            const downloadBtn = document.getElementById('downloadQRBtn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', () => {
+                    downloadQRCode();
+                });
+            }
+            
+            // Copy email button
+            const copyBtn = document.getElementById('copyEmailBtn');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', () => {
+                    copyEmailToClipboard();
+                });
+            }
+            
+            // Optional: reset QR when modal is hidden (avoid stale reference)
+            qrModalEl.addEventListener('hidden.bs.modal', function () {
+                const qrContainer = document.getElementById('qrcode');
+                if (qrContainer) qrContainer.innerHTML = '';
+            });
+        }
+    }
+
+    // Additional safety for dynamic email changes (if needed, but static demo)
+    document.addEventListener('DOMContentLoaded', () => {
+        populateProfileData();
+        
+        const editBtn = document.getElementById('editProfileBtn');
+        if (editBtn) editBtn.addEventListener('click', handleEditProfile);
+        
+        // Initialize QR code sharing feature
+        initQRFeature();
+        
+        console.log("Personal Information Profile Loaded - QR sharing enabled with student email.");
+        
+        // Avatar background keep consistency
+        const avatarDiv = document.querySelector('.profile-avatar');
+        if (avatarDiv) avatarDiv.style.background = "#475867";
+    });
+    
+    // Iframe detection (optional from original snippet, keep for consistency)
+    if (window.self === window.top) {
+        const currentPagePath = window.location.pathname.split("/").pop();
+        if (currentPagePath && !currentPagePath.includes('studdashboard.html')) {
+            // commented redirect to avoid breaking demo but keeping logic
+             window.location.href = "studdashboard.html?page=studprofile.html&subpage=" + currentPagePath;
+        }
+    }
+</script>
+</body>
+</html>

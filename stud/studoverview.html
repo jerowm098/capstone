@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Student Overview | PUPBC CareLink Dashboard</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --medical-blue: #475867;
+            --medical-blue-dark: #1a2127;
+            --medical-blue-light: #667f94;
+            --medical-blue-soft: rgba(71, 88, 103, 0.08);
+            --clay-bg: #f4f7f6;
+            --white: #ffffff;
+            --text-main: #28313a;
+            --text-muted: #5c7285;
+            --success-green: #28a745;
+            --warning-orange: #f39c12;
+            --danger-red: #e74a3b;
+            --info-teal: #20b2aa;
+            --float-shadow: 0 12px 28px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.01);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--clay-bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 25px;
+        }
+
+        /* --- HYPERREALISTIC 2D STAT CARDS - STUDENT EDITION (fresh original icons) --- */
+        .stat-card {
+            background: white;
+            border-radius: 24px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--float-shadow);
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.2s ease;
+            min-height: 130px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.12);
+        }
+
+        .stat-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .stat-icon svg {
+            width: 56px;
+            height: 56px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.02));
+        }
+
+        /* Individual soft background tints for each student card (unique palette) */
+        .stat-card:nth-child(1) .stat-icon { background: rgba(32, 178, 170, 0.12); }    /* Teal for Appointments */
+        .stat-card:nth-child(2) .stat-icon { background: rgba(111, 66, 193, 0.1); }     /* Purple for QR Logins */
+        .stat-card:nth-child(3) .stat-icon { background: rgba(255, 159, 28, 0.12); }    /* Amber for Medical Records */
+        .stat-card:nth-child(4) .stat-icon { background: rgba(220, 53, 69, 0.1); }       /* Rose for Blood Type */
+
+        .stat-number-animated {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 0;
+            line-height: 1.2;
+            color: var(--text-main);
+        }
+        
+        .stat-card small {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* --- Dashboard Grid --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1.8rem;
+            margin-top: 1.8rem;
+            align-items: stretch;
+        }
+
+        /* --- Graph Card --- */
+        .graph-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: var(--float-shadow);
+            transition: transform 0.2s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-card:hover { transform: translateY(-3px); }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--medical-blue);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            letter-spacing: -0.2px;
+        }
+        .section-title i { color: var(--pup-maroon); margin-right: 8px; }
+
+        .graph-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            width: 100%;
+            margin: 0.25rem 0 0.5rem 0;
+            flex: 1;
+        }
+        canvas#healthTrendChart { width: 100%; height: auto; max-height: 260px; display: block; }
+
+        .graph-stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 0.75rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .stat-badge {
+            background: var(--medical-blue-soft);
+            border-radius: 20px;
+            padding: 6px 10px;
+            flex: 1;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .stat-badge .stat-number-small { font-weight: 700; font-size: 0.95rem; color: var(--medical-blue-dark); }
+        .stat-badge .stat-label-small { font-size: 0.62rem; color: var(--text-muted); }
+        .trend-up { color: var(--success-green); font-size: 0.6rem; font-weight: 500; }
+        .small-stat-note {
+            font-size: 0.68rem;
+            border-top: 1px solid #edf2f7;
+            padding-top: 10px;
+            margin-top: 8px;
+            color: var(--text-muted);
+        }
+
+        /* Right column & circles */
+        .right-column { display: flex; flex-direction: column; gap: 1.5rem; height: 100%; }
+        .circle-cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .circle-stat-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--float-shadow);
+            transition: all 0.25s ease;
+        }
+        .circle-stat-card:hover { transform: translateY(-3px); box-shadow: 0 18px 30px rgba(0,0,0,0.08); }
+        .circle-progress { position: relative; width: 70px; height: 70px; flex-shrink: 0; }
+        .circle-progress svg { width: 70px; height: 70px; transform: rotate(-90deg); }
+        .circle-bg { stroke: #e9ecef; stroke-width: 7; fill: none; }
+        .circle-fill { stroke-width: 7; fill: none; stroke-linecap: round; transition: stroke-dasharray 0.8s ease; }
+        .fill-health { stroke: var(--success-green); }
+        .fill-attendance { stroke: var(--medical-blue); }
+        .circle-percent { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 0.9rem; font-weight: 700; color: var(--medical-blue-dark); }
+        .circle-stat-info { flex: 1; }
+        .circle-stat-title { font-weight: 700; font-size: 0.85rem; color: var(--medical-blue-dark); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .circle-stat-value { font-size: 1.2rem; font-weight: 700; color: var(--medical-blue); line-height: 1.2; }
+        .circle-stat-sub { font-size: 0.62rem; color: var(--text-muted); margin-top: 2px; }
+        .info-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(71, 88, 103, 0.1); padding: 3px 10px; border-radius: 30px; font-size: 0.58rem; font-weight: 500; color: var(--medical-blue); margin-top: 5px; }
+
+        /* Activity Timeline */
+        .activity-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: var(--float-shadow);
+            transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .activity-card:hover { transform: translateY(-3px); }
+        .timeline { position: relative; padding-left: 28px; }
+        .timeline::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 2px; background: #e9ecef; }
+        .timeline-item { position: relative; padding-bottom: 16px; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-item::after {
+            content: ''; position: absolute; left: -32px; top: 5px; width: 10px; height: 10px;
+            border-radius: 50%; background: var(--pup-maroon); border: 2px solid white;
+            box-shadow: 0 0 0 2px rgba(156, 12, 32, 0.2);
+        }
+        .timeline-item h6 { font-weight: 600; font-size: 0.82rem; color: var(--medical-blue-dark); margin-bottom: 2px; }
+        .timeline-item p { font-size: 0.7rem; margin-bottom: 0; color: var(--text-muted); }
+        .timeline-scroll { flex: 1; overflow-y: auto; max-height: 280px; padding-right: 6px; }
+        .timeline-scroll::-webkit-scrollbar { width: 4px; }
+        .timeline-scroll::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .timeline-scroll::-webkit-scrollbar-thumb { background: var(--medical-blue-light); border-radius: 4px; }
+
+        @media (max-width: 992px) {
+            .dashboard-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .circle-cards-row { grid-template-columns: 1fr; }
+            body { padding: 1.5rem; }
+        }
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .stat-card { padding: 15px; gap: 12px; }
+            .stat-icon { width: 52px; height: 52px; }
+            .stat-icon svg { width: 44px; height: 44px; }
+            .stat-number-animated { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <!-- 4 STAT CARDS with HYPERREALISTIC 2D ICONS - uniquely designed for STUDENT overview (Appointments, QR Logins, Medical Records, Blood Type) -->
+    <div class="row g-4">
+        <!-- Card 1: Upcoming Appointments - student appointment calendar with personalized icon -->
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Student appointment card: notebook + calendar elements with subtle 2D realism -->
+                        <rect x="14" y="18" width="36" height="32" rx="5" fill="white" stroke="#20b2aa" stroke-width="1.6"/>
+                        <path d="M14 26 L50 26" stroke="#20b2aa" stroke-width="1.3" stroke-linecap="round"/>
+                        <circle cx="24" cy="38" r="4" stroke="#20b2aa" stroke-width="1.4" fill="white"/>
+                        <path d="M24 35 L24 41 M21 38 L27 38" stroke="#20b2aa" stroke-width="1.2" stroke-linecap="round"/>
+                        <rect x="34" y="35" width="12" height="6" rx="2" fill="#20b2aa" fill-opacity="0.15" stroke="#20b2aa" stroke-width="1.2"/>
+                        <path d="M22 14 L22 20 M42 14 L42 20" stroke="#20b2aa" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M48 44 L56 44" stroke="#20b2aa" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M52 40 L52 48" stroke="#20b2aa" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M10 44 L14 44" stroke="#20b2aa" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-number-animated counter-number" id="statAppointments">0</div>
+                    <small class="text-muted">Upcoming Appointments</small>
+                </div>
+            </div>
+        </div>
+        <!-- Card 2: Total QR Logins - student access & digital engagement -->
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- QR code / digital login with student identity theme -->
+                        <rect x="12" y="16" width="18" height="18" rx="3" fill="white" stroke="#6f42c1" stroke-width="1.5"/>
+                        <path d="M16 20 L26 20 M16 24 L22 24 M20 28 L26 28" stroke="#6f42c1" stroke-width="1.3" stroke-linecap="round"/>
+                        <rect x="34" y="16" width="18" height="18" rx="3" fill="white" stroke="#6f42c1" stroke-width="1.5"/>
+                        <path d="M38 20 L48 20 M44 24 L48 24 M38 28 L44 28" stroke="#6f42c1" stroke-width="1.3" stroke-linecap="round"/>
+                        <rect x="12" y="38" width="18" height="18" rx="3" fill="white" stroke="#6f42c1" stroke-width="1.5"/>
+                        <path d="M16 42 L26 42 M20 46 L26 46 M16 50 L22 50" stroke="#6f42c1" stroke-width="1.3" stroke-linecap="round"/>
+                        <rect x="34" y="38" width="18" height="18" rx="3" fill="#6f42c1" fill-opacity="0.1" stroke="#6f42c1" stroke-width="1.5"/>
+                        <path d="M38 42 L48 42 M38 46 L48 46 M38 50 L48 50" stroke="#6f42c1" stroke-width="1.2" stroke-linecap="round"/>
+                        <circle cx="50" cy="12" r="3" fill="#6f42c1" fill-opacity="0.3" stroke="#6f42c1" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-number-animated counter-number" id="statQRTaps">0</div>
+                    <small class="text-muted">Total QR Logins</small>
+                </div>
+            </div>
+        </div>
+        <!-- Card 3: Medical Records - student health folder / documents -->
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Medical records folder with student health reports -->
+                        <path d="M18 24 L18 48 C18 50.209 19.791 52 22 52 L42 52 C44.209 52 46 50.209 46 48 L46 28 C46 25.791 44.209 24 42 24 L30 24 L26 18 L20 18 C18.895 18 18 18.895 18 20 L18 24Z" fill="white" stroke="#ff9f1c" stroke-width="1.6"/>
+                        <path d="M24 34 L40 34" stroke="#ff9f1c" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M24 40 L36 40" stroke="#ff9f1c" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M24 46 L38 46" stroke="#ff9f1c" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="48" cy="18" r="6" fill="#ff9f1c" fill-opacity="0.15" stroke="#ff9f1c" stroke-width="1.3"/>
+                        <path d="M48 15 L48 21 M45 18 L51 18" stroke="#ff9f1c" stroke-width="1.3" stroke-linecap="round"/>
+                        <path d="M12 32 L16 32" stroke="#ff9f1c" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-number-animated counter-number" id="statRecords">0</div>
+                    <small class="text-muted">Medical Records</small>
+                </div>
+            </div>
+        </div>
+        <!-- Card 4: Blood Type - student vital info with medical droplet theme but stylized -->
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Blood type with heart + drop fusion for student wellness -->
+                        <path d="M32 18 C32 18 22 28 22 36 C22 42.627 26.477 48 32 48 C37.523 48 42 42.627 42 36 C42 28 32 18 32 18Z" fill="white" stroke="#dc3545" stroke-width="1.6"/>
+                        <path d="M32 26 L32 42 M24 34 L40 34" stroke="#dc3545" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="52" cy="44" r="5" fill="#dc3545" fill-opacity="0.1" stroke="#dc3545" stroke-width="1.4"/>
+                        <path d="M50 44 L54 44 M52 42 L52 46" stroke="#dc3545" stroke-width="1.2" stroke-linecap="round"/>
+                        <path d="M12 50 L16 50" stroke="#dc3545" stroke-width="1.8" stroke-linecap="round"/>
+                        <path d="M14 48 L14 52" stroke="#dc3545" stroke-width="1.8" stroke-linecap="round"/>
+                        <rect x="46" y="28" width="8" height="8" rx="2" fill="#dc3545" fill-opacity="0.1" stroke="#dc3545" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="stat-number-animated" id="statBloodType">B+</div>
+                    <small class="text-muted">Blood Type</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD GRID: Graph + Right Column -->
+    <div class="dashboard-grid">
+        <!-- LEFT: GRAPH SECTION - Health Trends -->
+        <div class="graph-card">
+            <h5 class="section-title"><i class="fa-solid fa-chart-line"></i> Health & Wellness Trends</h5>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <p class="text-muted small mb-0" style="font-size: 0.68rem;"><i class="fa-regular fa-calendar-alt me-1"></i> Monthly checkup adherence & wellness score</p>
+                <span class="badge bg-light text-dark rounded-pill" style="font-size: 0.6rem; background: var(--medical-blue-soft) !important;"><i class="fa-solid fa-chart-line"></i> 6-month trend</span>
+            </div>
+            <div class="graph-container">
+                <canvas id="healthTrendChart" width="600" height="260" style="max-width:100%; height:auto; width:100%;"></canvas>
+            </div>
+            <div class="graph-stats">
+                <div class="stat-badge"><div class="stat-number-small">+18%</div><div class="stat-label-small">Wellness Score</div><small class="trend-up"><i class="fa-solid fa-arrow-up"></i> vs last month</small></div>
+                <div class="stat-badge"><div class="stat-number-small">92%</div><div class="stat-label-small">Appointment Adherence</div><small class="trend-up"><i class="fa-solid fa-face-smile"></i> Excellent</small></div>
+                <div class="stat-badge"><div class="stat-number-small">4.8/5</div><div class="stat-label-small">Patient Rating</div><small class="trend-up"><i class="fa-solid fa-star"></i> Very Satisfied</small></div>
+            </div>
+            <div class="small-stat-note"><i class="fa-regular fa-circle-check text-success me-1"></i> Regular checkups correlate with better outcomes. You've completed 4 visits this semester — keep it up!</div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="right-column">
+            <div class="circle-cards-row">
+                <div class="circle-stat-card">
+                    <div class="circle-progress">
+                        <svg width="70" height="70" viewBox="0 0 100 100">
+                            <circle class="circle-bg" cx="50" cy="50" r="42"></circle>
+                            <circle class="circle-fill fill-health" id="healthCircleFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"></circle>
+                        </svg>
+                        <div class="circle-percent" id="healthPercent">0%</div>
+                    </div>
+                    <div class="circle-stat-info">
+                        <div class="circle-stat-title"><i class="fa-solid fa-heartbeat" style="color: var(--success-green);"></i> Wellness Score</div>
+                        <div class="circle-stat-value" id="wellnessScore">86<span style="font-size: 0.7rem;">/100</span></div>
+                        <div class="circle-stat-sub">Based on checkups & vitals</div>
+                        <div class="info-badge"><i class="fa-regular fa-thumbs-up"></i> Above average</div>
+                    </div>
+                </div>
+                <div class="circle-stat-card">
+                    <div class="circle-progress">
+                        <svg width="70" height="70" viewBox="0 0 100 100">
+                            <circle class="circle-bg" cx="50" cy="50" r="42"></circle>
+                            <circle class="circle-fill fill-attendance" id="attendanceCircleFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"></circle>
+                        </svg>
+                        <div class="circle-percent" id="attendancePercent">0%</div>
+                    </div>
+                    <div class="circle-stat-info">
+                        <div class="circle-stat-title"><i class="fa-solid fa-calendar-week" style="color: var(--medical-blue);"></i> Clinic Engagement</div>
+                        <div class="circle-stat-value" id="engagementValue">78<span style="font-size: 0.7rem;">%</span></div>
+                        <div class="circle-stat-sub">QR check-ins / month</div>
+                        <div class="info-badge"><i class="fa-regular fa-clock"></i> +12% from last term</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <h5 class="section-title" style="margin-bottom: 0.8rem;"><i class="fa-regular fa-clock me-2"></i> Upcoming Activity</h5>
+                <div class="timeline-scroll">
+                    <div class="timeline">
+                        <div class="timeline-item"><h6 class="fw-bold mb-1"><i class="fa-regular fa-calendar me-1"></i> April 15, 2026 - 09:00 AM</h6><p>Annual Physical Exam - Clinic Room 1</p></div>
+                        <div class="timeline-item"><h6 class="fw-bold mb-1"><i class="fa-solid fa-syringe me-1"></i> April 18, 2026 - 10:30 AM</h6><p>Flu Vaccination Drive (Bldg. A Lobby)</p></div>
+                        <div class="timeline-item"><h6 class="fw-bold mb-1"><i class="fa-regular fa-clipboard me-1"></i> April 22, 2026 - 01:00 PM</h6><p>Lab Result Review - Teleconsultation</p></div>
+                        <div class="timeline-item"><h6 class="fw-bold mb-1"><i class="fa-solid fa-tooth me-1"></i> April 28, 2026 - 02:30 PM</h6><p>Dental Checkup - Dental Unit</p></div>
+                        <div class="timeline-item"><h6 class="fw-bold mb-1"><i class="fa-solid fa-chalkboard-user me-1"></i> May 05, 2026 - 11:00 AM</h6><p>Health & Wellness Seminar (Online)</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ============================================================
+    // STUDENT OVERVIEW DASHBOARD - Fresh 2D Icons for Student Data
+    // Animated counters, health chart, circle progress, timeline
+    // ============================================================
+
+    function animateNumber(element, target) {
+        if (!element) return;
+        let start = 0;
+        const duration = 1400;
+        const stepTime = 16;
+        const steps = duration / stepTime;
+        const increment = target / steps;
+        let current = 0;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.innerText = target;
+                clearInterval(timer);
+            } else {
+                element.innerText = Math.floor(current);
+            }
+        }, stepTime);
+    }
+
+    function animateCircleProgress(circleId, percentId, targetPercent) {
+        const circle = document.getElementById(circleId);
+        const percentSpan = document.getElementById(percentId);
+        if (!circle || !percentSpan) return;
+        const radius = 42;
+        const circumference = 2 * Math.PI * radius;
+        let startPercent = 0;
+        const duration = 1400;
+        const startTime = performance.now();
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            let progress = Math.min(1, elapsed / duration);
+            let currentPercent = startPercent + (targetPercent - startPercent) * progress;
+            const offset = circumference - (currentPercent / 100) * circumference;
+            circle.style.strokeDasharray = `${circumference}`;
+            circle.style.strokeDashoffset = `${offset}`;
+            percentSpan.innerText = Math.floor(currentPercent) + '%';
+            if (progress < 1) requestAnimationFrame(update);
+            else {
+                circle.style.strokeDashoffset = `${circumference - (targetPercent / 100) * circumference}`;
+                percentSpan.innerText = targetPercent + '%';
+            }
+        }
+        requestAnimationFrame(update);
+    }
+
+    function initHealthChart() {
+        const ctx = document.getElementById('healthTrendChart').getContext('2d');
+        if (window.healthChart instanceof Chart) window.healthChart.destroy();
+        window.healthChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [
+                    { label: 'Wellness Score (%)', data: [72, 75, 78, 82, 85, 88], borderColor: '#2c9e6e', backgroundColor: 'rgba(44, 158, 110, 0.05)', borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: '#2c9e6e', pointBorderColor: '#fff', tension: 0.3, fill: true },
+                    { label: 'Checkup Adherence (%)', data: [68, 70, 74, 80, 85, 90], borderColor: '#475867', backgroundColor: 'rgba(71, 88, 103, 0.05)', borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: '#475867', pointBorderColor: '#fff', tension: 0.3, fill: true, borderDash: [6, 4] }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: true,
+                plugins: {
+                    tooltip: { backgroundColor: '#28313a', titleColor: '#f4f7f6', bodyColor: '#e0e0e0', callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}%` } },
+                    legend: { position: 'top', labels: { font: { size: 9, weight: '500' }, boxWidth: 10, usePointStyle: true } }
+                },
+                scales: { y: { beginAtZero: true, max: 100, grid: { color: '#eef2f6' }, ticks: { stepSize: 20, font: { size: 8 } } }, x: { ticks: { font: { size: 9 } } } }
+            }
+        });
+    }
+
+    function initCountersAndCircles() {
+        animateNumber(document.getElementById('statAppointments'), 8);
+        animateNumber(document.getElementById('statQRTaps'), 24);
+        animateNumber(document.getElementById('statRecords'), 12);
+        // Blood type is static "B+", no animation needed.
+        document.getElementById('wellnessScore').innerHTML = '86<span style="font-size: 0.7rem;">/100</span>';
+        document.getElementById('engagementValue').innerHTML = '78<span style="font-size: 0.7rem;">%</span>';
+        animateCircleProgress('healthCircleFill', 'healthPercent', 86);
+        animateCircleProgress('attendanceCircleFill', 'attendancePercent', 78);
+    }
+
+    function enhanceTimeline() {
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            item.addEventListener('mouseenter', () => { item.style.transform = 'translateX(4px)'; item.style.transition = '0.2s'; });
+            item.addEventListener('mouseleave', () => { item.style.transform = 'translateX(0)'; });
+        });
+    }
+
+    function animateStatBadges() {
+        document.querySelectorAll('.stat-badge').forEach((badge, idx) => {
+            badge.style.opacity = '0';
+            badge.style.transform = 'translateY(8px)';
+            setTimeout(() => { badge.style.transition = 'all 0.3s ease'; badge.style.opacity = '1'; badge.style.transform = 'translateY(0)'; }, 100 + idx * 80);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initHealthChart();
+        initCountersAndCircles();
+        enhanceTimeline();
+        animateStatBadges();
+        console.log("Student Dashboard with UNIQUE hyperrealistic 2D icons loaded — each icon designed specifically for student metrics.");
+    });
+    window.addEventListener('resize', () => { if (window.healthChart) window.healthChart.resize(); });
+
+            if (window.self === window.top) {
+        const currentPagePath = window.location.pathname.split("/").pop();
+        if (currentPagePath && !currentPagePath.includes('studdashboard.html')) {
+            window.location.href = "studdashboard.html?page=studoverview.html&subpage=" + currentPagePath;
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+[
+    {
+        "firstName": "jerome",
+        "lastName": "mallari",
+        "email": "jerome123@gmail.com",
+        "staffId": "2026-001234-RN-0",
+        "password": "123456",
+        "registeredAt": "2026-04-24T13:09:14.073Z",
+        "role": "Medical Staff"
+    },
+    {
+        "firstName": "jerome",
+        "lastName": "mallari",
+        "email": "jerome123@gmail.com",
+        "staffId": "2026-001234-RN-0",
+        "password": "1234567",
+        "registeredAt": "2026-04-24T13:09:43.628Z",
+        "role": "Medical Staff"
+    },
+    {
+        "firstName": "jerome",
+        "lastName": "mallari",
+        "email": "jerome1234@gmail.com",
+        "staffId": "2026-12277-RN-0",
+        "password": "123456",
+        "registeredAt": "2026-04-24T14:54:04.983Z",
+        "role": "Medical Staff"
+    },
+    {
+        "firstName": "jerome",
+        "lastName": "mallari",
+        "email": "jerome12345@gmail.com",
+        "staffId": "2026-87395-RN-0",
+        "password": "123456",
+        "registeredAt": "2026-04-24T15:03:24.800Z",
+        "role": "Medical Staff"
+    },
+    {
+        "firstName": "jerome",
+        "lastName": "mallari",
+        "email": "jerome123456@gmail.com",
+        "staffId": "2026-21204-RN-0",
+        "password": "123456",
+        "registeredAt": "2026-04-24T15:22:29.785Z",
+        "role": "Medical Staff"
+    },
+    {
+        "firstName": "jerome",
+        "lastName": "mallari",
+        "email": "jerome1234567@gmail.com",
+        "staffId": "2026-60047-RN-0",
+        "password": "123456",
+        "registeredAt": "2026-04-24T15:27:34.758Z",
+        "role": "Medical Staff"
+    },
+    {
+        "firstName": "marc",
+        "lastName": "luna",
+        "email": "marc0123@gmail.com",
+        "staffId": "2026-70135-RN-0",
+        "password": "123456",
+        "registeredAt": "2026-04-25T02:39:29.373Z",
+        "role": "Medical Staff"
+    }
+]

@@ -1,0 +1,129 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f7f9;
+    display: flex;
+    align-items: center; /* Ginawa nating center para hindi masyadong nasa baba */
+    justify-content: center;
+    min-height: 100vh; /* Para laging centered sa screen */
+    padding: 20px;
+}
+
+.create-card {
+    background: #ffffff;
+    padding: 2rem; /* Binawasan ang padding para maging compact */
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 850px;
+}
+
+/* Header Section */
+.logo-section {
+    margin-bottom: 1.5rem !important; /* Mas dikit na sa form */
+}
+
+.logo-section h2 {
+    font-size: 1.25rem;
+    margin-top: 5px;
+}
+
+/* Form Styling */
+.form-label {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.form-control, .form-select {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #000;
+}
+
+/* Compact Row Spacing */
+.row.g-3 {
+    --bs-gutter-y: 0.75rem; /* Mas maliit na gap sa pagitan ng rows */
+}
+
+/* Right Side QR Styling */
+.qr-side-container {
+    background: #fafafa;
+    border-left: 1px solid #eee;
+    padding: 15px;
+    border-radius: 0 10px 10px 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#qrcode {
+    padding: 8px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+.id-badge {
+    background-color: #f1f3f5;
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: 1px dashed #adb5bd;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #212529;
+    margin-top: 10px;
+}
+
+.password-display-section {
+    width: 100%;
+    padding: 0 10px;
+}
+
+/* Buttons */
+.btn-create {
+    background-color: #000;
+    color: #fff !important;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    width: 100%;
+    /* Magdagdag ng border para sa inverted style mamaya */
+    border: 2px solid #000; 
+    /* Gawing 'all' ang transition para sa background at text color */
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Inverted Hover Style */
+.btn-create:hover {
+    background-color: #fff !important; /* Magiging puti ang loob */
+    color: #000 !important;            /* Magiging itim ang text */
+    border: 2px solid #000 !important; /* Mananatili ang itim na gilid */
+}
+
+/* Responsive Fix */
+@media (max-width: 768px) {
+    .qr-side-container {
+        border-left: none;
+        border-top: 1px solid #eee;
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+}

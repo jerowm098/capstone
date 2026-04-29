@@ -1,0 +1,91 @@
+/* Container and Card Styling */
+.registration-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.registration-card {
+    border: none;
+    border-radius: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Section Headers with Numbers */
+.section-step {
+    width: 35px;
+    height: 35px;
+    background-color: #212529;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #343a40;
+    margin-bottom: 0;
+}
+
+/* Form Controls Customization */
+.custom-form-group label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6c757d;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.custom-input-focus:focus {
+    border-color: #212529;
+    box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.1);
+}
+
+/* Sidebar Section (Medical Info) */
+.medical-info-panel {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 25px;
+    height: 100%;
+}
+
+/* Vertical Divider for Desktop */
+.vertical-divider {
+    border-left: 1px dashed #dee2e6;
+    height: 100%;
+    width: 1px;
+    margin: 0 auto;
+}
+
+/* Payment Highlight Box */
+.payment-section {
+    background: #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    border-left: 5px solid #198754;
+}
+
+.payment-label {
+    color: #198754;
+    font-weight: 800;
+}
+
+/* Buttons */
+.btn-register {
+    padding: 12px 40px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}

@@ -1,0 +1,77 @@
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-maroon text-white">
+                    <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i>Service Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h6>Patient: <span id="acc-patient-name" class="fw-bold">Jerome Mallari</span></h6>
+                        <h6>Date: <span>March 12, 2026</span></h6>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light text-center">
+                                <tr>
+                                    <th>Service/Item</th>
+                                    <th>Quantity</th>
+                                    <th>Type</th>
+                                    <th>Coverage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Medical Consultation</td>
+                                    <td>1</td>
+                                    <td>General</td>
+                                    <td class="text-success fw-bold text-center">University Funded</td>
+                                </tr>
+                                <tr>
+                                    <td>Paracetamol (500mg)</td>
+                                    <td>10</td>
+                                    <td>Medicine</td>
+                                    <td class="text-success fw-bold text-center">University Funded</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-light border text-end">
+                        Total Amount Due: <strong class="text-maroon">₱ 0.00</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body text-center">
+                    <h6 class="text-maroon fw-bold mb-3">Claim Verification</h6>
+                    <div class="bg-light p-4 rounded mb-3">
+                        <i class="fas fa-qrcode fa-4x text-muted"></i>
+                        <p class="small mt-2">Scan Student QR to process clinic clearance</p>
+                    </div>
+                    <button class="btn btn-maroon text-white w-100 mb-2">Issue Digital Receipt/Clearance</button>
+                    <small class="text-muted">Compliant with Data Privacy Act of 2012 [cite: 20]</small>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0 fw-bold">Resource Utilization</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted">Medicine Subsidy Used (Monthly)</small>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-maroon" style="width: 65%;"></div>
+                        </div>
+                        <small class="float-end mt-1">65% of Budget</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary w-100 mt-2">View Statistical Reports</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

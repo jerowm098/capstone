@@ -1,0 +1,125 @@
+/* Lahat ng inputs sa kahit anong page magiging dark mode friendly */
+/* 
+:root {
+    --bg-body: #f7fbff;
+    --bg-card: #ffffff;
+    --text-main: #212529;
+    --border-color: #eeeeee;
+}
+
+
+
+
+
+.stat-card {
+    background-color: var(--bg-card) !important;
+    
+    color: var(--text-main);
+}
+
+input, select, textarea {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    
+} */
+
+
+
+
+
+
+
+/* Sidebar Layout & Wrapper */
+
+/* Force no scroll on the entire browser */
+html, body {
+    background-color: #f9fcff !important;
+    height: 100vh;
+    /* overflow: hidden !important; */
+    /* overflow-y: auto; */ /* Lalabas lang ang scrollbar kung kailangan */
+    overflow: auto;    /* Dito papasok ang "magic" */
+    margin: 0;
+    padding: 0;
+    max-height: 695px;
+}
+
+
+/* #wrapper {
+    height: 100vh;
+    overflow: hidden;
+    background-color: #1b314c;
+    display: flex;
+} */
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    /* background-color: #1b314c; */
+    width: 280px;
+    transition: margin 0.25s ease-out;
+}
+
+#page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+}
+
+.sidebar-heading {
+    letter-spacing: -1px;
+}
+
+/* Sidebar Nav Pills Customization */
+.nav-pills .nav-link {
+    color: #ced4da;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: 500;
+}
+
+
+.nav-pills .nav-link.active {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.nav-pills .nav-link:hover:not(.active) {
+    background-color: #343a40;
+    color: #fff;
+}
+
+/* Sub-menu Navigation */
+#profileSubmenu .nav-link {
+    font-size: 0.85rem;
+    padding: 8px 15px;
+    border-radius: 5px;
+    background: transparent;
+    color: #adb5bd;
+}
+
+#profileSubmenu .nav-link:hover, 
+#profileSubmenu .nav-link.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Arrow Animation */
+[data-bs-toggle="collapse"][aria-expanded="true"] .bi-chevron-down {
+    transform: rotate(180deg);
+    transition: 0.3s;
+}
+
+/* Global Form Elements for Profile Shell */
+.form-control:focus, .form-select:focus {
+    box-shadow: none !important;
+    border-color: #000 !important;
+}
+
+.input-group-text {
+    border-right: none !important;
+    color: #6c757d;
+}
+
+
+
+
+

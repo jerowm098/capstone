@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>CareLink Express | Kiosk Consultation — What are you feeling today?</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- SweetAlert2 - Locked layout, no flicker/scrollbar -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --pup-maroon-dark: #7a0919;
+            --consult-sky: #38bdf8;
+            --consult-sky-dark: #0ea5e9;
+            --symptom-card-bg: rgba(255, 255, 255, 0.92);
+            --symptom-card-border: rgba(255, 255, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* CRITICAL: LOCK VIEWPORT — rigid, no scrollbar shifting, no overflow */
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000; 
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Blur background overlay - clean, no artifacts */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px) brightness(0.45);
+            transform: scale(1.02);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: -1;
+        }
+
+        /* MAIN UI CARD — fixed dimensions, no reflow */
+        .portal-card {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 20px;
+            width: 1300px;
+            height: 850px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.2) inset;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.92);
+            flex-shrink: 0;
+        }
+        
+        /* Dark overlay for text contrast */
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.65) 100%);
+            z-index: 1;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        /* Glass navbar — fully transparent */
+        .navbar-custom {
+            position: absolute;
+            top: 20px;
+            left: 100px;
+            right: 100px;
+            padding: 15px 40px 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            z-index: 100;
+        }
+
+        /* Horizontal separator wrappers (top + bottom) */
+        .logo-separator-wrapper {
+            position: absolute;
+            top: 95px;
+            left: 100px;
+            right: 100px;
+            z-index: 99;
+            pointer-events: none;
+        }
+        
+        .bottom-separator-wrapper {
+            position: absolute;
+            bottom: 90px;
+            left: 100px;
+            right: 100px;
+            z-index: 99;
+            pointer-events: none;
+        }
+        
+        .brand-separator {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.7) 15%, 
+                rgba(255,215,0,0.9) 50%, 
+                rgba(255,255,255,0.7) 85%, 
+                rgba(255,255,255,0) 100%);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            border-radius: 4px;
+        }
+
+        .logo-area { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            justify-content: flex-start; 
+            position: relative;
+        }
+        
+        .logo-area img { 
+            height: 45px; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); 
+        }
+        
+        .logo-area span { 
+            font-weight: 800; 
+            font-size: 1.5rem; 
+            color: white; 
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .login-area { 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        /* === LIVE CLOCK (fixed width, same styling) === */
+        .time-container-permanent {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            font-family: 'Poppins', monospace;
+            letter-spacing: 1px;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.45);
+            color: white;
+            border: 1.5px solid rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            min-width: 180px;
+            width: auto;
+            white-space: nowrap;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            transition: all 0.1s ease;
+            cursor: default;
+        }
+        
+        .time-container-permanent span {
+            display: inline-block;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== CONSULTATION HERO TEXT (NO BACKGROUND, ONLY TEXT) ===== */
+        .consult-hero {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 170px;         
+            width: auto;
+            max-width: 900px;
+            z-index: 10;
+            text-align: center;
+            background: transparent;
+            backdrop-filter: none;
+            padding: 0;
+            margin: 0;
+            border: none;
+            box-shadow: none;
+        }
+
+        .consult-hero h1 { 
+            font-size: 3.8rem; 
+            font-weight: 800; 
+            color: #ffffff; 
+            line-height: 1.2; 
+            margin-bottom: 12px;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.6);
+            letter-spacing: -0.01em;
+            text-align: center;
+            background: transparent;
+        }
+        
+        .consult-hero p { 
+            font-size: 1.45rem; 
+            color: rgba(255,255,255,0.96); 
+            margin-bottom: 0;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+            font-weight: 500;
+            text-align: center;
+            background: transparent;
+        }
+
+        /* SYMPTOMS GRID — MOVED DOWNWARD: increased top offset to push cards away from paragraph */
+        .symptoms-grid-container {
+            position: absolute;
+            top: 340px;          /* INCREASED from 280px to 340px → more spacing below paragraph */
+            bottom: 170px;       /* leaves enough room for bottom separator + go back/faq */
+            left: 100px;
+            right: 100px;
+            z-index: 12;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            overflow: visible;
+        }
+
+        .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Modern stat-card symptom button — clean stat card style */
+        .symptom-card-btn {
+            background: rgba(20, 30, 45, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 28px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 1.5px solid rgba(255, 255, 255, 0.55);
+            box-shadow: 0 16px 30px -12px rgba(0, 0, 0, 0.5);
+            color: white;
+            text-decoration: none;
+        }
+
+        .symptom-card-btn i {
+            font-size: 3.6rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+            transition: transform 0.2s ease;
+            color: #f9f9ff;
+        }
+
+        .symptom-card-btn span {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .symptom-card-btn:hover {
+            transform: translateY(-6px);
+            background: rgba(56, 189, 248, 0.85);
+            border-color: rgba(255,255,255,0.9);
+            box-shadow: 0 24px 32px -14px rgba(0, 0, 0, 0.5);
+        }
+
+        .symptom-card-btn:hover i {
+            transform: scale(1.05);
+        }
+
+        .symptom-card-btn:active {
+            transform: translateY(2px);
+            transition: 0.05s;
+        }
+
+        /* ====== GO BACK BUTTON with arrow left ====== */
+        .go-back-wrapper {
+            position: absolute;
+            bottom: 38px;
+            left: 130px;
+            z-index: 15;
+            pointer-events: auto;
+        }
+
+        .go-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.35);
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .go-back-btn i {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+        }
+
+        .go-back-btn:hover {
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            border-color: rgba(255,255,255,0.7);
+            text-decoration: none;
+        }
+
+        /* FAQ link */
+        .faq-link-wrapper {
+            position: absolute;
+            bottom: 38px;       
+            right: 130px;        
+            left: auto;          
+            text-align: right;  
+            z-index: 15;
+            pointer-events: auto;
+        }
+
+        .faq-simple-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(4px);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.25);
+            letter-spacing: 0.3px;
+        }
+
+        .faq-simple-link i {
+            font-size: 1rem;
+            color: #2dd4bf;
+        }
+
+        .faq-simple-link:hover {
+            background: rgba(0, 0, 0, 0.55);
+            color: white;
+            border-color: white;
+            text-decoration: none;
+        }
+
+        /* Responsive — maintain flexible grid but preserve locked viewport, keep extra spacing */
+        @media (max-width: 1200px) {
+            .portal-card { width: 95%; height: 90vh; }
+            .navbar-custom { left: 50px; right: 50px; top: 20px; }
+            .logo-separator-wrapper { left: 50px; right: 50px; top: 95px; }
+            .bottom-separator-wrapper { left: 50px; right: 50px; bottom: 90px; }
+            .symptoms-grid-container { left: 50px; right: 50px; top: 340px; bottom: 170px; } /* preserve downward shift */
+            .symptom-grid { gap: 25px; }
+            .consult-hero { top: 160px; }
+            .consult-hero h1 { font-size: 3rem; }
+            .consult-hero p { font-size: 1.25rem; }
+            .symptom-card-btn i { font-size: 3.2rem; }
+            .symptom-card-btn span { font-size: 1.2rem; }
+        }
+
+        @media (max-width: 950px) {
+            .navbar-custom { left: 30px; right: 30px; flex-wrap: wrap; gap: 10px; }
+            .logo-separator-wrapper { left: 30px; right: 30px; top: 95px; }
+            .bottom-separator-wrapper { left: 30px; right: 30px; bottom: 85px; }
+            .symptoms-grid-container { left: 30px; right: 30px; top: 350px; bottom: 160px; } /* extra breathing */
+            .symptom-grid { gap: 20px; grid-template-columns: repeat(2, 1fr); }
+            .consult-hero { top: 155px; max-width: 85%; }
+            .consult-hero h1 { font-size: 2.5rem; }
+            .consult-hero p { font-size: 1.1rem; }
+            .go-back-wrapper { left: 70px; bottom: 28px; }
+            .faq-link-wrapper { right: 70px; bottom: 28px; }
+        }
+
+        @media (max-width: 700px) {
+            .symptom-grid { grid-template-columns: 1fr; gap: 18px; max-width: 400px; margin: 0 auto; }
+            .symptoms-grid-container { top: 370px; bottom: 190px; overflow-y: auto; }
+            .symptoms-grid-container {
+                overflow-y: auto;
+                scrollbar-width: thin;
+            }
+            .symptom-card-btn { padding: 22px 16px; }
+            .consult-hero h1 { font-size: 2.2rem; }
+            .consult-hero p { font-size: 1rem; }
+            .time-container-permanent { min-width: 160px; font-size: 0.8rem; }
+        }
+        
+        @media (max-width: 550px) {
+            .navbar-custom { left: 20px; right: 20px; }
+            .logo-separator-wrapper { left: 20px; right: 20px; top: 100px; }
+            .bottom-separator-wrapper { left: 20px; right: 20px; bottom: 85px; }
+            .symptoms-grid-container { left: 20px; right: 20px; top: 390px; bottom: 180px; }
+            .consult-hero { top: 150px; }
+            .consult-hero h1 { font-size: 1.9rem; }
+            .consult-hero p { font-size: 0.9rem; }
+            .go-back-btn, .faq-simple-link { padding: 6px 18px; font-size: 0.75rem; }
+            .go-back-wrapper { left: 25px; bottom: 25px; }
+            .faq-link-wrapper { right: 25px; bottom: 25px; }
+        }
+        
+        /* Gentle pulse & micro-animation only on cards */
+        @keyframes softGlow {
+            0% { box-shadow: 0 16px 30px -12px rgba(0, 0, 0, 0.5); }
+            100% { box-shadow: 0 20px 38px -8px rgba(56, 189, 248, 0.3); }
+        }
+        .symptom-card-btn {
+            animation: softGlow 2s infinite alternate;
+        }
+        .symptom-card-btn:hover {
+            animation: none;
+        }
+
+        /* SweetAlert overrides - zero layout shift */
+        .swal2-popup {
+            font-family: 'Poppins', sans-serif !important;
+            border-radius: 28px !important;
+        }
+        body.swal2-shown {
+            overflow: hidden !important;
+            padding-right: 0px !important;
+            margin-right: 0px !important;
+        }
+        .swal2-container {
+            overflow-y: auto !important;
+        }
+        .swal2-backdrop-show {
+            backdrop-filter: blur(3px);
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        html:has(.swal2-shown), body:has(.swal2-shown) {
+            overflow: hidden !important;
+            margin-right: 0 !important;
+            padding-right: 0 !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="portal-card" id="card">
+    <div class="card-overlay"></div>
+    
+    <!-- Navbar: Logo + live time (fully preserved) -->
+    <nav class="navbar-custom">
+        <div class="logo-area">
+            <img src="cliniclogohalf.png" alt="PUP Logo" onerror="this.src='https://placehold.co/60x45/9C0C20/white?text=PUP'">
+            <span>PUPBC CareLink</span>
+        </div>
+        <div class="login-area">
+            <div class="time-container-permanent" id="liveClockDisplay">
+                <i class="bi bi-clock me-2" style="font-size: 0.9rem;"></i>
+                <span id="clockTimeText">--:--:-- --</span>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Top & Bottom horizontal separators -->
+    <div class="logo-separator-wrapper">
+        <div class="brand-separator"></div>
+    </div>
+    <div class="bottom-separator-wrapper">
+        <div class="brand-separator"></div>
+    </div>
+
+    <!-- MAIN CONTENT: Consultation header / paragraph (preserved text) -->
+    <div class="consult-hero">
+        <h1>Consultation</h1>
+        <p>What are you feeling today? Tap your main symptom.</p>
+    </div>
+
+    <!-- SYMPTOMS GRID (stat cards shifted downward: additional spacing achieved via increased top property) -->
+    <div class="symptoms-grid-container">
+        <div class="symptom-grid" id="symptomGrid">
+            <!-- 6 Stat Cards: same content, visual design completely preserved -->
+            <div class="symptom-card-btn" data-symptom="Fever / Chills">
+                <i class="fas fa-temperature-high"></i>
+                <span>Fever / Chills</span>
+            </div>
+            <div class="symptom-card-btn" data-symptom="Headache">
+                <i class="fas fa-brain"></i>
+                <span>Headache</span>
+            </div>
+            <div class="symptom-card-btn" data-symptom="Cough and Colds">
+                <i class="fas fa-lungs"></i>
+                <span>Cough and Colds</span>
+            </div>
+            <div class="symptom-card-btn" data-symptom="Stomachache">
+                <i class="fas fa-stomach"></i>
+                <span>Stomachache</span>
+            </div>
+            <div class="symptom-card-btn" data-symptom="Toothache">
+                <i class="fas fa-tooth"></i>
+                <span>Toothache</span>
+            </div>
+            <div class="symptom-card-btn" data-symptom="Breathing Issue">
+                <i class="fas fa-lungs-virus"></i>
+                <span>Breathing Issue</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- GO BACK BUTTON (preserved style + position) -->
+    <div class="go-back-wrapper">
+        <a href="#" class="go-back-btn" id="goBackButton">
+            <i class="fas fa-arrow-left"></i> Go Back
+        </a>
+    </div>
+
+    <!-- FAQ link (preserved) -->
+    <div class="faq-link-wrapper">
+        <a href="faq.html" class="faq-simple-link" id="faqSimpleLink">
+            <i class="fas fa-question-circle"></i> Need more help? <strong>FAQs</strong>
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ========== LIVE CLOCK (unchanged functionality) ==========
+    function updateLiveClock() {
+        const clockSpan = document.getElementById('clockTimeText');
+        if (!clockSpan) return;
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        const formattedHours = hours.toString().padStart(2, '0');
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+        const formattedSeconds = seconds.toString().padStart(2, '0');
+        clockSpan.innerText = `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
+    }
+    updateLiveClock();
+    setInterval(updateLiveClock, 1000);
+    
+    // ========== LAYOUT SHIFT ELIMINATION (preserve no flicker / scrollbar) ==========
+    (function eliminateLayoutShiftCompletely() {
+        const originalSwalFire = Swal.fire;
+        const lockBodyForModal = () => {
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = '0px';
+            document.body.style.marginRight = '0px';
+            document.body.style.width = '100%';
+            document.body.style.position = 'relative';
+        };
+        const unlockBodyForModal = () => {
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = '0px';
+            document.body.style.marginRight = '0px';
+        };
+        Swal.fire = function(...args) {
+            lockBodyForModal();
+            let config = args[0] || {};
+            if (typeof config === 'object') {
+                config.scrollbarPadding = false;
+                config.heightAuto = false;
+                config.backdrop = true;
+                config.allowOutsideClick = false;
+            } else {
+                args[0] = { ...(args[0] || {}), scrollbarPadding: false, heightAuto: false };
+            }
+            const result = originalSwalFire.apply(this, args);
+            if (result && typeof result.then === 'function') {
+                result.finally(() => unlockBodyForModal());
+            }
+            return result;
+        };
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'style' && document.body.style.paddingRight !== '0px') {
+                    document.body.style.paddingRight = '0px';
+                }
+                if (mutation.attributeName === 'class' && document.body.classList.contains('swal2-shown')) {
+                    document.body.style.paddingRight = '0px';
+                    document.body.style.marginRight = '0px';
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+        observer.observe(document.body, { attributes: true });
+        lockBodyForModal();
+    })();
+    
+    // BACKGROUND image (high-quality and preserved)
+    const backgroundImageURL = "https://5.imimg.com/data5/SELLER/Default/2023/6/316157293/TP/IJ/GK/5863015/healthcare-kiosk-solutions-1000x1000.jpg";
+    const card = document.getElementById('card');
+    document.body.style.backgroundImage = `url('${backgroundImageURL}')`;
+    if (card) card.style.backgroundImage = `url('${backgroundImageURL}')`;
+    
+    // ========== SYMPTOM CARD HANDLERS: exactly same interaction as original, but stat cards now have more breathing space ==========
+    const symptomButtons = document.querySelectorAll('.symptom-card-btn');
+    symptomButtons.forEach(btn => {
+        const symptomName = btn.getAttribute('data-symptom') || btn.querySelector('span')?.innerText || 'Symptom';
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        newBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            Swal.fire({
+                title: `💙 ${symptomName}`,
+                text: `Your symptom "${symptomName}" has been recorded. You will be guided to the next step.`,
+                icon: 'success',
+                confirmButtonText: 'Continue',
+                confirmButtonColor: '#38bdf8',
+                background: '#fff',
+                scrollbarPadding: false,
+                heightAuto: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Redirecting...',
+                        text: 'Taking you to the consultation assistant (next page).',
+                        icon: 'info',
+                        timer: 1200,
+                        showConfirmButton: false,
+                        scrollbarPadding: false
+                    }).then(() => {
+                        console.log(`Proceed with symptom: ${symptomName}`);
+                        // future integration remains ready: window.location.href = 'consultation-flow.html';
+                    });
+                }
+            });
+        });
+    });
+    
+    // ========== GO BACK BUTTON (preserved exact behavior) ==========
+    const goBackElement = document.getElementById('goBackButton');
+    if (goBackElement) {
+        const freshGoBack = goBackElement.cloneNode(true);
+        goBackElement.parentNode.replaceChild(freshGoBack, goBackElement);
+        freshGoBack.id = 'goBackButton';
+        freshGoBack.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                Swal.fire({
+                    title: `Navigation`,
+                    text: `No previous page in history. Returning to dashboard.`,
+                    icon: 'info',
+                    timer: 1200,
+                    showConfirmButton: false,
+                    backdrop: `rgba(0,0,0,0.7)`
+                });
+            }
+        });
+    }
+    
+    // FAQ link preserved interaction
+    const faqSimpleLink = document.getElementById('faqSimpleLink');
+    if (faqSimpleLink) {
+        faqSimpleLink.addEventListener('click', (e) => {
+            console.log("Navigating to FAQ page from consultation view");
+        });
+    }
+    
+    console.log("✅ KIOSK CONSULTATION PAGE (UPDATED): Stat cards moved downward for comfortable spacing from paragraph — all designs, contents, navbar, separators, go-back and FAQ preserved exactly.");
+</script>
+</body>
+</html>
