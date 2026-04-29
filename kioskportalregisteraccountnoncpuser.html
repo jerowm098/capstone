@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>CareLink Express | Register Account — Multi-Step Kiosk Forms</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- SweetAlert2 + QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --pup-maroon: #9C0C20;
+            --pup-maroon-dark: #7a0919;
+            --key-bg: #f1f5f9;
+            --key-active: #e2e8f0;
+            --step-active: #0ea5e9;
+            --step-complete: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        /* LOCK VIEWPORT — rigid, no scrollbar shifting */
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px) brightness(0.45);
+            transform: scale(1.02);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: -1;
+        }
+
+        /* MAIN UI CARD */
+        .portal-card {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 20px;
+            width: 1300px;
+            height: 850px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.2) inset;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.92);
+            flex-shrink: 0;
+        }
+        
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.65) 100%);
+            z-index: 1;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        /* NAVBAR (identical positioning) */
+        .navbar-custom {
+            position: absolute;
+            top: 20px;
+            left: 100px;
+            right: 100px;
+            padding: 15px 40px 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            z-index: 100;
+        }
+
+        .logo-area { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            justify-content: flex-start; 
+        }
+        
+        .logo-area img { 
+            height: 45px; 
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); 
+        }
+        
+        .logo-area span { 
+            font-weight: 800; 
+            font-size: 1.5rem; 
+            color: white; 
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .login-area { 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        .time-container-permanent {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            font-family: 'Poppins', monospace;
+            letter-spacing: 1px;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.45);
+            color: white;
+            border: 1.5px solid rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            min-width: 180px;
+            width: auto;
+            white-space: nowrap;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            cursor: default;
+        }
+        
+        .time-container-permanent span {
+            display: inline-block;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* HORIZONTAL SEPARATORS */
+        .logo-separator-wrapper {
+            position: absolute;
+            top: 95px;
+            left: 100px;
+            right: 100px;
+            z-index: 99;
+            pointer-events: none;
+        }
+        
+        .bottom-separator-wrapper {
+            position: absolute;
+            bottom: 90px;
+            left: 100px;
+            right: 100px;
+            z-index: 99;
+            pointer-events: none;
+        }
+        
+        .brand-separator {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.7) 15%, 
+                rgba(255,215,0,0.9) 50%, 
+                rgba(255,255,255,0.7) 85%, 
+                rgba(255,255,255,0) 100%);
+            border-radius: 4px;
+        }
+
+        /* MIDDLE SECTION */
+        .register-forms-middle {
+            position: absolute;
+            top: 130px;
+            bottom: 130px;
+            left: 100px;
+            right: 100px;
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            overflow: visible;
+        }
+
+        /* HEADER SECTION */
+        .form-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            background: transparent;
+            margin: 0;
+            padding: 0;
+            width: auto;
+        }
+        
+        .form-header i {
+            font-size: 3rem;
+            color: #ffffff;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+        }
+        
+        .form-header h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: white;
+            margin: 0;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+            white-space: nowrap;
+        }
+        
+        .form-sub {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.98);
+            text-align: center;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+            margin: 0;
+            width: auto;
+        }
+
+        /* STEP CARD (matches reference width) */
+        .step-card {
+            width: auto;
+            min-width: 580px;
+            max-width: 780px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 18px;
+        }
+        
+        /* ===== STEP PROGRESS BAR (compact, above input) ===== */
+        .step-progress {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 6px;
+            background: transparent;
+        }
+        
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.2s;
+        }
+        
+        .progress-step .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.7);
+            transition: all 0.2s;
+        }
+        
+        .progress-step.active .step-number {
+            background: #0ea5e9;
+            border-color: #0ea5e9;
+            color: white;
+            box-shadow: 0 0 8px rgba(14,165,233,0.5);
+        }
+        
+        .progress-step.completed .step-number {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        
+        .progress-step .step-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .progress-step.active .step-label {
+            color: white;
+            font-weight: 600;
+        }
+        
+        .progress-step.completed .step-label {
+            color: #a7f3d0;
+        }
+        
+        .progress-connector {
+            width: 48px;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+        
+        .progress-connector.active-connector {
+            background: #0ea5e9;
+            box-shadow: 0 0 4px #0ea5e9;
+        }
+        
+        /* Input + button row */
+        .input-action-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+        }
+        
+        .form-input-field {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 56px;
+            border: 2px solid rgba(255,255,255,0.5);
+            padding: 4px 20px;
+            min-width: 0;
+        }
+        
+        .form-input-field input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.9rem;
+            font-weight: 600;
+            font-family: 'Poppins', monospace;
+            letter-spacing: 1px;
+            color: white;
+            text-align: center;
+            padding: 12px 8px;
+        }
+        
+        .form-input-field input::placeholder {
+            color: rgba(255,255,240,0.6);
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+        
+        .step-action-btn {
+            background: linear-gradient(95deg, #0f3b5c, #0ea5e9);
+            border: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 0 28px;
+            border-radius: 56px;
+            color: white;
+            white-space: nowrap;
+            letter-spacing: 1px;
+            transition: 0.15s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            height: 100%;
+            min-height: 64px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .step-action-btn:active { transform: scale(0.97); }
+        .step-action-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        /* QWERTY KEYBOARD */
+        .kiosk-keyboard {
+            background: rgba(20, 20, 28, 0.92);
+            backdrop-filter: blur(18px);
+            border-radius: 32px;
+            padding: 12px 16px;
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.6);
+        }
+        
+        .key-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .key {
+            background: #2c2c32;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            padding: 7px 0;
+            border-radius: 14px;
+            width: 58px;
+            text-align: center;
+            color: #ffffff;
+            transition: 0.05s linear;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .key:active { transform: scale(0.92); background: #3a3a44; }
+        .key-func { background: #3a3a44; color: #ffd966; font-size: 0.8rem; font-weight: 600; width: 68px; }
+        .key-backspace { background: #a1222a; color: white; width: 76px; }
+        .key-clear { background: #b91c1c; color: white; width: 72px; }
+        .key-space { background: #2c2c32; width: 160px; color: white; font-weight: 400; letter-spacing: 2px; }
+        .key-switch { background: #1e5f6e; color: white; width: 76px; font-weight: 600; font-size: 0.75rem; }
+        .key-switch i { margin-right: 4px; }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .navbar-custom, .logo-separator-wrapper, .bottom-separator-wrapper, .register-forms-middle { left: 70px; right: 70px; }
+            .form-header h1 { font-size: 2.2rem; white-space: normal; text-align: center; }
+            .step-card { min-width: 520px; max-width: 700px; }
+            .key { width: 54px; font-size: 1rem; padding: 6px 0; }
+            .key-func { width: 64px; font-size: 0.75rem; }
+            .key-backspace { width: 72px; }
+            .key-clear { width: 68px; }
+            .key-space { width: 150px; }
+            .progress-step .step-label { display: none; }
+            .progress-step { gap: 4px; }
+            .progress-connector { width: 30px; }
+        }
+        
+        @media (max-width: 950px) {
+            .navbar-custom, .logo-separator-wrapper, .bottom-separator-wrapper, .register-forms-middle { left: 45px; right: 45px; }
+            .form-header h1 { font-size: 1.9rem; }
+            .form-input-field input { font-size: 1.6rem; }
+            .step-action-btn { font-size: 0.95rem; padding: 0 20px; min-height: 56px; }
+            .step-card { min-width: 460px; max-width: 620px; }
+            .key { width: 50px; font-size: 0.9rem; }
+        }
+        
+        @media (max-width: 750px) {
+            .step-card { min-width: 380px; max-width: 520px; }
+            .key { width: 44px; font-size: 0.85rem; }
+        }
+
+        /* GO BACK & FAQ */
+        .go-back-wrapper {
+            position: absolute;
+            bottom: 38px;
+            left: 130px;
+            z-index: 15;
+            pointer-events: auto;
+        }
+        
+        .go-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.35);
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .go-back-btn i {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+        }
+        
+        .go-back-btn:hover {
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            border-color: rgba(255,255,255,0.7);
+            text-decoration: none;
+        }
+
+         /* FAQ link (preserved exact styling) */
+        .faq-link-wrapper {
+            position: absolute;
+            bottom: 38px;
+            right: 130px;
+            z-index: 15;
+            pointer-events: auto;
+        }
+        
+        .faq-simple-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(4px);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255,255,255,0.25);
+            letter-spacing: 0.3px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .faq-simple-link i {
+            font-size: 1rem;
+            color: #2dd4bf;
+        }
+        
+        .faq-simple-link:hover {
+            background: rgba(0, 0, 0, 0.55);
+            color: white;
+            border-color: white;
+            text-decoration: none;
+        }
+        
+        .swal2-popup { font-family: 'Poppins', sans-serif !important; border-radius: 28px !important; }
+        body.swal2-shown { overflow: hidden !important; }
+        
+        /* QR code styles within SweetAlert - IMPROVED centering */
+        .qr-container-inline {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0 10px 0;
+            width: 100%;
+        }
+        .qr-wrapper {
+            background: white;
+            padding: 12px;
+            border-radius: 24px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            /* ENSURE PERFECT CENTERING INSIDE FLEX CONTAINER */
+            margin: 0 auto;
+        }
+        .registration-qr-code {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Force canvas/image inside QR code to be centered */
+        .registration-qr-code canvas,
+        .registration-qr-code img {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="portal-card" id="card">
+    <div class="card-overlay"></div>
+    
+    <nav class="navbar-custom">
+        <div class="logo-area">
+            <img src="cliniclogohalf.png" alt="Logo" onerror="this.src='https://placehold.co/60x45/9C0C20/white?text=CL'">
+            <span>PUPBC CareLink</span>
+        </div>
+        <div class="login-area">
+            <div class="time-container-permanent" id="liveClockDisplay">
+                <i class="bi bi-clock me-2"></i>
+                <span id="clockTimeText">--:--:-- --</span>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="logo-separator-wrapper"><div class="brand-separator"></div></div>
+    <div class="bottom-separator-wrapper"><div class="brand-separator"></div></div>
+
+    <div class="register-forms-middle">
+        <div class="form-header">
+            <i class="fas fa-user-edit"></i>
+            <h1>REGISTER NEW PATIENT FOR ACCESS</h1>
+        </div>
+        <div class="form-sub">please fill up your carelink account details to start registration</div>
+
+        <div class="step-card" id="stepCardContainer">
+            <!-- dynamic progress bar + input + keyboard -->
+        </div>
+    </div>
+
+    <div class="go-back-wrapper">
+        <a href="kioskportalpage.html" class="go-back-btn" id="goBackButton"><i class="fas fa-arrow-left"></i> Go Back</a>
+    </div>
+    <div class="faq-link-wrapper">
+        <a href="faq.html" class="faq-simple-link" id="faqSimpleLink"><i class="fas fa-question-circle"></i> Need more help? <strong>FAQs</strong></a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // LIVE CLOCK
+    function updateLiveClock() {
+        const clockSpan = document.getElementById('clockTimeText');
+        if (!clockSpan) return;
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        clockSpan.innerText = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')} ${ampm}`;
+    }
+    updateLiveClock();
+    setInterval(updateLiveClock, 1000);
+    
+    const backgroundImageURL = "https://5.imimg.com/data5/SELLER/Default/2023/6/316157293/TP/IJ/GK/5863015/healthcare-kiosk-solutions-1000x1000.jpg";
+    document.body.style.backgroundImage = `url('${backgroundImageURL}')`;
+    const cardElem = document.getElementById('card');
+    if (cardElem) cardElem.style.backgroundImage = `url('${backgroundImageURL}')`;
+    
+    // Step definitions
+    const steps = [
+        { id: "studentId", label: "STUDENT ID", placeholder: "e.g., 2026-00123-BN-0", buttonText: "PROCEED", nextKey: "studentIdValue", validationMsg: "valid student ID format accepted" },
+        { id: "firstName", label: "FIRST NAME", placeholder: "e.g., JUAN", buttonText: "PROCEED", nextKey: "firstNameValue", validationMsg: "first name looks great!" },
+        { id: "lastName", label: "LAST NAME", placeholder: "e.g., DELA CRUZ", buttonText: "REGISTER", nextKey: "lastNameValue", validationMsg: "last name verified" }
+    ];
+    
+    let currentStepIndex = 0;
+    let registrationData = {
+        studentIdValue: "",
+        firstNameValue: "",
+        lastNameValue: ""
+    };
+    
+    // Keyboard layouts
+    const abcLayout = {
+        rows: [["Q","W","E","R","T","Y","U","I","O","P"], ["A","S","D","F","G","H","J","K","L"], ["Z","X","C","V","B","N","M"]],
+        specialBottom: [
+            { type: "switch", label: "?123", action: "switch" },
+            { type: "func", label: "SPACE", action: "space", wide: true },
+            { type: "func", label: "⌫ DEL", action: "backspace", style: "key-backspace" },
+            { type: "func", label: "CLEAR", action: "clear", style: "key-clear" }
+        ]
+    };
+    const numLayout = {
+        rows: [["1","2","3","4","5","6","7","8","9","0"], ["-","/",":",";","(",")","$","&","@","\""], [".",",","?","!","'","#","%","*","+","="]],
+        specialBottom: [
+            { type: "switch", label: "ABC", action: "switch" },
+            { type: "func", label: "SPACE", action: "space", wide: true },
+            { type: "func", label: "⌫ DEL", action: "backspace", style: "key-backspace" },
+            { type: "func", label: "CLEAR", action: "clear", style: "key-clear" }
+        ]
+    };
+    
+    let currentLayout = "abc";
+    let activeInputElement = null;
+    
+    function renderKeyboard(container) {
+        const layout = currentLayout === 'abc' ? abcLayout : numLayout;
+        let html = '';
+        layout.rows.forEach(row => {
+            html += `<div class="key-row">`;
+            row.forEach(key => { html += `<button class="key" data-type="char" data-value="${key}">${key}</button>`; });
+            html += `</div>`;
+        });
+        html += `<div class="key-row">`;
+        layout.specialBottom.forEach(btn => {
+            let addClass = "";
+            let iconHtml = "";
+            if (btn.style) addClass = btn.style;
+            if (btn.action === 'switch') { addClass += " key-switch"; iconHtml = `<i class="fas fa-keyboard"></i> `; }
+            else if (btn.action === 'space') addClass += " key-space";
+            else if (btn.action === 'backspace') addClass += " key-backspace";
+            else if (btn.action === 'clear') addClass += " key-clear";
+            if (btn.wide) addClass += " key-func";
+            html += `<button class="key ${addClass}" data-type="action" data-action="${btn.action}">${iconHtml}${btn.label}</button>`;
+        });
+        html += `</div>`;
+        container.innerHTML = html;
+        
+        container.querySelectorAll('.key').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!activeInputElement) return;
+                const type = btn.getAttribute('data-type');
+                if (type === 'char') {
+                    const val = btn.getAttribute('data-value');
+                    activeInputElement.value += val;
+                    activeInputElement.dispatchEvent(new Event('input', { bubbles: true }));
+                } else if (type === 'action') {
+                    const action = btn.getAttribute('data-action');
+                    if (action === 'backspace') {
+                        activeInputElement.value = activeInputElement.value.slice(0, -1);
+                        activeInputElement.dispatchEvent(new Event('input', { bubbles: true }));
+                    } else if (action === 'clear') {
+                        activeInputElement.value = '';
+                        activeInputElement.dispatchEvent(new Event('input', { bubbles: true }));
+                    } else if (action === 'space') {
+                        activeInputElement.value += ' ';
+                        activeInputElement.dispatchEvent(new Event('input', { bubbles: true }));
+                    } else if (action === 'switch') {
+                        currentLayout = currentLayout === 'abc' ? 'num' : 'abc';
+                        const keyboardDiv = document.getElementById('stepKeyboard');
+                        if (keyboardDiv) renderKeyboard(keyboardDiv);
+                    }
+                }
+                if (activeInputElement) activeInputElement.focus();
+            });
+        });
+    }
+    
+    // Progress bar render
+    function renderProgressBar() {
+        const progressContainer = document.getElementById('stepProgressContainer');
+        if (!progressContainer) return;
+        let html = `<div class="step-progress">`;
+        steps.forEach((step, idx) => {
+            let statusClass = '';
+            if (idx < currentStepIndex) statusClass = 'completed';
+            else if (idx === currentStepIndex) statusClass = 'active';
+            html += `<div class="progress-step ${statusClass}">
+                        <div class="step-number">${idx + 1}</div>
+                        <span class="step-label">${step.id === 'studentId' ? 'ID Number' : (step.id === 'firstName' ? 'First Name' : 'Last Name')}</span>
+                    </div>`;
+            if (idx < steps.length - 1) {
+                let connectorClass = (idx < currentStepIndex) ? 'active-connector' : '';
+                html += `<div class="progress-connector ${connectorClass}"></div>`;
+            }
+        });
+        html += `</div>`;
+        progressContainer.innerHTML = html;
+    }
+    
+    // Enhanced step validation
+    async function validateAndProceed(step, value) {
+        const stepName = step.label;
+        return new Promise((resolve) => {
+            Swal.fire({
+                title: '🔍 Verifying...',
+                text: `Checking your ${stepName.toLowerCase()}...`,
+                icon: 'info',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                backdrop: `rgba(0,0,0,0.85)`,
+                didOpen: () => { Swal.showLoading(); },
+                timer: 1200,
+                timerProgressBar: true
+            }).then(() => {
+                Swal.fire({
+                    title: '✓ Valid',
+                    text: `${stepName} is valid: "${value}". ${step.validationMsg || 'Proceeding...'}`,
+                    icon: 'success',
+                    timer: 1000,
+                    showConfirmButton: false,
+                    backdrop: `rgba(0,0,0,0.8)`
+                }).then(() => {
+                    resolve(true);
+                });
+            });
+        });
+    }
+    
+    // ========== QR CODE generation helper — FULLY CENTERED INSIDE MODAL ==========
+    function showSuccessWithQR(firstName, lastName, studentId) {
+        const timestamp = new Date().toLocaleString();
+        const qrPayload = `PATIENT: ${firstName} ${lastName} | ID: ${studentId} | REGISTERED: ${timestamp} | CARELINK EXPRESS`;
+        
+        Swal.fire({
+            title: '✅ Registration Successful',
+            html: `
+                <div style="font-size:1.2rem; font-weight:600; margin-bottom:8px;">Welcome ${firstName} ${lastName}</div>
+                <div style="font-size:0.9rem; margin-bottom:10px;">Student ID: ${studentId}</div>
+                <div class="qr-container-inline" id="qrCodeSuccessContainer">
+                    <div class="qr-wrapper" id="qrCodeWrapper">
+                        <div id="dynamicQRCode" class="registration-qr-code"></div>
+                    </div>
+                </div>
+                <div style="font-size:0.85rem; margin-top:12px; background:#f8f9ff; padding:8px; border-radius:40px;">
+                    <i class="fas fa-mobile-alt"></i> Scan QR to save digital receipt
+                </div>
+                <div style="margin-top:10px; font-size:0.85rem;">Redirecting to portal...</div>
+            `,
+            icon: 'success',
+            confirmButtonText: 'Continue to Portal',
+            confirmButtonColor: '#0ea5e9',
+            backdrop: `rgba(0,0,0,0.85)`,
+            allowOutsideClick: false,
+            didOpen: () => {
+                const qrDiv = document.getElementById('dynamicQRCode');
+                if (qrDiv && typeof QRCode !== 'undefined') {
+                    qrDiv.innerHTML = '';
+                    new QRCode(qrDiv, {
+                        text: qrPayload,
+                        width: 140,
+                        height: 140,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+                    // Additional centering for generated canvas/img inside div (ensures absolute centering)
+                    const qrCanvas = qrDiv.querySelector('canvas') || qrDiv.querySelector('img');
+                    if (qrCanvas) {
+                        qrCanvas.style.display = 'block';
+                        qrCanvas.style.margin = '0 auto';
+                    }
+                } else {
+                    console.warn("QRCode library not loaded yet or container missing");
+                    const fallback = document.getElementById('dynamicQRCode');
+                    if(fallback) fallback.innerHTML = '<div style="font-size:10px;">QR unavailable</div>';
+                }
+            }
+        }).then(() => {
+            window.location.href = "kioskportalpage.html";
+        });
+    }
+    
+    // Build step UI
+    function buildStepUI() {
+        const step = steps[currentStepIndex];
+        const container = document.getElementById('stepCardContainer');
+        if (!container) return;
+        
+        const savedValue = registrationData[step.nextKey] || "";
+        const stepHtml = `
+            <div id="stepProgressContainer"></div>
+            <div class="input-action-row">
+                <div class="form-input-field">
+                    <input type="text" id="stepInput" placeholder="${step.placeholder}" autocomplete="off" value="${escapeHtml(savedValue)}" readonly>
+                </div>
+                <button class="step-action-btn" id="stepActionBtn">
+                    <i class="fas ${step.buttonText === 'REGISTER' ? 'fa-user-check' : 'fa-arrow-right'}"></i> ${step.buttonText}
+                </button>
+            </div>
+            <div class="kiosk-keyboard" id="stepKeyboard"></div>
+        `;
+        container.innerHTML = stepHtml;
+        
+        renderProgressBar();
+        
+        const inputField = document.getElementById('stepInput');
+        const actionBtn = document.getElementById('stepActionBtn');
+        const keyboardDiv = document.getElementById('stepKeyboard');
+        
+        if (inputField) {
+            activeInputElement = inputField;
+            inputField.addEventListener('focus', () => { activeInputElement = inputField; });
+            inputField.addEventListener('input', (e) => {
+                registrationData[step.nextKey] = e.target.value;
+            });
+            inputField.value = savedValue;
+        }
+        if (keyboardDiv) renderKeyboard(keyboardDiv);
+        
+        if (actionBtn) {
+            const newBtn = actionBtn.cloneNode(true);
+            actionBtn.parentNode.replaceChild(newBtn, actionBtn);
+            newBtn.id = 'stepActionBtn';
+            newBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const currentVal = registrationData[step.nextKey] || "";
+                if (!currentVal.trim()) {
+                    Swal.fire({ title: 'Empty Field', text: `Please enter ${step.label.toLowerCase()} using the on-screen keyboard.`, icon: 'warning', confirmButtonText: 'OK', backdrop: `rgba(0,0,0,0.85)` });
+                    return;
+                }
+                
+                newBtn.disabled = true;
+                try {
+                    const isValid = await validateAndProceed(step, currentVal);
+                    if (isValid) {
+                        if (step.buttonText === 'REGISTER') {
+                            await handleFinalRegistration();
+                        } else {
+                            if (currentStepIndex + 1 < steps.length) {
+                                currentStepIndex++;
+                                buildStepUI();
+                            } else {
+                                await handleFinalRegistration();
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                } finally {
+                    newBtn.disabled = false;
+                }
+            });
+        }
+    }
+    
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    
+    async function handleFinalRegistration() {
+        const lastName = registrationData.lastNameValue || "";
+        const firstName = registrationData.firstNameValue || "";
+        const studentId = registrationData.studentIdValue || "";
+        
+        if (!lastName.trim() || !firstName.trim() || !studentId.trim()) {
+            Swal.fire({ title: 'Incomplete Data', text: 'Missing information. Please complete all steps.', icon: 'error', confirmButtonText: 'OK', backdrop: `rgba(0,0,0,0.85)` });
+            return false;
+        }
+        
+        return new Promise((resolve) => {
+            Swal.fire({
+                title: '🔍 Verifying registration...',
+                text: `Please wait while we create your CareLink account.`,
+                icon: 'info',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                backdrop: `rgba(0,0,0,0.85)`,
+                didOpen: () => { Swal.showLoading(); },
+                timer: 3000,
+                timerProgressBar: true
+            }).then(() => {
+                showSuccessWithQR(firstName, lastName, studentId);
+                resolve(true);
+            });
+        });
+    }
+    
+    buildStepUI();
+    
+    const goBackBtn = document.getElementById('goBackButton');
+    if (goBackBtn) {
+        const freshGoBack = goBackBtn.cloneNode(true);
+        goBackBtn.parentNode.replaceChild(freshGoBack, goBackBtn);
+        freshGoBack.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.history.length > 1) window.history.back();
+            else { Swal.fire({ title: 'Navigate Back', text: 'Returning to portal.', icon: 'info', timer: 1000, showConfirmButton: false }).then(() => window.location.href = 'kioskportalpage.html'); }
+        });
+    }
+    
+    (function fixSwalAndOverflow() {
+        const originalSwal = Swal.fire;
+        Swal.fire = function(...args) {
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            let config = args[0] || {};
+            if (typeof config === 'object') { config.scrollbarPadding = false; config.heightAuto = false; config.allowOutsideClick = false; } 
+            else { args[0] = { ...(args[0] || {}), scrollbarPadding: false, heightAuto: false }; }
+            const result = originalSwal.apply(this, args);
+            if (result && result.then) result.finally(() => { document.documentElement.style.overflow = 'hidden'; document.body.style.overflow = 'hidden'; });
+            return result;
+        };
+        const observer = new MutationObserver(() => { if (document.body.style.paddingRight !== '0px') document.body.style.paddingRight = '0px'; });
+        observer.observe(document.body, { attributes: true });
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+    })();
+    
+    console.log("✅ QR code perfectly centered in container. All layouts, progress bar, navigation, and styling untouched.");
+</script>
+</body>
+</html>

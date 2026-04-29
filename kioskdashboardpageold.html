@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>CareLink Express | Health Kiosk — Sky Blue Get Started</title>
+    <title>CareLink Express | Kiosk Dashboard — How can we help?</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-    <!-- SweetAlert2 - LOCKED to prevent any scrollbar / layout flickering -->
+    <!-- SweetAlert2 - Locked layout, no flicker/scrollbar -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        /* ... ALL YOUR EXISTING STYLES REMAIN EXACTLY THE SAME ... */
         :root {
             --pup-maroon: #9C0C20;
             --pup-maroon-dark: #7a0919;
@@ -23,6 +22,9 @@
             --get-started-sky: #0ea5e9;
             --get-started-sky-light: #7dd3fc;
             --faq-teal: #14b8a6;
+            --consult-sky: #38bdf8;
+            --appoint-maroon: #9C0C20;
+            --concern-teal: #14b8a6;
         }
 
         * {
@@ -31,7 +33,7 @@
             box-sizing: border-box;
         }
 
-        /* CRITICAL: LOCK VIEWPORT TO PREVENT ANY SCROLLBAR / LAYOUT SHIFT */
+        /* CRITICAL: LOCK VIEWPORT — rigid, no scrollbar shifting */
         html, body {
             height: 100%;
             overflow: hidden;
@@ -57,7 +59,7 @@
             background-repeat: no-repeat;
         }
 
-        /* BLURRING BACKGROUND - clean, no black artifacts */
+        /* Blur background overlay - clean, no artifacts */
         body::before {
             content: "";
             position: absolute;
@@ -84,7 +86,7 @@
             z-index: -1;
         }
 
-        /* MAIN LAYOUT CARD - fixed dimensions, no reflow */
+        /* MAIN UI CARD — fixed dimensions, no reflow */
         .portal-card {
             background-size: cover;
             background-position: center;
@@ -102,7 +104,7 @@
             flex-shrink: 0;
         }
         
-        /* Card overlay: gradient dark for readability */
+        /* Dark overlay for text contrast */
         .card-overlay {
             position: absolute;
             top: 0;
@@ -115,7 +117,7 @@
             pointer-events: none;
         }
 
-        /* GLASS MORPHISM NAVBAR - fully transparent (preserved) */
+        /* Glass navbar — fully transparent */
         .navbar-custom {
             position: absolute;
             top: 20px;
@@ -134,7 +136,7 @@
             z-index: 100;
         }
 
-        /* TOP HORIZONTAL SEPARATOR below the logo area - sleek line that matches PUP branding (unchanged) */
+        /* Horizontal separator wrappers (top + bottom) */
         .logo-separator-wrapper {
             position: absolute;
             top: 95px;
@@ -144,7 +146,6 @@
             pointer-events: none;
         }
         
-        /* BOTTOM HORIZONTAL SEPARATOR - footer-like look, matching top separator style */
         .bottom-separator-wrapper {
             position: absolute;
             bottom: 90px;
@@ -195,7 +196,7 @@
             gap: 15px; 
         }
 
-        /* ===== LIVE CLOCK - Permanent Fixed Width Container ===== */
+        /* === LIVE CLOCK (fixed width, same styling) === */
         .time-container-permanent {
             height: 48px;
             display: flex;
@@ -221,134 +222,199 @@
             cursor: default;
         }
         
-        @keyframes gentleColonBlink {
-            0% { opacity: 1; }
-            50% { opacity: 0.65; }
-            100% { opacity: 1; }
-        }
-        
         .time-container-permanent span {
             display: inline-block;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
 
-        /* HERO TEXT: Shifted rightward & Centered alignment */
+        /* ===== DASHBOARD HERO TEXT: FULLY CENTERED (horizontally) ===== */
         .hero-text {
             position: absolute;
-            left: 370px;
-            right: auto;
-            top: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 200px;
             width: auto;
-            max-width: 700px;
+            max-width: 850px;
             z-index: 10;
             text-align: center;
-            transform: none;
+            background: transparent;
+            backdrop-filter: none;
+            padding: 0;
+            margin: 0;
+            border: none;
+            box-shadow: none;
         }
 
         .hero-text h1 { 
-            font-size: 4.75rem; 
+            font-size: 4rem; 
             font-weight: 800; 
             color: #ffffff; 
-            line-height: 1.05; 
-            margin-bottom: 20px;
+            line-height: 1.15; 
+            margin-bottom: 18px;
             text-shadow: 0 2px 15px rgba(0,0,0,0.5);
             letter-spacing: -0.01em;
             text-align: center;
+            background: transparent;
         }
         
         .hero-text p { 
-            font-size: 1.2rem; 
-            color: rgba(255,255,255,0.96); 
+            font-size: 1.35rem; 
+            color: rgba(255,255,255,0.97); 
             margin-bottom: 0;
-            text-shadow: 0 1px 5px rgba(0,0,0,0.4);
-            font-weight: 400;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.45);
+            font-weight: 500;
             text-align: center;
+            background: transparent;
         }
 
-        /* STAT CARD BUTTONS - ONE STAT CARD (Get Started) */
+        /* THREE STAT CARDS — ORDER MATCHING EXACT REQUEST:
+           1st button (LEFT): Consultation → SKY BLUE color
+           2nd button (CENTER): Appointment → MAROON color
+           3rd button (RIGHT): Other Concerns → TEAL / GREEN-LIKE color
+        */
         .stat-card-buttons {
             position: absolute;
-            bottom: 160px;
+            bottom: 170px;
             left: 100px;
             right: 100px;
             display: flex;
             flex-wrap: wrap;
-            gap: 32px;
+            gap: 38px;
             justify-content: center;
             align-items: center;
             z-index: 15;
         }
 
-        /* ONE stat card button - Get Started - SKY BLUE */
+        /* Kiosk stat button style */
         .kiosk-btn {
             flex: 1;
-            min-width: 260px;
-            max-width: 340px;
+            min-width: 270px;
+            max-width: 360px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            padding: 52px 20px 52px 20px;
-            border-radius: 18px;
-            font-size: 1.9rem;
+            gap: 24px;
+            padding: 48px 24px 48px 24px;
+            border-radius: 22px;
+            font-size: 1.8rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             text-decoration: none;
             transition: all 0.2s ease;
             border: none;
-            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0,0,0,0.25);
             cursor: pointer;
             backdrop-filter: blur(2px);
             color: white;
-            text-shadow: 0 2px 3px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 3px rgba(0,0,0,0.4);
         }
 
-        /* Larger 3D Heartbeat Icon */
+        /* Larger icon inside buttons */
         .kiosk-btn i {
-            font-size: 4.2rem;
+            font-size: 4.5rem;
             margin: 0;
-            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4)) drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5)) drop-shadow(0 2px 4px rgba(0,0,0,0.3));
             transition: all 0.2s ease;
             display: inline-block;
         }
 
         .kiosk-btn span {
-            font-size: 1.5rem;
+            font-size: 1.55rem;
             font-weight: 800;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-align: center;
             display: block;
+            line-height: 1.3;
         }
 
-        /* Get Started button - SKY BLUE base */
-        .btn-getstarted {
+        /* ===== EXACT COLOR MAPPING ===== */
+        /* 1. Consultation (SKY BLUE) */
+        .btn-consult-sky {
             background: linear-gradient(135deg, #38bdf8, #0284c7);
             border-bottom: 6px solid #075985;
-            color: white;
         }
-
-        /* SIMPLE HOVER: slightly darker background, no bright colors */
-        .btn-getstarted:hover {
+        .btn-consult-sky:hover {
             background: linear-gradient(135deg, #2c9fd6, #026d9e);
             border-bottom-color: #054a66;
-            box-shadow: 0 16px 24px -10px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 16px 24px -10px rgba(0, 0, 0, 0.4);
         }
         
-        .btn-getstarted:hover i {
-            transform: scale(1.02);
-            filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
+        /* 2. Appointment (MAROON) */
+        .btn-appoint-maroon {
+            background: linear-gradient(135deg, #9C0C20, #7a0919);
+            border-bottom: 6px solid #4a0510;
         }
-
-        .btn-getstarted:active {
+        .btn-appoint-maroon:hover {
+            background: linear-gradient(135deg, #830a1b, #520410);
+            border-bottom-color: #3d030c;
+            box-shadow: 0 16px 24px -10px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 3. Other Concerns (TEAL / GREEN-LIKE) */
+        .btn-concern-teal {
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            border-bottom: 6px solid #0a5c55;
+        }
+        .btn-concern-teal:hover {
+            background: linear-gradient(135deg, #119e8c, #0b7a6e);
+            border-bottom-color: #074942;
+            box-shadow: 0 16px 24px -10px rgba(0, 0, 0, 0.4);
+        }
+        
+        .kiosk-btn:hover i {
+            transform: scale(1.03);
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
+        }
+        
+        .kiosk-btn:active {
             transform: scale(0.98);
             border-bottom-width: 2px;
-            box-shadow: 0 8px 12px -6px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 12px -6px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* ====== GO BACK BUTTON with arrow left ====== */
+        .go-back-wrapper {
+            position: absolute;
+            bottom: 38px;
+            left: 130px;
+            z-index: 15;
+            pointer-events: auto;
         }
 
-        /* ====== FAQ BUTTON - MOVED TO RIGHT SIDE CORNER, ALIGNED WITH LIVE TIME EDGE ====== */
+        .go-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.35);
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .go-back-btn i {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+        }
+
+        .go-back-btn:hover {
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            border-color: rgba(255,255,255,0.7);
+            text-decoration: none;
+        }
+
+        /* FAQ link (preserved) */
         .faq-link-wrapper {
             position: absolute;
             bottom: 38px;       
@@ -374,7 +440,6 @@
             transition: all 0.2s ease;
             border: 1px solid rgba(255,255,255,0.25);
             letter-spacing: 0.3px;
-            background: rgba(0, 0, 0, 0.3);
         }
 
         .faq-simple-link i {
@@ -389,32 +454,36 @@
             text-decoration: none;
         }
 
-        /* Responsive adjustments */
+        /* Responsive — maintain order across breakpoints */
         @media (max-width: 1100px) {
             .portal-card { width: 95%; height: 90vh; }
             .navbar-custom { left: 50px; right: 50px; top: 20px; }
             .logo-separator-wrapper { left: 50px; right: 50px; top: 95px; }
             .bottom-separator-wrapper { left: 50px; right: 50px; bottom: 90px; }
-            .hero-text { left: 150px; top: 210px; max-width: 550px; }
-            .hero-text h1 { font-size: 3.4rem; }
-            .stat-card-buttons { left: 50px; right: 50px; bottom: 170px; gap: 25px; }
-            .kiosk-btn { min-width: 280px; padding: 42px 18px; gap: 18px; }
-            .kiosk-btn i { font-size: 3.8rem; }
+            .hero-text { top: 190px; max-width: 700px; }
+            .hero-text h1 { font-size: 3.2rem; }
+            .hero-text p { font-size: 1.2rem; }
+            .stat-card-buttons { left: 50px; right: 50px; bottom: 180px; gap: 28px; }
+            .kiosk-btn { min-width: 250px; padding: 42px 18px; gap: 20px; }
+            .kiosk-btn i { font-size: 4rem; }
             .kiosk-btn span { font-size: 1.4rem; }
-            .faq-link-wrapper { right: 50px; bottom: 38px; }
-            .time-container-permanent { min-width: 170px; font-size: 0.9rem; padding: 0 16px; }
+            .faq-link-wrapper { bottom: 28px; right: 70px; }
+            .go-back-wrapper { bottom: 28px; left: 70px; }
+            .time-container-permanent { min-width: 170px; font-size: 0.9rem; }
         }
         
         @media (max-width: 850px) {
             .navbar-custom { left: 40px; right: 40px; flex-wrap: wrap; gap: 12px; top: 20px; }
             .logo-separator-wrapper { left: 40px; right: 40px; top: 95px; }
             .bottom-separator-wrapper { left: 40px; right: 40px; bottom: 85px; }
-            .hero-text { left: 100px; top: 180px; max-width: 480px; }
-            .hero-text h1 { font-size: 2.8rem; }
-            .stat-card-buttons { left: 40px; right: 40px; bottom: 160px; gap: 25px; }
-            .kiosk-btn { padding: 36px 15px; min-width: 260px; }
-            .kiosk-btn i { font-size: 3.5rem; }
-            .faq-link-wrapper { right: 40px; bottom: 32px; }
+            .hero-text { top: 180px; max-width: 600px; }
+            .hero-text h1 { font-size: 2.6rem; }
+            .hero-text p { font-size: 1.1rem; }
+            .stat-card-buttons { left: 40px; right: 40px; bottom: 180px; gap: 24px; }
+            .kiosk-btn { padding: 38px 16px; min-width: 230px; }
+            .kiosk-btn i { font-size: 3.6rem; }
+            .faq-link-wrapper { bottom: 22px; right: 50px; }
+            .go-back-wrapper { bottom: 22px; left: 50px; }
             .time-container-permanent { min-width: 160px; font-size: 0.85rem; }
         }
         
@@ -423,13 +492,16 @@
             .logo-separator-wrapper { left: 25px; right: 25px; top: 105px; }
             .bottom-separator-wrapper { left: 25px; right: 25px; bottom: 100px; }
             .login-area { justify-content: center; margin-left: 0; }
-            .hero-text { left: 20px; right: 20px; top: 160px; text-align: center; max-width: none; }
-            .hero-text h1 { font-size: 2.3rem; }
-            .stat-card-buttons { left: 25px; right: 25px; bottom: 190px; flex-direction: column; gap: 18px; }
-            .kiosk-btn { width: 100%; max-width: 280px; padding: 32px 12px; }
-            .kiosk-btn i { font-size: 3.2rem; }
-            .faq-link-wrapper { right: 25px; bottom: 28px; }
+            .hero-text { top: 170px; max-width: 90%; left: 50%; transform: translateX(-50%); }
+            .hero-text h1 { font-size: 2.2rem; }
+            .hero-text p { font-size: 1rem; }
+            .stat-card-buttons { left: 25px; right: 25px; bottom: 210px; flex-direction: column; gap: 20px; }
+            .kiosk-btn { width: 100%; max-width: 300px; padding: 32px 12px; }
+            .kiosk-btn i { font-size: 3.4rem; }
+            .faq-link-wrapper { bottom: 22px; right: 25px; }
+            .go-back-wrapper { bottom: 22px; left: 25px; }
             .faq-simple-link { font-size: 0.8rem; padding: 6px 18px; }
+            .go-back-btn { font-size: 0.8rem; padding: 6px 18px; }
             .time-container-permanent { min-width: 150px; font-size: 0.75rem; height: 42px; }
         }
         
@@ -437,18 +509,20 @@
             .navbar-custom { left: 20px; right: 20px; }
             .logo-separator-wrapper { left: 20px; right: 20px; top: 105px; }
             .bottom-separator-wrapper { left: 20px; right: 20px; bottom: 95px; }
-            .hero-text { left: 15px; right: 15px; top: 150px; }
-            .hero-text h1 { font-size: 2rem; }
-            .stat-card-buttons { left: 20px; right: 20px; bottom: 180px; }
+            .hero-text { top: 160px; }
+            .hero-text h1 { font-size: 1.9rem; }
+            .hero-text p { font-size: 0.9rem; }
+            .stat-card-buttons { left: 20px; right: 20px; bottom: 200px; }
             .kiosk-btn i { font-size: 3rem; }
-            .faq-link-wrapper { right: 20px; bottom: 24px; }
+            .faq-link-wrapper { bottom: 20px; right: 20px; }
+            .go-back-wrapper { bottom: 20px; left: 20px; }
             .time-container-permanent { min-width: 140px; font-size: 0.7rem; padding: 0 12px; }
         }
         
-        /* Gentle pulse animation for container (non-intrusive) */
+        /* Gentle pulse animation — consistent */
         @keyframes gentlePulse {
             0% { box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.4); }
-            100% { box-shadow: 0 22px 38px -10px rgba(0, 0, 0, 0.55); }
+            100% { box-shadow: 0 22px 38px -8px rgba(0, 0, 0, 0.6); }
         }
         .kiosk-btn {
             animation: gentlePulse 1.8s infinite alternate ease-in-out;
@@ -457,16 +531,16 @@
             animation: none;
         }
         
-        /* Heartbeat animation for icon: subtle beat */
+        /* Subtle heartbeat icons */
         @keyframes subtleBeat {
             0% { transform: scale(1); }
-            45% { transform: scale(1.08); }
-            55% { transform: scale(1.08); }
+            45% { transform: scale(1.05); }
+            55% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
         
         .kiosk-btn i {
-            animation: subtleBeat 1.2s ease-in-out infinite;
+            animation: subtleBeat 1.6s ease-in-out infinite;
             transform-origin: center;
         }
         
@@ -474,7 +548,7 @@
             animation: none;
         }
         
-        /* SweetAlert overrides: ZERO LAYOUT SHIFT */
+        /* SWEETALERT overrides - zero layout shift */
         .swal2-popup {
             font-family: 'Poppins', sans-serif !important;
             border-radius: 28px !important;
@@ -503,10 +577,10 @@
     <div class="portal-card" id="card">
         <div class="card-overlay"></div>
         
-        <!-- Navbar: transparent with live time container -->
+        <!-- Navbar: Logo + live time -->
         <nav class="navbar-custom">
             <div class="logo-area">
-                <img src="cliniclogohalf.png" alt="Logo" onerror="this.src='https://placehold.co/60x45/9C0C20/white?text=CL'">
+                <img src="cliniclogohalf.png" alt="PUP Logo" onerror="this.src='https://placehold.co/60x45/9C0C20/white?text=PUP'">
                 <span>PUPBC CareLink</span>
             </div>
             <div class="login-area">
@@ -517,7 +591,7 @@
             </div>
         </nav>
         
-        <!-- TOP & BOTTOM separators preserved -->
+        <!-- Top & Bottom separators -->
         <div class="logo-separator-wrapper">
             <div class="brand-separator"></div>
         </div>
@@ -528,20 +602,43 @@
         <div class="carousel-outer">
             <div class="carousel-inner-container">
                 <div class="carousel-pane">
+                    <!-- Centered Header & Paragraph -->
                     <div class="hero-text">
-                        <h1>Your Health,<br>Our Safety.</h1>
-                        <p>Ensuring a secure and healthy environment for <br>every Iskolar ng Bayan through accessible campus care.</p>
+                        <h1>How can we help you?</h1>
+                        <p>Please tap the specific purpose of your clinic visit</p>
                     </div>
                     
-                    <!-- STAT CARD BUTTONS: ONLY ONE "GET STARTED" - with redirect pop-up -->
+                    <!-- THREE BUTTONS WITH EXACT COLOR MAPPING:
+                         1st (LEFT) Consultation → SKY BLUE
+                         2nd (CENTER) Appointment → MAROON
+                         3rd (RIGHT) Other Concerns → TEAL / GREEN-LIKE
+                    -->
                     <div class="stat-card-buttons">
-                        <div class="kiosk-btn btn-getstarted" id="getStartedBtn">
-                            <i class="fas fa-heartbeat"></i>
-                            <span>GET STARTED</span>
+                        <!-- Button 1: Consultation - SKY BLUE -->
+                        <div class="kiosk-btn btn-consult-sky" id="consultationBtn">
+                            <i class="fas fa-stethoscope"></i>
+                            <span>CONSULTATION</span>
+                        </div>
+                        <!-- Button 2: Appointment - MAROON -->
+                        <div class="kiosk-btn btn-appoint-maroon" id="appointmentBtn">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>APPOINTMENT</span>
+                        </div>
+                        <!-- Button 3: Other Concerns - TEAL / GREEN -->
+                        <div class="kiosk-btn btn-concern-teal" id="otherConcernBtn">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>OTHER CONCERNS</span>
                         </div>
                     </div>
 
-                    <!-- FAQ LINK: POSITIONED ON THE RIGHT SIDE CORNER -->
+                    <!-- GO BACK BUTTON -->
+                    <div class="go-back-wrapper">
+                        <a href="#" class="go-back-btn" id="goBackButton">
+                            <i class="fas fa-arrow-left"></i> Go Back
+                        </a>
+                    </div>
+
+                    <!-- FAQ link -->
                     <div class="faq-link-wrapper">
                         <a href="faq.html" class="faq-simple-link" id="faqSimpleLink">
                             <i class="fas fa-question-circle"></i> Need more help? <strong>FAQs</strong>
@@ -554,7 +651,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ==================== LIVE CLOCK UPDATE ====================
+        // ========== LIVE CLOCK ==========
         function updateLiveClock() {
             const clockSpan = document.getElementById('clockTimeText');
             if (!clockSpan) return;
@@ -573,7 +670,7 @@
         updateLiveClock();
         setInterval(updateLiveClock, 1000);
         
-        // ==================== ELIMINATE LAYOUT SHIFT for modals ====================
+        // ========== LAYOUT SHIFT ELIMINATION ==========
         (function eliminateLayoutShiftCompletely() {
             const originalSwalFire = Swal.fire;
             const lockBodyForModal = () => {
@@ -607,6 +704,13 @@
                 }
                 return result;
             };
+            if (Swal && typeof Swal.getScrollbarWidth === 'undefined') {
+                try {
+                    Object.defineProperty(Swal, 'getScrollbarWidth', {
+                        get: function() { return function() { return 0; }; }
+                    });
+                } catch(e) {}
+            }
             const observer = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
                     if (mutation.attributeName === 'style' && document.body.style.paddingRight !== '0px') {
@@ -623,78 +727,88 @@
             lockBodyForModal();
         })();
         
-        // Background image setup
+        // BACKGROUND image
         const backgroundImageURL = "https://5.imimg.com/data5/SELLER/Default/2023/6/316157293/TP/IJ/GK/5863015/healthcare-kiosk-solutions-1000x1000.jpg";
         const card = document.getElementById('card');
         document.body.style.backgroundImage = `url('${backgroundImageURL}')`;
         if (card) card.style.backgroundImage = `url('${backgroundImageURL}')`;
         
-        // ==================== DEFINE THE SETUP FUNCTIONS ====================
-        function setupGetStartedButton() {
-            const getStartedButton = document.getElementById('getStartedBtn');
-            if (getStartedButton) {
-                // Remove old event listeners by cloning
-                const freshButton = getStartedButton.cloneNode(true);
-                getStartedButton.parentNode.replaceChild(freshButton, getStartedButton);
-                freshButton.id = 'getStartedBtn';
-                freshButton.addEventListener('click', createRedirectHandlerWithPopup('kioskportalpage.html', 'CareLink Portal'));
-            }
-        }
-        
-        function setupFaqLink() {
-            const faqSimpleLink = document.getElementById('faqSimpleLink');
-            if (faqSimpleLink) {
-                const freshFaq = faqSimpleLink.cloneNode(true);
-                faqSimpleLink.parentNode.replaceChild(freshFaq, faqSimpleLink);
-                freshFaq.addEventListener('click', (e) => {
-                    console.log("FAQ navigation to faq.html");
-                });
-            }
-        }
-        
-        // ==================== REDIRECT HANDLER WITH DELAY FIX ====================
-        function createRedirectHandlerWithPopup(targetUrl, friendlyName) {
+        // ========== BUTTON NAVIGATION (placeholder pages) ==========
+        function createNavHandler(targetUrl, titleMessage) {
             return (e) => {
                 e.preventDefault();
-                
-                // CRITICAL FIX: Force reflow to clear CSS pseudo-states
-                const btn = e.currentTarget;
-                void btn.offsetHeight; // Forces reflow/style recalculation
-                
                 Swal.fire({
-                    title: `🚀 Redirecting`,
-                    text: `Opening ${friendlyName}...`,
+                    title: `✨ ${titleMessage}`,
+                    text: `Taking you to ${targetUrl} ...`,
                     icon: 'info',
-                    timer: 800,
+                    timer: 1000,
                     showConfirmButton: false,
                     backdrop: `rgba(0,0,0,0.7)`,
                     scrollbarPadding: false,
                     heightAuto: false
                 }).then(() => {
-                    // Tiny delay before redirect to ensure clean state
-                    setTimeout(() => {
-                        window.location.href = targetUrl;
-                    }, 15);
+                    window.location.href = targetUrl;
                 });
             };
         }
         
-        // ==================== INITIAL BUTTON SETUP ====================
-        setupGetStartedButton();
-        setupFaqLink();
+        const consultBtn = document.getElementById('consultationBtn');
+        const appointBtn = document.getElementById('appointmentBtn');
+        const concernBtn = document.getElementById('otherConcernBtn');
         
-        // ==================== PAGESHOW HANDLER FOR BFCACHE RESTORE ====================
-        window.addEventListener('pageshow', function(event) {
-            // This runs every time the page is shown, including on back/forward navigation
-            if (event.persisted) {
-                // The page was restored from bfcache. Re-initialize your buttons.
-                console.log("Page restored from bfcache, re-initializing.");
-                setupGetStartedButton();
-                setupFaqLink();
-            }
-        });
+        if (consultBtn) {
+            const freshConsult = consultBtn.cloneNode(true);
+            consultBtn.parentNode.replaceChild(freshConsult, consultBtn);
+            freshConsult.id = 'consultationBtn';
+            freshConsult.addEventListener('click', createNavHandler('kioskdashboardconsultation.html', 'Consultation'));
+        }
         
-        console.log("✅ COMPLETE: All fixes applied - CSS state clearing, bfcache handling, and button re-initialization.");
+        if (appointBtn) {
+            const freshAppoint = appointBtn.cloneNode(true);
+            appointBtn.parentNode.replaceChild(freshAppoint, appointBtn);
+            freshAppoint.id = 'appointmentBtn';
+            freshAppoint.addEventListener('click', createNavHandler('kioskdashboardappointment.html', 'Appointment Scheduler'));
+        }
+        
+        if (concernBtn) {
+            const freshConcern = concernBtn.cloneNode(true);
+            concernBtn.parentNode.replaceChild(freshConcern, concernBtn);
+            freshConcern.id = 'otherConcernBtn';
+            freshConcern.addEventListener('click', createNavHandler('kioskdashboardconcerns.html', 'Other Concerns'));
+        }
+        
+        // ========== GO BACK BUTTON ==========
+        const goBackElement = document.getElementById('goBackButton');
+        if (goBackElement) {
+            const freshGoBack = goBackElement.cloneNode(true);
+            goBackElement.parentNode.replaceChild(freshGoBack, goBackElement);
+            freshGoBack.id = 'goBackButton';
+            freshGoBack.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    Swal.fire({
+                        title: `Navigation`,
+                        text: `No previous page in history. Returning to start.`,
+                        icon: 'info',
+                        timer: 1200,
+                        showConfirmButton: false,
+                        backdrop: `rgba(0,0,0,0.7)`
+                    });
+                }
+            });
+        }
+        
+        // FAQ link preserved
+        const faqSimpleLink = document.getElementById('faqSimpleLink');
+        if (faqSimpleLink) {
+            faqSimpleLink.addEventListener('click', (e) => {
+                console.log("Navigating to FAQ page");
+            });
+        }
+        
+        console.log("✅ EXACT COLOR MAPPING APPLIED: Consultation (Sky Blue / Left), Appointment (Maroon / Center), Other Concerns (Teal/Green / Right) | Header & paragraph centered | All other designs preserved");
     </script>
 </body>
 </html>

@@ -386,6 +386,7 @@
             letter-spacing: 0.3px;
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.3);
         }
 
         .go-back-btn i {
@@ -426,6 +427,7 @@
             transition: all 0.2s ease;
             border: 1px solid rgba(255,255,255,0.25);
             letter-spacing: 0.3px;
+            background: rgba(0, 0, 0, 0.3);
         }
 
         .faq-simple-link i {
@@ -587,7 +589,7 @@
                     <!-- NEW HEADER + PARAGRAPH as requested -->
                     <div class="hero-text">
                         <h1>Welcome to<br>CareLink Express</h1>
-                        <p>Choose your access method below</p>
+                        <p>Touch a service to begin your request</p>
                     </div>
                     
                     <!-- THREE STAT CARD BUTTONS: scan, manual patient id, register new patient -->
@@ -611,7 +613,7 @@
 
                     <!-- NEW: GO BACK BUTTON with left-aligned arrow (<) placed along horizontal separator zone at bottom-left part -->
                     <div class="go-back-wrapper">
-                        <a href="#" class="go-back-btn" id="goBackButton">
+                        <a href="kioskhomepage.html" class="go-back-btn" id="goBackButton">
                             <i class="fas fa-arrow-left"></i> Go Back
                         </a>
                     </div>
@@ -738,21 +740,21 @@
             const freshScan = scanBtn.cloneNode(true);
             scanBtn.parentNode.replaceChild(freshScan, scanBtn);
             freshScan.id = 'scanQrBtn';
-            freshScan.addEventListener('click', createRedirectHandler('kioskscanpatientqr.html', 'QR Scanner'));
+            freshScan.addEventListener('click', createRedirectHandler('kioskportalscanpatientqr.html', 'QR Scanner'));
         }
         
         if (manualBtn) {
             const freshManual = manualBtn.cloneNode(true);
             manualBtn.parentNode.replaceChild(freshManual, manualBtn);
             freshManual.id = 'manualIdBtn';
-            freshManual.addEventListener('click', createRedirectHandler('kioskmanualpatientqr.html', 'Manual Patient Login'));
+            freshManual.addEventListener('click', createRedirectHandler('kioskportalmanualpatientqr.html', 'Manual Patient Login'));
         }
         
         if (registerBtn) {
             const freshReg = registerBtn.cloneNode(true);
             registerBtn.parentNode.replaceChild(freshReg, registerBtn);
             freshReg.id = 'registerNewBtn';
-            freshReg.addEventListener('click', createRedirectHandler('kioskregister.html', 'Patient Registration'));
+            freshReg.addEventListener('click', createRedirectHandler('kioskportalregisteraccount.html', 'Patient Registration'));
         }
         
         // ========== NEW: GO BACK BUTTON FUNCTIONALITY ==========

@@ -224,12 +224,12 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== CONSULTATION HERO TEXT (NO BACKGROUND, NO CONTAINER, ONLY TEXT) ===== */
+        /* ===== CONSULTATION HERO TEXT (NO BACKGROUND, ONLY TEXT) ===== */
         .consult-hero {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            top: 170px;         /* positioned just below top separator, maximizing middle space */
+            top: 170px;         
             width: auto;
             max-width: 900px;
             z-index: 10;
@@ -264,10 +264,10 @@
             background: transparent;
         }
 
-        /* SYMPTOMS GRID — flexible but fully contained between separators, maximizes space */
+        /* SYMPTOMS GRID — MOVED DOWNWARD: increased top offset to push cards away from paragraph */
         .symptoms-grid-container {
             position: absolute;
-            top: 280px;          /* positioned right after hero text, expands down */
+            top: 340px;          /* INCREASED from 280px to 340px → more spacing below paragraph */
             bottom: 170px;       /* leaves enough room for bottom separator + go back/faq */
             left: 100px;
             right: 100px;
@@ -288,7 +288,7 @@
             margin: 0 auto;
         }
 
-        /* Modern stat-card symptom button — exactly as required (stat card style) */
+        /* Modern stat-card symptom button — clean stat card style */
         .symptom-card-btn {
             background: rgba(20, 30, 45, 0.75);
             backdrop-filter: blur(12px);
@@ -324,7 +324,6 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
 
-        /* individual symptom subtle colors (border/icon hint) but clean */
         .symptom-card-btn:hover {
             transform: translateY(-6px);
             background: rgba(56, 189, 248, 0.85);
@@ -420,13 +419,13 @@
             text-decoration: none;
         }
 
-        /* Responsive — maintain flexible grid but preserve locked viewport */
+        /* Responsive — maintain flexible grid but preserve locked viewport, keep extra spacing */
         @media (max-width: 1200px) {
             .portal-card { width: 95%; height: 90vh; }
             .navbar-custom { left: 50px; right: 50px; top: 20px; }
             .logo-separator-wrapper { left: 50px; right: 50px; top: 95px; }
             .bottom-separator-wrapper { left: 50px; right: 50px; bottom: 90px; }
-            .symptoms-grid-container { left: 50px; right: 50px; top: 280px; bottom: 170px; }
+            .symptoms-grid-container { left: 50px; right: 50px; top: 340px; bottom: 170px; } /* preserve downward shift */
             .symptom-grid { gap: 25px; }
             .consult-hero { top: 160px; }
             .consult-hero h1 { font-size: 3rem; }
@@ -439,7 +438,7 @@
             .navbar-custom { left: 30px; right: 30px; flex-wrap: wrap; gap: 10px; }
             .logo-separator-wrapper { left: 30px; right: 30px; top: 95px; }
             .bottom-separator-wrapper { left: 30px; right: 30px; bottom: 85px; }
-            .symptoms-grid-container { left: 30px; right: 30px; top: 290px; bottom: 160px; }
+            .symptoms-grid-container { left: 30px; right: 30px; top: 350px; bottom: 160px; } /* extra breathing */
             .symptom-grid { gap: 20px; grid-template-columns: repeat(2, 1fr); }
             .consult-hero { top: 155px; max-width: 85%; }
             .consult-hero h1 { font-size: 2.5rem; }
@@ -450,8 +449,7 @@
 
         @media (max-width: 700px) {
             .symptom-grid { grid-template-columns: 1fr; gap: 18px; max-width: 400px; margin: 0 auto; }
-            .symptoms-grid-container { top: 310px; bottom: 190px; overflow-y: auto; }
-            /* allow grid to scroll only if necessary but overall body still locked */
+            .symptoms-grid-container { top: 370px; bottom: 190px; overflow-y: auto; }
             .symptoms-grid-container {
                 overflow-y: auto;
                 scrollbar-width: thin;
@@ -466,7 +464,7 @@
             .navbar-custom { left: 20px; right: 20px; }
             .logo-separator-wrapper { left: 20px; right: 20px; top: 100px; }
             .bottom-separator-wrapper { left: 20px; right: 20px; bottom: 85px; }
-            .symptoms-grid-container { left: 20px; right: 20px; bottom: 180px; }
+            .symptoms-grid-container { left: 20px; right: 20px; top: 390px; bottom: 180px; }
             .consult-hero { top: 150px; }
             .consult-hero h1 { font-size: 1.9rem; }
             .consult-hero p { font-size: 0.9rem; }
@@ -516,7 +514,7 @@
 <div class="portal-card" id="card">
     <div class="card-overlay"></div>
     
-    <!-- Navbar: Logo + live time -->
+    <!-- Navbar: Logo + live time (fully preserved) -->
     <nav class="navbar-custom">
         <div class="logo-area">
             <img src="cliniclogohalf.png" alt="PUP Logo" onerror="this.src='https://placehold.co/60x45/9C0C20/white?text=PUP'">
@@ -530,7 +528,7 @@
         </div>
     </nav>
     
-    <!-- Top & Bottom horizontal separators (preserved) -->
+    <!-- Top & Bottom horizontal separators -->
     <div class="logo-separator-wrapper">
         <div class="brand-separator"></div>
     </div>
@@ -538,41 +536,36 @@
         <div class="brand-separator"></div>
     </div>
 
-    <!-- MAIN CONTENT: Consultation header + paragraph + 6 symptom stat cards -->
+    <!-- MAIN CONTENT: Consultation header / paragraph (preserved text) -->
     <div class="consult-hero">
         <h1>Consultation</h1>
         <p>What are you feeling today? Tap your main symptom.</p>
     </div>
 
-    <!-- SYMPTOMS GRID (exactly 6 stat cards between separators) -->
+    <!-- SYMPTOMS GRID (stat cards shifted downward: additional spacing achieved via increased top property) -->
     <div class="symptoms-grid-container">
         <div class="symptom-grid" id="symptomGrid">
-            <!-- 1: Fever / Chills -->
+            <!-- 6 Stat Cards: same content, visual design completely preserved -->
             <div class="symptom-card-btn" data-symptom="Fever / Chills">
                 <i class="fas fa-temperature-high"></i>
                 <span>Fever / Chills</span>
             </div>
-            <!-- 2: Headache -->
             <div class="symptom-card-btn" data-symptom="Headache">
                 <i class="fas fa-brain"></i>
                 <span>Headache</span>
             </div>
-            <!-- 3: Cough and Colds -->
             <div class="symptom-card-btn" data-symptom="Cough and Colds">
                 <i class="fas fa-lungs"></i>
                 <span>Cough and Colds</span>
             </div>
-            <!-- 4: Stomachache -->
             <div class="symptom-card-btn" data-symptom="Stomachache">
                 <i class="fas fa-stomach"></i>
                 <span>Stomachache</span>
             </div>
-            <!-- 5: Toothache -->
             <div class="symptom-card-btn" data-symptom="Toothache">
                 <i class="fas fa-tooth"></i>
                 <span>Toothache</span>
             </div>
-            <!-- 6: Breathing Issue -->
             <div class="symptom-card-btn" data-symptom="Breathing Issue">
                 <i class="fas fa-lungs-virus"></i>
                 <span>Breathing Issue</span>
@@ -597,7 +590,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // ========== LIVE CLOCK ==========
+    // ========== LIVE CLOCK (unchanged functionality) ==========
     function updateLiveClock() {
         const clockSpan = document.getElementById('clockTimeText');
         if (!clockSpan) return;
@@ -616,7 +609,7 @@
     updateLiveClock();
     setInterval(updateLiveClock, 1000);
     
-    // ========== LAYOUT SHIFT ELIMINATION (no scrollbar flicker) ==========
+    // ========== LAYOUT SHIFT ELIMINATION (preserve no flicker / scrollbar) ==========
     (function eliminateLayoutShiftCompletely() {
         const originalSwalFire = Swal.fire;
         const lockBodyForModal = () => {
@@ -666,13 +659,13 @@
         lockBodyForModal();
     })();
     
-    // BACKGROUND image (same as original)
+    // BACKGROUND image (high-quality and preserved)
     const backgroundImageURL = "https://5.imimg.com/data5/SELLER/Default/2023/6/316157293/TP/IJ/GK/5863015/healthcare-kiosk-solutions-1000x1000.jpg";
     const card = document.getElementById('card');
     document.body.style.backgroundImage = `url('${backgroundImageURL}')`;
     if (card) card.style.backgroundImage = `url('${backgroundImageURL}')`;
     
-    // ========== SYMPTOM BUTTON HANDLERS (each stat card shows sweetalert then redirect placeholder) ==========
+    // ========== SYMPTOM CARD HANDLERS: exactly same interaction as original, but stat cards now have more breathing space ==========
     const symptomButtons = document.querySelectorAll('.symptom-card-btn');
     symptomButtons.forEach(btn => {
         const symptomName = btn.getAttribute('data-symptom') || btn.querySelector('span')?.innerText || 'Symptom';
@@ -691,7 +684,6 @@
                 heightAuto: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Placeholder navigation: For demo, show alert but you can redirect to a consultation form page later.
                     Swal.fire({
                         title: 'Redirecting...',
                         text: 'Taking you to the consultation assistant (next page).',
@@ -700,17 +692,15 @@
                         showConfirmButton: false,
                         scrollbarPadding: false
                     }).then(() => {
-                        // In actual integration: window.location.href = 'consultation-flow.html';
-                        // Since spec doesn't enforce a particular flow, we simply stay but simulate info.
-                        // For future: window.location.href = 'kiosk-consultation-detail.html';
                         console.log(`Proceed with symptom: ${symptomName}`);
+                        // future integration remains ready: window.location.href = 'consultation-flow.html';
                     });
                 }
             });
         });
     });
     
-    // ========== GO BACK BUTTON (preserve exact behavior) ==========
+    // ========== GO BACK BUTTON (preserved exact behavior) ==========
     const goBackElement = document.getElementById('goBackButton');
     if (goBackElement) {
         const freshGoBack = goBackElement.cloneNode(true);
@@ -741,7 +731,7 @@
         });
     }
     
-    console.log("✅ KIOSK CONSULTATION PAGE: Header 'Consultation', paragraph symptom prompt, 6 symptom stat cards (fever, headache, cough & colds, stomachache, toothache, breathing issue). Full lock layout + preserved separators / logos / clock / go back / FAQ.");
+    console.log("✅ KIOSK CONSULTATION PAGE (UPDATED): Stat cards moved downward for comfortable spacing from paragraph — all designs, contents, navbar, separators, go-back and FAQ preserved exactly.");
 </script>
 </body>
 </html>
